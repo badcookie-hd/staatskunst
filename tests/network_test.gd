@@ -11,6 +11,7 @@ func run():
 	session.name = "Session"
 	root.add_child(session)
 	if "--server" in OS.get_cmdline_user_args():
+		session.solo(0, 2026 if "--modern" in OS.get_cmdline_user_args() else 1936)
 		if session.host_game() != OK:
 			printerr("NET FAIL: host creation"); quit(1); return
 		await create_timer(8.0).timeout
@@ -28,6 +29,8 @@ func run():
 		await create_timer(2.0).timeout
 		if session.player_id != 1 or session.players.size() != 2:
 			printerr("NET FAIL: assignment or snapshot"); failed = true
+		if session.sim.year() != (2026 if "--modern" in OS.get_cmdline_user_args() else 1936):
+			printerr("NET FAIL: scenario not synchronized"); failed = true
 		session.toggle_pause()
 		session.command("tax_up")
 		await create_timer(1.0).timeout

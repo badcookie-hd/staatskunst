@@ -23,8 +23,10 @@ jobs:
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/ui_test.gd
       - name: Two-process networking
         run: |
-          Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/network_test.gd -- --server &
-          server=$!
-          sleep 1
-          Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/network_test.gd -- --client
-          wait "$server"
+          for era in "" "--modern"; do
+            Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/network_test.gd -- --server $era &
+            server=$!
+            sleep 1
+            Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/network_test.gd -- --client $era
+            wait "$server"
+          done

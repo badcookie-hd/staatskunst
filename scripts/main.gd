@@ -19,6 +19,9 @@ var selected = 0
 var modal: AcceptDialog
 var network_window: AcceptDialog
 var scroll: ScrollContainer
+var map_caption: Label
+var setup_year = 1936
+var setup_content: VBoxContainer
 
 func _ready():
 	build_theme()
@@ -129,7 +132,8 @@ func build_ui():
 	nation_label = label("", 16)
 	nation_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	map_header.add_child(nation_label)
-	map_header.add_child(label("POLITISCHE KARTE  /  8 STAATEN", 11, MUTED))
+	map_caption = label("", 11, MUTED)
+	map_header.add_child(map_caption)
 	map = WorldMap.new()
 	map.sim = session.sim
 	map.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -173,17 +177,19 @@ func build_ui():
 func refresh():
 	if stats == null: return
 	var sim = session.sim
+	selected = clampi(selected, 0, sim.count() - 1)
 	var c = sim.country(session.player_id)
 	clear(stats)
 	metric("STAATSMITTEL", "%.0f M" % c.money, "%+.1f M / Monat" % sim.income(session.player_id))
 	metric("POLITISCHER EINFLUSS", "%.0f" % c.influence, "Für Gesetze und Entscheidungen")
-	metric("STABILITÄT", "%.0f %%" % c.stability, sim.PARTIES[int(c.ruling)] + " regieren")
+	metric("STABILITÄT", "%.0f %%" % c.stability, "Freie Wahlen" if c.democratic else "Autoritäre Regierung")
 	metric("INDUSTRIE", "%.0f" % c.industry, "%d %% Steuern · %d Handelsverträge" % [c.tax, c.trade])
 	metric("STREITKRÄFTE", "%.0f Tsd." % c.army, "Qualität %.2f · Stärke %.0f" % [c.quality, sim.power(session.player_id)])
 	date_label.text = "%s   ·   %d×" % [date_text(int(sim.state.day)), session.speed]
 	pause_button.text = "Ⅱ Pause" if session.running else "▶ Fortsetzen"
 	pause_button.disabled = not session.is_host() or int(sim.state.winner) >= 0
 	nation_label.text = "%s  /  %s" % [c.name.to_upper(), "LAN · %d Spieler" % session.players.size() if session.online else "EINZELSPIELER"]
+	map_caption.text = "%d  /  %d STAATEN" % [sim.year(), sim.count()]
 	map.selected_id = selected
 	map.player_id = session.player_id
 	map.queue_redraw()
@@ -214,7 +220,7 @@ func metric(title: String, value: String, detail: String):
 	box.add_child(label(detail, 11, MUTED))
 
 func date_text(day: int) -> String:
-	return "%02d.%02d.%d" % [day % 30 + 1, (day / 30) % 12 + 1, 1936 + day / 360]
+	return "%02d.%02d.%d" % [day % 30 + 1, (day / 30) % 12 + 1, session.sim.year() + day / 360]
 
 func heading(title: String, sub: String):
 	content.add_child(label(title, 23, GOLD))
@@ -231,12 +237,12 @@ func state_tab(c: Dictionary):
 	heading("Das Kabinett", "Dein Kurs für %s. Jede Entscheidung verändert das politische Gleichgewicht." % c.name)
 	var goal = panel(content, Color("203a3e"))
 	goal.add_child(label("DEIN WEG ZUM SIEG", 11, GOLD))
-	paragraph(goal, "Wohlstand: ab Tag 365 mindestens 100 Industrie und 75 % Stabilität. Oder: fünf der acht Länder kontrollieren.")
+	paragraph(goal, "Wohlstand: ab Tag 365 mindestens 100 Industrie und 75 % Stabilität. Oder: fünf Länder kontrollieren.")
 	bar(goal, c.industry)
 	paragraph(goal, "%.0f / 100 Industrie   ·   %d / 5 Länder" % [c.industry, session.sim.territories(session.player_id)])
 	if int(c.event) >= 0:
-		var titles = ["Streik im Industriegebiet", "Die Energiefrage", "Eine neue Generation"]
-		var bodies = ["Gewerkschaften fordern sichere Arbeitsplätze und Investitionen.", "Die Städte verlangen eine verlässliche öffentliche Versorgung.", "Studierende fordern moderne Schulen und berufliche Perspektiven."]
+		var titles = ["Streik im Industriegebiet", "Die Energiefrage", "Eine neue Generation"] if session.sim.year() == 1936 else ["Automatisierung der Industrie", "Energiewende", "Digitale Bildung"]
+		var bodies = ["Arbeitende fordern sichere Arbeitsplätze und Investitionen.", "Die Städte verlangen eine verlässliche öffentliche Versorgung.", "Studierende fordern moderne Schulen und berufliche Perspektiven."] if session.sim.year() == 1936 else ["Neue Technologien verändern die Arbeitswelt. Beschäftigte fordern Weiterbildung.", "Netzausbau und erneuerbare Energie benötigen staatliche Investitionen.", "Schulen und Hochschulen benötigen moderne digitale Infrastruktur."]
 		var event_box = panel(content)
 		event_box.add_child(label(titles[int(c.event)], 18, GOLD))
 		paragraph(event_box, bodies[int(c.event)] + " Entscheidung binnen %d Tagen, sonst wird vertagt." % (30 - int(session.sim.state.day) + int(c.event_day)))
@@ -249,11 +255,13 @@ func state_tab(c: Dictionary):
 	add_action("welfare")
 
 func politics_tab(c: Dictionary):
-	heading("Parteien & Parlament", "Nächste Wahl in %d Tagen. Die stärkste Partei übernimmt automatisch die Regierung." % (180 - int(session.sim.state.day) % 180))
+	heading("Politik & Regierung", "Nächste Wahl in %d Tagen. Die stärkste politische Strömung übernimmt die Regierung." % (180 - int(session.sim.state.day) % 180) if c.democratic else "Autoritäres Regierungssystem: keine freien Wahlen. Eine Verfassungsreform eröffnet einen demokratischen Alternativpfad.")
+	paragraph(content, "Politische Strömungen · vereinfachte Spielwerte, keine historischen Wahlergebnisse.")
+	if not c.democratic: add_action("democratize")
 	var bonuses = ["+16 % Industrie als zusätzliche Monatseinnahmen", "+Stabilität, kostet 6 M pro Monat", "+0,25 politischer Einfluss pro Tag", "+0,75 Tsd. Soldaten / Monat, −Stabilität"]
 	for i in range(4):
 		var box = panel(content)
-		box.add_child(label("%s   %.1f %% %s" % [session.sim.PARTIES[i], c.support[i], "• Regierung" if int(c.ruling) == i else ""], 15, GOLD if int(c.ruling) == i else Color("dce7e4")))
+		paragraph(box, "%s · %.1f %% %s" % [session.sim.PARTIES[i], c.support[i], "· Regierung" if int(c.ruling) == i else ""], GOLD if int(c.ruling) == i else Color("dce7e4"))
 		bar(box, c.support[i])
 		paragraph(box, bonuses[i])
 		add_action("campaign_%d" % i, box, "Wahlkampf · 25 Einfluss", "+9 Unterstützung, übrige Parteien verlieren Anteile")
@@ -311,25 +319,41 @@ func show_notice(value: String):
 	if status_label: status_label.text = value
 
 func show_start():
+	if is_instance_valid(modal): modal.queue_free()
 	modal = AcceptDialog.new()
-	modal.title = "Willkommen bei Staatskunst"
-	modal.get_ok_button().text = "Kabinett öffnen"
+	modal.title = "Neue Partie · Szenario wählen"
+	modal.get_ok_button().text = "Zurück"
 	add_child(modal)
 	var box = VBoxContainer.new()
-	box.custom_minimum_size = Vector2(570, 470)
+	box.custom_minimum_size = Vector2(720, 570)
 	modal.add_child(box)
-	box.add_child(label("Eine Welt. Dein politischer Kurs.", 28, GOLD))
-	paragraph(box, "1936, auf einem fiktiven Kontinent. Führe deinen Staat durch Wahlen, Wirtschaftskrisen und internationale Konflikte.")
-	box.add_child(label("WÄHLE DEINEN STAAT", 11, GOLD))
-	var grid = GridContainer.new()
-	grid.columns = 2
-	box.add_child(grid)
-	for i in range(8):
-		var b = button(grid, session.sim.NAMES[i], func(): session.solo(i); selected = i; refresh(); modal.hide())
-		b.custom_minimum_size.x = 275
-	paragraph(box, "1. Baue Industrie aus und halte den Haushalt im Plus.\n2. Fördere Parteien; alle 180 Tage wird gewählt.\n3. Nutze Diplomatie oder überlegene Streitkräfte.\n4. Gewinne durch Wohlstand oder fünf kontrollierte Länder.")
-	paragraph(box, "Die Zeit ist pausiert. Mit ▶ oder Leertaste starten. Alle Armeen handeln automatisch. LAN / direkte IP findest du im Menü.")
+	box.add_child(label("Zwei Epochen. Dein politischer Kurs.", 28, GOLD))
+	var years = HBoxContainer.new()
+	box.add_child(years)
+	for value in [1936, 2026]:
+		var b = button(years, "1936 · Europa am Scheideweg" if value == 1936 else "2026 · Europa der Gegenwart", func(): setup_year = value; refresh_setup())
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	setup_content = VBoxContainer.new()
+	box.add_child(setup_content)
+	refresh_setup()
 	modal.popup_centered()
+
+func refresh_setup():
+	clear(setup_content)
+	var scenario = session.sim.Scenarios.get_scenario(setup_year)
+	setup_content.add_child(label("%d — %s" % [setup_year, scenario.title], 22, GOLD))
+	paragraph(setup_content, scenario.description)
+	setup_content.add_child(label("STAAT WÄHLEN UND PARTIE STARTEN", 11, GOLD))
+	var grid = GridContainer.new()
+	grid.columns = 3
+	setup_content.add_child(grid)
+	for i in range(scenario.countries.size()):
+		var entry = scenario.countries[i]
+		var b = button(grid, entry.name, func(): session.solo(i, setup_year); selected = i; refresh(); modal.hide())
+		b.custom_minimum_size.x = 230
+		b.tooltip_text = "Industrie %d · Armee %d · Qualität %.2f · %s" % [entry.industry, entry.army, entry.quality, "Freie Wahlen" if entry.democratic else "Autoritäre Regierung"]
+	paragraph(setup_content, "Reale Staaten auf einer vereinfachten Europakarte. Historische Grenzen sind schematisch; Wirtschaft, Militär und politische Anteile sind Spielwerte. Der Verlauf ist frei, keine festgelegte Geschichtswiederholung.")
+	paragraph(setup_content, "Mit ▶ oder Leertaste starten. Maus-Rad: Kartenzoom. LAN / direkte IP findest du im Menü.")
 
 func show_menu():
 	if session.is_host() and session.running: session.toggle_pause()
@@ -343,10 +367,10 @@ func show_menu():
 	menu.add_child(box)
 	button(box, "Partie speichern", func():
 		if not session.is_host(): show_notice("Nur der Host kann speichern."); return
-		var error = session.sim.save_game("user://campaign.json", session.player_id)
+		var error = session.sim.save_game("user://campaign-v2.json", session.player_id)
 		show_notice("Partie gespeichert." if error == OK else "Speichern fehlgeschlagen: %s" % error_string(error)))
 	var load_button = button(box, "Gespeicherte Partie laden", func():
-		var id = session.sim.read_game("user://campaign.json")
+		var id = session.sim.read_game("user://campaign-v2.json")
 		if id < 0: show_notice("Kein gültiger Spielstand gefunden."); return
 		session.player_id = id
 		session.running = false
@@ -359,7 +383,7 @@ func show_menu():
 	new_button.disabled = session.online
 	button(box, "LAN / Direkte IP", func(): menu.hide(); show_network())
 	button(box, "Spielanleitung", func(): menu.hide(); show_help())
-	paragraph(box, "Staatskunst 0.1.0 · Godot 4.5\nEin eigenständiges Strategiespiel mit fiktiven Staaten.\nLokaler Spielstand: " + OS.get_user_data_dir())
+	paragraph(box, "Staatskunst 0.2.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
 

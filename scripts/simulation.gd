@@ -1,14 +1,16 @@
 extends RefCounted
 ## All gameplay state lives here. Only the host advances or mutates it.
-const PARTIES = ["Liberale", "Sozialbund", "Konservative", "Nationalblock"]
-const NAMES = ["Aurelia", "Nordmark", "Valdora", "Westhain", "Eisenbund", "Südküste", "Ostwald", "Lydien"]
-const COLORS = ["6caa9a", "8eabbc", "b49aca", "c4a471", "ac7870", "88a27c", "929bbb", "c792ab"]
-const NEIGHBORS = [[1, 3, 4], [0, 2, 4], [1, 4, 6], [0, 4, 5], [0, 1, 2, 3, 5, 6, 7], [3, 4, 7], [2, 4, 7], [4, 5, 6]]
-const ACTIONS = {
+const Scenarios = preload("res://scripts/scenarios.gd")
+var PARTIES: Array:
+	get: return Scenarios.get_scenario(year()).parties
+var NAMES: Array:
+	get: return state.countries.map(func(c): return c.name)
+const BASE_ACTIONS = {
 	"industry": ["Industrie ausbauen", "180 M · 35 Einfluss · 45 Tage → +8 Industrie", 180.0, 35.0],
 	"research": ["Modernisierung", "140 M · 30 Einfluss · 60 Tage → +0,25 Qualität", 140.0, 30.0],
 	"recruit": ["Freiwillige anwerben", "90 M · 20 Einfluss · 30 Tage → +15 Tsd. Soldaten", 90.0, 20.0],
-	"welfare": ["Sozialpakt", "100 M · 35 Einfluss → +12 Stabilität, +8 Sozialbund", 100.0, 35.0],
+	"welfare": ["Sozialpakt", "100 M · 35 Einfluss → +12 Stabilität, +8 linkes Lager", 100.0, 35.0],
+	"democratize": ["Demokratische Verfassung", "180 M · 120 Einfluss → freie Wahlen, −8 Stabilität", 180.0, 120.0],
 	"tax_up": ["Steuern erhöhen", "20 Einfluss → +5 Prozentpunkte Steuern, −5 Stabilität", 0.0, 20.0],
 	"tax_down": ["Steuern senken", "20 Einfluss → −5 Prozentpunkte Steuern, +4 Stabilität", 0.0, 20.0],
 	"trade": ["Handelsabkommen", "50 M · 25 Einfluss → +1 Handel (max. 4), bessere Beziehungen", 50.0, 25.0],
@@ -17,22 +19,37 @@ const ACTIONS = {
 	"peace": ["Waffenstillstand anbieten", "30 Einfluss · bei ausgeglichenem Krieg nach 30 Tagen", 0.0, 30.0]
 }
 var state: Dictionary = {}
+var ACTIONS: Dictionary:
+	get:
+		var actions = BASE_ACTIONS.duplicate(true)
+		if year() == 2026:
+			actions.industry = ["Digitale Infrastruktur", "220 M · 35 Einfluss · 45 Tage → +8 Industrie", 220.0, 35.0]
+			actions.research = ["Technologieprogramm", "180 M · 30 Einfluss · 60 Tage → +0,25 Qualität", 180.0, 30.0]
+			actions.recruit = ["Berufsarmee erweitern", "110 M · 20 Einfluss · 30 Tage → +15 Tsd. Soldaten", 110.0, 20.0]
+		return actions
 
-func new_game(seed_value: int = 1936):
-	state = {"version": 1, "seed": seed_value, "day": 0, "countries": [], "wars": [], "log": [], "winner": -1}
-	for i in range(8):
-		state.countries.append({"id": i, "name": NAMES[i], "owner": i, "money": 310.0 + i * 8,
-			"industry": 35.0 + (i * 7 % 19), "stability": 68.0, "influence": 100.0,
-			"army": 48.0 + (i * 11 % 35), "quality": 1.0 + (i % 3) * 0.15,
-			"tax": 25, "trade": 0, "ruling": i % 4, "support": [30.0, 27.0, 25.0, 18.0],
-			"projects": [], "relations": {}, "event": -1, "event_day": 0, "cooldowns": {}, "truce": {}})
-	log_entry("Ein Kontinent am Wendepunkt. Dein Kabinett wartet auf Entscheidungen.")
+func year() -> int:
+	return int(state.get("scenario", 1936))
+
+func count() -> int:
+	return state.countries.size()
+
+func new_game(scenario_year: int = 1936, seed_value: int = 1936):
+	if not Scenarios.available(scenario_year): scenario_year = 1936
+	var setup = Scenarios.get_scenario(scenario_year)
+	state = {"version": 2, "scenario": scenario_year, "seed": seed_value, "day": 0, "countries": [], "wars": [], "log": [], "winner": -1}
+	for entry in setup.countries:
+		var c = entry.duplicate(true)
+		for key in ["polygons", "neighbors", "sea_neighbors", "center", "color"]: c.erase(key)
+		c.merge({"owner": int(c.id), "tax": 25, "trade": 0, "projects": [], "relations": {}, "event": -1, "event_day": 0, "cooldowns": {}, "truce": {}})
+		state.countries.append(c)
+	log_entry("%d · %s. Dein Kabinett wartet auf Entscheidungen." % [scenario_year, setup.title])
 
 func country(id: int) -> Dictionary:
 	return state.countries[id]
 
 func alive(id: int) -> bool:
-	return id >= 0 and id < 8 and int(country(id).owner) == id
+	return id >= 0 and id < count() and int(country(id).owner) == id
 
 func territories(id: int) -> int:
 	var total = 0
@@ -59,10 +76,11 @@ func relation(a: int, b: int) -> int:
 	return int(country(a).relations.get(str(b), 0))
 
 func borders(a: int, b: int) -> bool:
-	for i in range(8):
+	for i in range(count()):
 		if int(country(i).owner) != a: continue
-		for n in NEIGHBORS[i]:
-			if int(country(n).owner) == b: return true
+		var entry = Scenarios.get_scenario(year()).countries[i]
+		for n in entry.neighbors + entry.sea_neighbors:
+			if int(country(int(n)).owner) == b: return true
 	return false
 
 func at_war(a: int, b: int) -> bool:
@@ -76,6 +94,7 @@ func reason(id: int, action: String, target: int = -1) -> String:
 	var c = country(id)
 	if action.begins_with("campaign_"):
 		if action not in ["campaign_0", "campaign_1", "campaign_2", "campaign_3"]: return "Unbekannte Partei."
+		if not c.democratic: return "Keine freien Wahlen. Zuerst eine demokratische Verfassung beschließen."
 		if c.influence < 25: return "25 Einfluss erforderlich."
 		if int(c.cooldowns.get("campaign", -1)) > int(state.day): return "Wahlkampagne erst in 15 Tagen wieder möglich."
 		return ""
@@ -84,6 +103,7 @@ func reason(id: int, action: String, target: int = -1) -> String:
 		if action == "event_0" and c.money < 60: return "60 M erforderlich."
 		return ""
 	if not ACTIONS.has(action): return "Unbekannte Entscheidung."
+	if action == "democratize" and c.democratic: return "Es gibt bereits freie Wahlen."
 	if c.money < ACTIONS[action][2]: return "Nicht genug Staatsmittel."
 	if c.influence < ACTIONS[action][3]: return "Nicht genug politischer Einfluss."
 	if int(c.cooldowns.get(action, -1)) > int(state.day): return "Diese Entscheidung hat 15 Tage Abklingzeit."
@@ -98,7 +118,7 @@ func reason(id: int, action: String, target: int = -1) -> String:
 		if action == "trade" and c.trade >= 4: return "Alle vier Handelsplätze sind belegt."
 		if action == "trade" and relation(id, target) < -20: return "Beziehungen zuerst verbessern."
 		if action == "war":
-			if not borders(id, target): return "Kriege sind nur gegen Nachbarstaaten möglich."
+			if not borders(id, target): return "Kein gemeinsamer Grenz- oder Seezugang im Szenario."
 			if at_war(id, target): return "Ihr befindet euch bereits im Krieg."
 			if war_count(id) >= 1 or war_count(target) >= 1: return "Ein Staat kann nur einen Krieg gleichzeitig führen."
 			if int(c.truce.get(str(target), -1)) > int(state.day): return "Der Waffenstillstand gilt noch."
@@ -132,6 +152,10 @@ func act(id: int, action: String, target: int = -1) -> String:
 	c.influence -= ACTIONS[action][3]
 	c.cooldowns[action] = int(state.day) + 15
 	match action:
+		"democratize":
+			c.democratic = true
+			c.stability = maxf(0, c.stability - 8)
+			log_entry("%s beschließt eine demokratische Verfassung." % c.name)
 		"industry", "research", "recruit":
 			var duration = {"industry": 45, "research": 60, "recruit": 30}[action]
 			c.projects.append({"kind": action, "finish": int(state.day) + duration})
@@ -198,7 +222,7 @@ func advance(humans: Array = [0]):
 					"recruit": c.army += 15
 				c.projects.erase(project)
 				if id in humans: log_entry("%s: %s abgeschlossen." % [c.name, ACTIONS[project.kind][0]])
-		if day % 180 == 0:
+		if day % 180 == 0 and c.democratic:
 			c.ruling = c.support.find(c.support.max())
 			c.stability = minf(100, c.stability + 3)
 			log_entry("Wahl in %s: %s bilden die Regierung." % [c.name, PARTIES[int(c.ruling)]])
@@ -247,7 +271,7 @@ func ai_turn(id: int):
 	var choice = ["industry", "research", "recruit"][(int(state.day) / 30 + id) % 3]
 	act(id, choice)
 	if int(state.day) >= 240 and int(c.ruling) == 3 and c.stability > 50:
-		for target in range(8):
+		for target in range(count()):
 			if alive(target) and target != id and power(id) > power(target) * 1.65 and reason(id, "war", target) == "":
 				act(id, "war", target)
 				break
@@ -269,18 +293,23 @@ func read_game(path: String) -> int:
 	var data = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not data is Dictionary or not data.has("state") or not data.has("player"): return -1
 	var s = data.state
-	if not s is Dictionary or s.get("version", 0) != 1 or not s.get("countries", null) is Array or s.countries.size() != 8: return -1
+	if not s is Dictionary or s.get("version", 0) != 2 or not number_in(s.get("scenario", 0), 1936, 2026): return -1
+	if not Scenarios.available(int(s.scenario)): return -1
+	var scenario_countries = Scenarios.get_scenario(int(s.scenario)).countries
+	var size_value = scenario_countries.size()
+	if not s.get("countries", null) is Array or s.countries.size() != size_value: return -1
 	if not s.get("wars", null) is Array or not s.get("log", null) is Array or not s.has_all(["day", "seed", "winner"]): return -1
-	if not number_in(s.day, 0, 1000000) or not number_in(s.seed, 0, 100000000) or not number_in(s.winner, -1, 7): return -1
+	if not number_in(s.day, 0, 1000000) or not number_in(s.seed, 0, 100000000) or not number_in(s.winner, -1, size_value - 1): return -1
 	if not data.player is float and not data.player is int: return -1
-	if int(data.player) < 0 or int(data.player) >= 8: return -1
-	for index in range(8):
+	if int(data.player) < 0 or int(data.player) >= size_value: return -1
+	for index in range(size_value):
 		var c = s.countries[index]
 		if not c is Dictionary or not c.has_all(["id", "name", "owner", "money", "industry", "stability", "influence", "army", "quality", "tax", "trade", "ruling", "support", "projects", "relations", "event", "event_day", "cooldowns", "truce"]): return -1
-		if not c.name is String or c.name != NAMES[index] or not number_in(c.id, index, index): return -1
+		if not c.name is String or c.name != scenario_countries[index].name or not number_in(c.id, index, index): return -1
+		if not c.get("democratic", null) is bool: return -1
 		for key in ["owner", "ruling", "money", "industry", "stability", "influence", "army", "quality", "tax", "trade", "event", "event_day"]:
 			if not number_in(c[key], -1 if key == "event" else 0, 100000000): return -1
-		if int(c.owner) not in range(8) or int(c.ruling) not in range(4) or int(c.event) not in [-1,0,1,2]: return -1
+		if int(c.owner) not in range(size_value) or int(c.ruling) not in range(4) or int(c.event) not in [-1,0,1,2]: return -1
 		if c.stability > 100 or c.quality < 1 or c.quality > 3 or c.tax < 10 or c.tax > 45 or c.trade > 4: return -1
 		if not c.support is Array or c.support.size() != 4: return -1
 		for value in c.support:
@@ -295,7 +324,7 @@ func read_game(path: String) -> int:
 				if not number_in(value, -100, 10000000): return -1
 	for w in s.wars:
 		if not w is Dictionary or not w.has_all(["a", "b", "progress", "days"]): return -1
-		if not number_in(w.a, 0, 7) or not number_in(w.b, 0, 7) or w.a == w.b: return -1
+		if not number_in(w.a, 0, size_value - 1) or not number_in(w.b, 0, size_value - 1) or w.a == w.b: return -1
 		if not number_in(w.progress, -100, 100) or not number_in(w.days, 0, 1000000): return -1
 	for entry in s.log:
 		if not entry is Dictionary or not entry.has_all(["day", "text"]): return -1

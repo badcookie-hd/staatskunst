@@ -24,14 +24,15 @@ func _ready():
 func is_host() -> bool:
 	return not online or multiplayer.is_server()
 
-func solo(id: int):
+func solo(id: int, scenario_year: int = 1936):
 	disconnect_session()
-	sim.new_game()
+	sim.new_game(scenario_year)
 	player_id = id
 	running = false
 	elapsed = 0.0
 	speed = 1
 	updated.emit()
+	notice.emit("Neue Partie · %d · %s. Mit ▶ oder Leertaste starten." % [sim.year(), sim.country(player_id).name])
 
 func host_game() -> Error:
 	if online: return ERR_ALREADY_IN_USE
@@ -70,7 +71,7 @@ func disconnect_session():
 func _peer_connected(peer_id: int):
 	if not is_host(): return
 	var chosen = -1
-	for id in range(8):
+	for id in range(sim.count()):
 		if sim.alive(id) and id not in players.values(): chosen = id; break
 	if chosen < 0:
 		multiplayer.multiplayer_peer.disconnect_peer(peer_id)
@@ -91,7 +92,6 @@ func _peer_disconnected(peer_id: int):
 @rpc("authority", "call_remote", "reliable")
 func _assignment(id: int):
 	player_id = id
-	updated.emit()
 
 @rpc("authority", "call_remote", "reliable")
 func _sync(snapshot: Dictionary, active: bool, new_speed: int, roster: Dictionary):
