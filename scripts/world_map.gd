@@ -97,6 +97,9 @@ func _draw():
 	for i in range(regions.size()):
 		var owner = int(sim.country(i).owner)
 		var color = Color(setup.countries[owner].color).darkened(0.33)
+		for war in sim.state.wars:
+			var pressured = int(war.b) if war.progress > 0 else int(war.a)
+			if owner == pressured: color = color.lerp(Color("ba615f"), absf(war.progress) / 140.0)
 		if i == hovered or i == selected_id: color = color.lightened(0.18)
 		for ring in regions[i]:
 			var points = screen_polygon(ring)
@@ -116,8 +119,29 @@ func _draw():
 		draw_string(font, pos - Vector2(width / 2,0), text_value, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color("e7e9df"))
 		if int(sim.country(i).owner) == player_id: draw_circle(pos + Vector2(0,7), 2.5, Color("dfc48e"))
 	for w in sim.state.wars:
-		draw_dashed_line(transform_point(center(int(w.a))), transform_point(center(int(w.b))), Color("efb19b"), 2, 7)
+		var start = transform_point(center(int(w.a)))
+		var end = transform_point(center(int(w.b)))
+		if w.progress < 0:
+			var swap = start
+			start = end
+			end = swap
+		draw_dashed_line(start, end, Color("efb19b"), 2, 7)
+		var phase = fmod(Time.get_ticks_msec() / 2400.0, 1.0)
+		for i in range(3): draw_circle(start.lerp(end, fmod(phase + i / 3.0, 1)), 3, Color("ffdbb2"))
+		var mid = start.lerp(end, 0.5)
+		draw_style_box(badge_style(), Rect2(mid - Vector2(43, 19), Vector2(86, 32)))
+		draw_string(font, mid + Vector2(-33, 2), "%.0f %% · %d T" % [absf(w.progress), w.days], HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("ffe1b2"))
 	draw_string(font, Vector2(20,28), "EUROPA / %d" % sim.year(), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("9eb7bc"))
 	draw_string(font, Vector2(20,48), "Mausrad: Zoom · Mittlere Taste: Verschieben", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("7e979e"))
 	draw_string(font, transform_point(Vector2(-8,49)), "ATLANTIK", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("64818b"))
 	draw_string(font, transform_point(Vector2(2,58)), "NORDSEE", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("64818b"))
+	if not sim.state.wars.is_empty(): draw_string(font, Vector2(20, size.y - 18), "Rot = strategischer Druck · Punkte = Vormarschrichtung, keine Frontlinie", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("efb19b"))
+
+func badge_style() -> StyleBoxFlat:
+	var box = StyleBoxFlat.new()
+	box.bg_color = Color("382b36")
+	box.set_corner_radius_all(4)
+	return box
+
+func _process(_delta):
+	if sim != null and not sim.state.wars.is_empty() and is_visible_in_tree(): queue_redraw()

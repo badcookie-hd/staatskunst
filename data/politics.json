@@ -1,0 +1,3067 @@
+{
+  "1936": {
+    "DEU": {
+      "head": "Adolf Hitler",
+      "head_title": "Staats- und Regierungschef",
+      "premier": "Adolf Hitler",
+      "premier_title": "Reichskanzler",
+      "parties": [
+        {
+          "name": "NSDAP",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Adolf Hitler",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Hermann Göring",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Wilhelm Frick",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            },
+            {
+              "name": "Joseph Goebbels",
+              "focus": "foreign",
+              "id": "0:3",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Zentrum",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Heinrich Brüning",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Ludwig Kaas",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            },
+            {
+              "name": "Joseph Wirth",
+              "focus": "defense",
+              "id": "1:2",
+              "party": 1
+            },
+            {
+              "name": "Konrad Adenauer",
+              "focus": "foreign",
+              "id": "1:3",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "SPD",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Otto Wels",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Hans Vogel",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            },
+            {
+              "name": "Rudolf Breitscheid",
+              "focus": "defense",
+              "id": "2:2",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "KPD",
+          "kind": "communist",
+          "color": "c56265",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Wilhelm Pieck",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Ernst Thälmann",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            },
+            {
+              "name": "Walter Ulbricht",
+              "focus": "defense",
+              "id": "3:2",
+              "party": 3
+            }
+          ]
+        },
+        {
+          "name": "DNVP",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Alfred Hugenberg",
+              "focus": "finance",
+              "id": "4:0",
+              "party": 4
+            },
+            {
+              "name": "Kuno von Westarp",
+              "focus": "economy",
+              "id": "4:1",
+              "party": 4
+            }
+          ]
+        },
+        {
+          "name": "Deutsche Staatspartei",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Theodor Heuss",
+              "focus": "finance",
+              "id": "5:0",
+              "party": 5
+            },
+            {
+              "name": "Reinhold Maier",
+              "focus": "economy",
+              "id": "5:1",
+              "party": 5
+            }
+          ]
+        },
+        {
+          "name": "Parteilose",
+          "kind": "independent",
+          "color": "9bacae",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Hjalmar Schacht",
+              "focus": "economy",
+              "id": "6:0",
+              "party": 6
+            },
+            {
+              "name": "Konstantin von Neurath",
+              "focus": "foreign",
+              "id": "6:1",
+              "party": 6
+            },
+            {
+              "name": "Werner von Blomberg",
+              "focus": "defense",
+              "id": "6:2",
+              "party": 6
+            },
+            {
+              "name": "Franz Gürtner",
+              "focus": "foreign",
+              "id": "6:3",
+              "party": 6
+            },
+            {
+              "name": "Lutz Graf Schwerin von Krosigk",
+              "focus": "finance",
+              "id": "6:4",
+              "party": 6
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0,
+        6
+      ],
+      "cabinet": {
+        "finance": "Lutz Graf Schwerin von Krosigk",
+        "economy": "Hjalmar Schacht",
+        "defense": "Werner von Blomberg",
+        "foreign": "Konstantin von Neurath"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Adolf_Hitler"
+      ]
+    },
+    "FRA": {
+      "head": "Albert Lebrun",
+      "head_title": "Präsident",
+      "premier": "Pierre Laval",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Parteilose",
+          "kind": "independent",
+          "color": "9bacae",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Pierre Laval",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Parti radical",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Édouard Herriot",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Édouard Daladier",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "SFIO",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Léon Blum",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Paul Faure",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "Parti communiste français",
+          "kind": "communist",
+          "color": "c56265",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Maurice Thorez",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Jacques Duclos",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Pierre_Laval"
+      ]
+    },
+    "GBR": {
+      "head": "George V.",
+      "head_title": "König",
+      "premier": "Stanley Baldwin",
+      "premier_title": "Premierminister",
+      "parties": [
+        {
+          "name": "Conservative Party",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Stanley Baldwin",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Neville Chamberlain",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Anthony Eden",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            },
+            {
+              "name": "Winston Churchill",
+              "focus": "foreign",
+              "id": "0:3",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Labour Party",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Clement Attlee",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Arthur Greenwood",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Liberal Party",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Archibald Sinclair",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "David Lloyd George",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Stanley_Baldwin"
+      ]
+    },
+    "ITA": {
+      "head": "Viktor Emanuel III.",
+      "head_title": "König",
+      "premier": "Benito Mussolini",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Partito Nazionale Fascista",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Benito Mussolini",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Dino Grandi",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Italo Balbo",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            },
+            {
+              "name": "Galeazzo Ciano",
+              "focus": "foreign",
+              "id": "0:3",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Partito Socialista Italiano",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Pietro Nenni",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Giuseppe Saragat",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Partito Comunista d’Italia",
+          "kind": "communist",
+          "color": "c56265",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Palmiro Togliatti",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Luigi Longo",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "Partito Popolare Italiano",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Luigi Sturzo",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Alcide De Gasperi",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Benito_Mussolini"
+      ]
+    },
+    "ESP": {
+      "head": "Niceto Alcalá-Zamora",
+      "head_title": "Präsident",
+      "premier": "Manuel Portela Valladares",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Parteilose",
+          "kind": "independent",
+          "color": "9bacae",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Manuel Portela Valladares",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Joaquín Chapaprieta",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "PSOE",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Francisco Largo Caballero",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Indalecio Prieto",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "CEDA",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "José María Gil-Robles",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Manuel Giménez Fernández",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "Izquierda Republicana",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Manuel Azaña",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Marcelino Domingo",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Manuel_Portela_Valladares"
+      ]
+    },
+    "POL": {
+      "head": "Ignacy Mościcki",
+      "head_title": "Präsident",
+      "premier": "Marian Zyndram-Kościałkowski",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Parteilose (Sanacja)",
+          "kind": "independent",
+          "color": "9bacae",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Marian Zyndram-Kościałkowski",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Józef Beck",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Eugeniusz Kwiatkowski",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Polska Partia Socjalistyczna",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Mieczysław Niedziałkowski",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Zygmunt Żuławski",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Stronnictwo Ludowe",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Wincenty Witos",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Stanisław Mikołajczyk",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Marian_Zyndram-Ko%C5%9Bcia%C5%82kowski"
+      ]
+    },
+    "AUT": {
+      "head": "Wilhelm Miklas",
+      "head_title": "Bundespräsident",
+      "premier": "Kurt Schuschnigg",
+      "premier_title": "Bundeskanzler",
+      "parties": [
+        {
+          "name": "Vaterländische Front",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Kurt Schuschnigg",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Ernst Rüdiger Starhemberg",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Eduard Baar-Baarenfels",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "SDAP",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Otto Bauer",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Karl Renner",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Christlichsoziale Partei",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Leopold Kunschak",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Richard Schmitz",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Kurt_Schuschnigg"
+      ]
+    },
+    "CSK": {
+      "head": "Edvard Beneš",
+      "head_title": "Präsident",
+      "premier": "Milan Hodža",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "RSZML (Agrarpartei)",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Milan Hodža",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Rudolf Beran",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "František Udržal",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Československá sociální demokracie",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Antonín Hampl",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Rudolf Bechyně",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Komunistická strana Československa",
+          "kind": "communist",
+          "color": "c56265",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Klement Gottwald",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Antonín Zápotocký",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Milan_Hod%C5%BEa"
+      ]
+    },
+    "HUN": {
+      "head": "Miklós Horthy",
+      "head_title": "Reichsverweser",
+      "premier": "Gyula Gömbös",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Nemzeti Egység Pártja",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Gyula Gömbös",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Kálmán Darányi",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Bálint Hóman",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Független Kisgazdapárt",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Tibor Eckhardt",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Ferenc Nagy",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Magyarországi Szociáldemokrata Párt",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Károly Peyer",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Anna Kéthly",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Gyula_G%C3%B6mb%C3%B6s"
+      ]
+    },
+    "BEL": {
+      "head": "Leopold III.",
+      "head_title": "König",
+      "premier": "Paul van Zeeland",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Katholische Partei",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Paul van Zeeland",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Prosper Poullet",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Belgische Arbeiterpartei",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Émile Vandervelde",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Paul-Henri Spaak",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Liberale Partei",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Albert Devèze",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Paul Hymans",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Paul_van_Zeeland"
+      ]
+    },
+    "NLD": {
+      "head": "Wilhelmina",
+      "head_title": "Königin",
+      "premier": "Hendrik Colijn",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Anti-Revolutionaire Partij",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Hendrik Colijn",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Jan Schouten",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "SDAP",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Johan Willem Albarda",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Willem Drees",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Roomsch-Katholieke Staatspartij",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Laurentius Deckers",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Piet Aalberse",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Hendrik_Colijn"
+      ]
+    },
+    "CHE": {
+      "head": "Albert Meyer",
+      "head_title": "Bundespräsident",
+      "premier": "Albert Meyer",
+      "premier_title": "Bundesratsvorsitz",
+      "parties": [
+        {
+          "name": "FDP",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Albert Meyer",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Hermann Obrecht",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Katholisch-Konservative Volkspartei",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Philipp Etter",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Giuseppe Motta",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Bauern-, Gewerbe- und Bürgerpartei",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Rudolf Minger",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Eduard von Steiger",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Albert_Meyer"
+      ]
+    },
+    "PRT": {
+      "head": "Óscar Carmona",
+      "head_title": "Präsident",
+      "premier": "António de Oliveira Salazar",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "União Nacional",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "António de Oliveira Salazar",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "António Carneiro Pacheco",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Pedro Teotónio Pereira",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Partido Republicano Português",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Norton de Matos",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Bernardino Machado",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Partido Comunista Português",
+          "kind": "communist",
+          "color": "c56265",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Bento Gonçalves",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Álvaro Cunhal",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Ant%C3%B3nio_de_Oliveira_Salazar"
+      ]
+    },
+    "DNK": {
+      "head": "Christian X.",
+      "head_title": "König",
+      "premier": "Thorvald Stauning",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Socialdemokratiet",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Thorvald Stauning",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Hans Hedtoft",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Vilhelm Buhl",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Radikale Venstre",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Peter Munch",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Jørgen Jørgensen",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Det Konservative Folkeparti",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "John Christmas Møller",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Ole Bjørn Kraft",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Thorvald_Stauning"
+      ]
+    },
+    "SWE": {
+      "head": "Gustaf V.",
+      "head_title": "König",
+      "premier": "Per Albin Hansson",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Socialdemokraterna",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Per Albin Hansson",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Ernst Wigforss",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Gustav Möller",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Allmänna valmansförbundet",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Gösta Bagge",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Fritiof Domö",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Bondeförbundet",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Axel Pehrsson-Bramstorp",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Karl Gustaf Westman",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Per_Albin_Hansson"
+      ]
+    },
+    "NOR": {
+      "head": "Haakon VII.",
+      "head_title": "König",
+      "premier": "Johan Nygaardsvold",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Arbeiderpartiet",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Johan Nygaardsvold",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Halvdan Koht",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Oscar Torp",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Høyre",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Johan H. Andresen",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "C. J. Hambro",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Venstre",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Johan Ludwig Mowinckel",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Per Berg Lund",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Johan_Nygaardsvold"
+      ]
+    }
+  },
+  "2026": {
+    "DEU": {
+      "head": "Frank-Walter Steinmeier",
+      "head_title": "Bundespräsident",
+      "premier": "Friedrich Merz",
+      "premier_title": "Bundeskanzler",
+      "parties": [
+        {
+          "name": "CDU",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Friedrich Merz",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Katherina Reiche",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Johann Wadephul",
+              "focus": "foreign",
+              "id": "0:2",
+              "party": 0
+            },
+            {
+              "name": "Carsten Linnemann",
+              "focus": "foreign",
+              "id": "0:3",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "CSU",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Markus Söder",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Alexander Dobrindt",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            },
+            {
+              "name": "Dorothee Bär",
+              "focus": "defense",
+              "id": "1:2",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "SPD",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Lars Klingbeil",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Bärbel Bas",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            },
+            {
+              "name": "Boris Pistorius",
+              "focus": "defense",
+              "id": "2:2",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "Bündnis 90/Die Grünen",
+          "kind": "green",
+          "color": "7bb98d",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Franziska Brantner",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Felix Banaszak",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            },
+            {
+              "name": "Katharina Dröge",
+              "focus": "defense",
+              "id": "3:2",
+              "party": 3
+            }
+          ]
+        },
+        {
+          "name": "AfD",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Alice Weidel",
+              "focus": "finance",
+              "id": "4:0",
+              "party": 4
+            },
+            {
+              "name": "Tino Chrupalla",
+              "focus": "economy",
+              "id": "4:1",
+              "party": 4
+            },
+            {
+              "name": "Beatrix von Storch",
+              "focus": "defense",
+              "id": "4:2",
+              "party": 4
+            }
+          ]
+        },
+        {
+          "name": "Die Linke",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Ines Schwerdtner",
+              "focus": "finance",
+              "id": "5:0",
+              "party": 5
+            },
+            {
+              "name": "Jan van Aken",
+              "focus": "economy",
+              "id": "5:1",
+              "party": 5
+            },
+            {
+              "name": "Heidi Reichinnek",
+              "focus": "defense",
+              "id": "5:2",
+              "party": 5
+            }
+          ]
+        },
+        {
+          "name": "FDP",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Christian Dürr",
+              "focus": "finance",
+              "id": "6:0",
+              "party": 6
+            },
+            {
+              "name": "Wolfgang Kubicki",
+              "focus": "economy",
+              "id": "6:1",
+              "party": 6
+            },
+            {
+              "name": "Johannes Vogel",
+              "focus": "defense",
+              "id": "6:2",
+              "party": 6
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0,
+        1,
+        2
+      ],
+      "cabinet": {
+        "finance": "Lars Klingbeil",
+        "economy": "Katherina Reiche",
+        "defense": "Boris Pistorius",
+        "foreign": "Johann Wadephul"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Friedrich_Merz"
+      ]
+    },
+    "FRA": {
+      "head": "Emmanuel Macron",
+      "head_title": "Präsident",
+      "premier": "Sébastien Lecornu",
+      "premier_title": "Premierminister",
+      "parties": [
+        {
+          "name": "Renaissance",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Sébastien Lecornu",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Gabriel Attal",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Élisabeth Borne",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Rassemblement national",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Jordan Bardella",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Marine Le Pen",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Parti socialiste",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Olivier Faure",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Boris Vallaud",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "Les Républicains",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Bruno Retailleau",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Laurent Wauquiez",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/S%C3%A9bastien_Lecornu"
+      ]
+    },
+    "GBR": {
+      "head": "Charles III.",
+      "head_title": "König",
+      "premier": "Keir Starmer",
+      "premier_title": "Premierminister",
+      "parties": [
+        {
+          "name": "Labour Party",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Keir Starmer",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Rachel Reeves",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "John Healey",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            },
+            {
+              "name": "Yvette Cooper",
+              "focus": "foreign",
+              "id": "0:3",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Conservative Party",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Kemi Badenoch",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Mel Stride",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Liberal Democrats",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Ed Davey",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Daisy Cooper",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "Reform UK",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Nigel Farage",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Richard Tice",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Keir_Starmer"
+      ]
+    },
+    "ITA": {
+      "head": "Sergio Mattarella",
+      "head_title": "Präsident",
+      "premier": "Giorgia Meloni",
+      "premier_title": "Ministerpräsidentin",
+      "parties": [
+        {
+          "name": "Fratelli d’Italia",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Giorgia Meloni",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Guido Crosetto",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Adolfo Urso",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Partito Democratico",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Elly Schlein",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Stefano Bonaccini",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Forza Italia",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Antonio Tajani",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Maurizio Gasparri",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "Lega",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Matteo Salvini",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Giancarlo Giorgetti",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Giorgia_Meloni"
+      ]
+    },
+    "ESP": {
+      "head": "Felipe VI.",
+      "head_title": "König",
+      "premier": "Pedro Sánchez",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "PSOE",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Pedro Sánchez",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "María Jesús Montero",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Margarita Robles",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Partido Popular",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Alberto Núñez Feijóo",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Cuca Gamarra",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Vox",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Santiago Abascal",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Ignacio Garriga",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Pedro_S%C3%A1nchez"
+      ]
+    },
+    "POL": {
+      "head": "Karol Nawrocki",
+      "head_title": "Präsident",
+      "premier": "Donald Tusk",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Koalicja Obywatelska",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Donald Tusk",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Radosław Sikorski",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Andrzej Domański",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Prawo i Sprawiedliwość",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Jarosław Kaczyński",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Mateusz Morawiecki",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Polskie Stronnictwo Ludowe",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Władysław Kosiniak-Kamysz",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Piotr Zgorzelski",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Donald_Tusk"
+      ]
+    },
+    "AUT": {
+      "head": "Alexander Van der Bellen",
+      "head_title": "Bundespräsident",
+      "premier": "Christian Stocker",
+      "premier_title": "Bundeskanzler",
+      "parties": [
+        {
+          "name": "ÖVP",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Christian Stocker",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Claudia Plakolm",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Wolfgang Hattmannsdorfer",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "SPÖ",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Andreas Babler",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Doris Bures",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "FPÖ",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Herbert Kickl",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Dagmar Belakowitsch",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "NEOS",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Beate Meinl-Reisinger",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Christoph Wiederkehr",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Christian_Stocker"
+      ]
+    },
+    "CZE": {
+      "head": "Petr Pavel",
+      "head_title": "Präsident",
+      "premier": "Andrej Babiš",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "ANO 2011",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Andrej Babiš",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Alena Schillerová",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Karel Havlíček",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "ODS",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Petr Fiala",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Zbyněk Stanjura",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Česká pirátská strana",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Zdeněk Hřib",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Olga Richterová",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Andrej_Babi%C5%A1"
+      ]
+    },
+    "HUN": {
+      "head": "Tamás Sulyok",
+      "head_title": "Präsident",
+      "premier": "Viktor Orbán",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Fidesz",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Viktor Orbán",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Péter Szijjártó",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Gergely Gulyás",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Tisza",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Péter Magyar",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Dóra Dávid",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Demokratikus Koalíció",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Klára Dobrev",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Csaba Molnár",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Viktor_Orb%C3%A1n"
+      ]
+    },
+    "BEL": {
+      "head": "Philippe",
+      "head_title": "König",
+      "premier": "Bart De Wever",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "N-VA",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Bart De Wever",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Jan Jambon",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Theo Francken",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Mouvement Réformateur",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Georges-Louis Bouchez",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "David Clarinval",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Vooruit",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Conner Rousseau",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Frank Vandenbroucke",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Bart_De_Wever"
+      ]
+    },
+    "NLD": {
+      "head": "Willem-Alexander",
+      "head_title": "König",
+      "premier": "Dick Schoof",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Parteilose",
+          "kind": "independent",
+          "color": "9bacae",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Dick Schoof",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "VVD",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Dilan Yeşilgöz",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Sophie Hermans",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            },
+            {
+              "name": "Eelco Heinen",
+              "focus": "defense",
+              "id": "1:2",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "D66",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Rob Jetten",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Rob Paternotte",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "PVV",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Geert Wilders",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Fleur Agema",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Dick_Schoof"
+      ]
+    },
+    "CHE": {
+      "head": "Guy Parmelin",
+      "head_title": "Bundespräsident",
+      "premier": "Guy Parmelin",
+      "premier_title": "Bundesratsvorsitz",
+      "parties": [
+        {
+          "name": "SVP",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Guy Parmelin",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Albert Rösti",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Marcel Dettling",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "SP",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Elisabeth Baume-Schneider",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Beat Jans",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "FDP.Die Liberalen",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Ignazio Cassis",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Karin Keller-Sutter",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        },
+        {
+          "name": "Die Mitte",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Martin Pfister",
+              "focus": "finance",
+              "id": "3:0",
+              "party": 3
+            },
+            {
+              "name": "Gerhard Pfister",
+              "focus": "economy",
+              "id": "3:1",
+              "party": 3
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Guy_Parmelin"
+      ]
+    },
+    "PRT": {
+      "head": "Marcelo Rebelo de Sousa",
+      "head_title": "Präsident",
+      "premier": "Luís Montenegro",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "PSD",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Luís Montenegro",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Joaquim Miranda Sarmento",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Paulo Rangel",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Partido Socialista",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "José Luís Carneiro",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Pedro Nuno Santos",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Chega",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "André Ventura",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Pedro Pinto",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Lu%C3%ADs_Montenegro"
+      ]
+    },
+    "DNK": {
+      "head": "Frederik X.",
+      "head_title": "König",
+      "premier": "Mette Frederiksen",
+      "premier_title": "Ministerpräsidentin",
+      "parties": [
+        {
+          "name": "Socialdemokratiet",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Mette Frederiksen",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Nicolai Wammen",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Morten Bødskov",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Venstre",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Troels Lund Poulsen",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Stephanie Lose",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Moderaterne",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Lars Løkke Rasmussen",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Lars Aagaard",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Mette_Frederiksen"
+      ]
+    },
+    "SWE": {
+      "head": "Carl XVI. Gustaf",
+      "head_title": "König",
+      "premier": "Ulf Kristersson",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Moderaterna",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Ulf Kristersson",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Elisabeth Svantesson",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Pål Jonson",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Socialdemokraterna",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Magdalena Andersson",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Mikael Damberg",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Sverigedemokraterna",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Jimmie Åkesson",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Mattias Karlsson",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Ulf_Kristersson"
+      ]
+    },
+    "NOR": {
+      "head": "Harald V.",
+      "head_title": "König",
+      "premier": "Jonas Gahr Støre",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Arbeiderpartiet",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Jonas Gahr Støre",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Jens Stoltenberg",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Espen Barth Eide",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Høyre",
+          "kind": "conservative",
+          "color": "8e9eb4",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Erna Solberg",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Ine Eriksen Søreide",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Fremskrittspartiet",
+          "kind": "national",
+          "color": "9293c2",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Sylvi Listhaug",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Ketil Solvik-Olsen",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Jonas_Gahr_St%C3%B8re"
+      ]
+    },
+    "SVK": {
+      "head": "Peter Pellegrini",
+      "head_title": "Präsident",
+      "premier": "Robert Fico",
+      "premier_title": "Ministerpräsident",
+      "parties": [
+        {
+          "name": "Smer-SD",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Robert Fico",
+              "focus": "finance",
+              "id": "0:0",
+              "party": 0
+            },
+            {
+              "name": "Robert Kaliňák",
+              "focus": "economy",
+              "id": "0:1",
+              "party": 0
+            },
+            {
+              "name": "Juraj Blanár",
+              "focus": "defense",
+              "id": "0:2",
+              "party": 0
+            }
+          ]
+        },
+        {
+          "name": "Progresívne Slovensko",
+          "kind": "liberal",
+          "color": "d8bf65",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Michal Šimečka",
+              "focus": "finance",
+              "id": "1:0",
+              "party": 1
+            },
+            {
+              "name": "Tomáš Valášek",
+              "focus": "economy",
+              "id": "1:1",
+              "party": 1
+            }
+          ]
+        },
+        {
+          "name": "Hlas-SD",
+          "kind": "social",
+          "color": "cd6975",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Matúš Šutaj Eštok",
+              "focus": "finance",
+              "id": "2:0",
+              "party": 2
+            },
+            {
+              "name": "Denisa Saková",
+              "focus": "economy",
+              "id": "2:1",
+              "party": 2
+            }
+          ]
+        }
+      ],
+      "coalition": [
+        0
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/Robert_Fico"
+      ]
+    }
+  }
+}

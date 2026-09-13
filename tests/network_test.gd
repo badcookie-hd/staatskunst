@@ -21,6 +21,10 @@ func run():
 			printerr("NET FAIL: client mutated host country"); failed = true
 		if int(session.sim.state.day) != 0:
 			printerr("NET FAIL: client advanced paused host"); failed = true
+		if session.sim.country(1).cabinet.defense != "1:0":
+			printerr("NET FAIL: cabinet command not applied on host"); failed = true
+		if session.sim.country(0).cabinet.defense == "1:0":
+			printerr("NET FAIL: cabinet command changed host country"); failed = true
 		print("NETWORK HOST: " + ("FAIL" if failed else "PASS"))
 		session.disconnect_session()
 		quit(1 if failed else 0)
@@ -40,6 +44,12 @@ func run():
 		await create_timer(1.0).timeout
 		if session.sim.country(1).tax != 30 or session.running:
 			printerr("NET FAIL: invalid command or pause authority"); failed = true
+		session.command("coalition_1")
+		await create_timer(0.4).timeout
+		session.command("appoint_defense_1:0")
+		await create_timer(0.6).timeout
+		if session.sim.country(1).cabinet.defense != "1:0" or not session.sim.country(1).has("econ"):
+			printerr("NET FAIL: new cabinet and economy state not synchronized"); failed = true
 		print("NETWORK CLIENT: " + ("FAIL" if failed else "PASS"))
 		session.disconnect_session()
 		quit(1 if failed else 0)

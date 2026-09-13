@@ -1,8 +1,9 @@
 extends Control
 const Session = preload("res://scripts/session.gd")
 const WorldMap = preload("res://scripts/world_map.gd")
-const GOLD = Color("ddbf7e")
-const MUTED = Color("91a7ac")
+const Trend = preload("res://scripts/trend.gd")
+const GOLD = Color("e2c28a")
+const MUTED = Color("9eafc4")
 var session
 var map
 var root_box: VBoxContainer
@@ -20,6 +21,8 @@ var modal: AcceptDialog
 var network_window: AcceptDialog
 var scroll: ScrollContainer
 var map_caption: Label
+var map_area: VBoxContainer
+var detail_panel: PanelContainer
 var setup_year = 1936
 var setup_content: VBoxContainer
 
@@ -52,15 +55,15 @@ func build_theme():
 	t.set_color("font_color", "Label", Color("e3e9e7"))
 	t.set_color("font_color", "Button", Color("d8e5e2"))
 	t.set_color("font_disabled_color", "Button", Color("60757c"))
-	t.set_stylebox("normal", "Button", style(Color("1e363e"), Color("354c50")))
-	t.set_stylebox("hover", "Button", style(Color("2d4c53"), GOLD))
-	t.set_stylebox("pressed", "Button", style(Color("40554e"), GOLD))
-	t.set_stylebox("disabled", "Button", style(Color("162b32"), Color("253b41")))
+	t.set_stylebox("normal", "Button", style(Color("22334a"), Color("34465d")))
+	t.set_stylebox("hover", "Button", style(Color("344b67"), GOLD))
+	t.set_stylebox("pressed", "Button", style(Color("3c5268"), GOLD))
+	t.set_stylebox("disabled", "Button", style(Color("162335"), Color("25364b")))
 	t.set_stylebox("focus", "Button", style(Color(0,0,0,0), GOLD))
-	t.set_stylebox("panel", "AcceptDialog", style(Color("142b33"), Color("62766e")))
+	t.set_stylebox("panel", "AcceptDialog", style(Color("152336"), Color("62766e")))
 	t.set_stylebox("normal", "LineEdit", style(Color("0d2129"), Color("48636a")))
 	t.set_color("font_color", "LineEdit", Color("e3e9e7"))
-	t.set_stylebox("background", "ProgressBar", style(Color("142a32"), Color.TRANSPARENT, 3))
+	t.set_stylebox("background", "ProgressBar", style(Color("152336"), Color.TRANSPARENT, 3))
 	t.set_stylebox("fill", "ProgressBar", style(Color("bfa66e"), Color.TRANSPARENT, 3))
 	t.set_constant("separation", "VBoxContainer", 10)
 	t.set_constant("separation", "HBoxContainer", 10)
@@ -86,9 +89,9 @@ func button(parent: Node, value: String, callback: Callable) -> Button:
 	parent.add_child(b)
 	return b
 
-func panel(parent: Node, color: Color = Color("142a32")) -> VBoxContainer:
+func panel(parent: Node, color: Color = Color("152336")) -> VBoxContainer:
 	var p = PanelContainer.new()
-	p.add_theme_stylebox_override("panel", style(color, Color("2b4248")))
+	p.add_theme_stylebox_override("panel", style(color, Color("2d3e53")))
 	parent.add_child(p)
 	var box = VBoxContainer.new()
 	p.add_child(box)
@@ -124,7 +127,23 @@ func build_ui():
 	var body = HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root_box.add_child(body)
+	var nav = VBoxContainer.new()
+	nav.custom_minimum_size.x = 164
+	nav.add_theme_constant_override("separation", 8)
+	body.add_child(nav)
+	nav.add_child(label("REGIERUNGSZENTRALE", 10, MUTED))
+	var names = ["01   Übersicht", "02   Parteien", "03   Kabinett", "04   Wirtschaft", "05   Krieg", "06   Diplomatie"]
+	for i in range(names.size()):
+		var b = button(nav, names[i], func(): tab = i; scroll.scroll_vertical = 0; refresh())
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.custom_minimum_size.y = 49
+		tab_buttons.append(b)
+	var spacer = Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	nav.add_child(spacer)
+	paragraph(nav, "STAATSKUNST\nPOLITISCHE STRATEGIE\n\n1936 / 2026\nVERSION 0.3", MUTED)
 	var left = VBoxContainer.new()
+	map_area = left
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_child(left)
 	var map_header = HBoxContainer.new()
@@ -137,7 +156,7 @@ func build_ui():
 	map = WorldMap.new()
 	map.sim = session.sim
 	map.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	map.custom_minimum_size = Vector2(520, 320)
+	map.custom_minimum_size = Vector2(400, 290)
 	map.selected.connect(func(id): selected = id; refresh())
 	left.add_child(map)
 	var key = HBoxContainer.new()
@@ -148,20 +167,13 @@ func build_ui():
 	chronicle = VBoxContainer.new()
 	journal.add_child(chronicle)
 	var side = PanelContainer.new()
-	side.custom_minimum_size.x = 400
-	side.add_theme_stylebox_override("panel", style(Color("142a32"), Color("30464a")))
+	side.custom_minimum_size.x = 420
+	detail_panel = side
+	side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side.add_theme_stylebox_override("panel", style(Color("152336"), Color("304058")))
 	body.add_child(side)
 	var side_box = VBoxContainer.new()
 	side.add_child(side_box)
-	var tabs = HBoxContainer.new()
-	tabs.add_theme_constant_override("separation", 4)
-	side_box.add_child(tabs)
-	var names = ["Staat", "Politik", "Wirtschaft", "Ausland"]
-	for i in range(4):
-		var b = button(tabs, names[i], func(): tab = i; scroll.scroll_vertical = 0; refresh())
-		b.add_theme_font_size_override("font_size", 13)
-		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		tab_buttons.append(b)
 	scroll = ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -183,8 +195,8 @@ func refresh():
 	metric("STAATSMITTEL", "%.0f M" % c.money, "%+.1f M / Monat" % sim.income(session.player_id))
 	metric("POLITISCHER EINFLUSS", "%.0f" % c.influence, "Für Gesetze und Entscheidungen")
 	metric("STABILITÄT", "%.0f %%" % c.stability, "Freie Wahlen" if c.democratic else "Autoritäre Regierung")
-	metric("INDUSTRIE", "%.0f" % c.industry, "%d %% Steuern · %d Handelsverträge" % [c.tax, c.trade])
-	metric("STREITKRÄFTE", "%.0f Tsd." % c.army, "Qualität %.2f · Stärke %.0f" % [c.quality, sim.power(session.player_id)])
+	metric("MONATS-BIP", "%.0f M" % sim.Economy.ledger(c, sim.year(), sim.war_count(session.player_id)).gdp, "%.1f %% Inflation · %.0f %% Beschäftigung" % [c.econ.inflation, c.econ.employment])
+	metric("STREITKRÄFTE", "%.0f Tsd." % c.army, "Stärke %.0f · Versorgung %.0f %%" % [sim.power(session.player_id), sim.Economy.supply(c) * 100])
 	date_label.text = "%s   ·   %d×" % [date_text(int(sim.state.day)), session.speed]
 	pause_button.text = "Ⅱ Pause" if session.running else "▶ Fortsetzen"
 	pause_button.disabled = not session.is_host() or int(sim.state.winner) >= 0
@@ -192,8 +204,10 @@ func refresh():
 	map_caption.text = "%d  /  %d STAATEN" % [sim.year(), sim.count()]
 	map.selected_id = selected
 	map.player_id = session.player_id
+	map.ensure_cache()
 	map.queue_redraw()
-	for i in range(4): tab_buttons[i].modulate = GOLD if tab == i else Color.WHITE
+	map_area.visible = tab in [0, 4, 5]
+	for i in range(tab_buttons.size()): tab_buttons[i].modulate = GOLD if tab == i else Color.WHITE
 	clear(content)
 	if int(sim.state.winner) >= 0:
 		content.add_child(label("PARTIE ABGESCHLOSSEN", 19, GOLD))
@@ -204,8 +218,10 @@ func refresh():
 	match tab:
 		0: state_tab(c)
 		1: politics_tab(c)
-		2: economy_tab(c)
-		3: foreign_tab(c)
+		2: cabinet_tab(c)
+		3: economy_tab(c)
+		4: war_tab(c)
+		5: foreign_tab(c)
 	clear(chronicle)
 	for entry in sim.state.log.slice(0, 3):
 		var l = label("%s   %s" % [date_text(int(entry.day)), entry.text], 12, MUTED)
@@ -234,7 +250,8 @@ func bar(parent: Node, value: float):
 	parent.add_child(p)
 
 func state_tab(c: Dictionary):
-	heading("Das Kabinett", "Dein Kurs für %s. Jede Entscheidung verändert das politische Gleichgewicht." % c.name)
+	heading("Die Staatsführung", "%s · %s\n%s · %s" % [c.head_title, c.head_name, c.premier_title, c.premier])
+	paragraph(content, "Regierung: " + session.sim.parties(session.player_id)[int(c.ruling)].name, GOLD)
 	var goal = panel(content, Color("203a3e"))
 	goal.add_child(label("DEIN WEG ZUM SIEG", 11, GOLD))
 	paragraph(goal, "Wohlstand: ab Tag 365 mindestens 100 Industrie und 75 % Stabilität. Oder: fünf Länder kontrollieren.")
@@ -254,22 +271,173 @@ func state_tab(c: Dictionary):
 	projects(c)
 	add_action("welfare")
 
+func grid(parent: Node, columns: int = 2) -> GridContainer:
+	var g = GridContainer.new()
+	g.columns = columns
+	g.add_theme_constant_override("h_separation", 16)
+	g.add_theme_constant_override("v_separation", 16)
+	parent.add_child(g)
+	return g
+
+func card(parent: Node) -> VBoxContainer:
+	var box = panel(parent)
+	box.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	return box
+
 func politics_tab(c: Dictionary):
-	heading("Politik & Regierung", "Nächste Wahl in %d Tagen. Die stärkste politische Strömung übernimmt die Regierung." % (180 - int(session.sim.state.day) % 180) if c.democratic else "Autoritäres Regierungssystem: keine freien Wahlen. Eine Verfassungsreform eröffnet einen demokratischen Alternativpfad.")
-	paragraph(content, "Politische Strömungen · vereinfachte Spielwerte, keine historischen Wahlergebnisse.")
+	var sim = session.sim
+	heading("Parlament & Parteien", "Nächste Modellwahl in %d Tagen. Koalitionsanteil: %.1f %% · %s" % [180 - int(sim.state.day) % 180, sim.Politics.coalition_support(c), "freie Wahlen" if c.democratic else "autoritäre Herrschaft"])
+	paragraph(content, "Reale Personen und Parteien. Unterstützung und Koalitionen sind Spielwerte, keine Umfragen. Historisch verbotene Parteien werden durch eine Verfassungsreform als Alternativpfad verfügbar.")
 	if not c.democratic: add_action("democratize")
-	var bonuses = ["+16 % Industrie als zusätzliche Monatseinnahmen", "+Stabilität, kostet 6 M pro Monat", "+0,25 politischer Einfluss pro Tag", "+0,75 Tsd. Soldaten / Monat, −Stabilität"]
-	for i in range(4):
-		var box = panel(content)
-		paragraph(box, "%s · %.1f %% %s" % [session.sim.PARTIES[i], c.support[i], "· Regierung" if int(c.ruling) == i else ""], GOLD if int(c.ruling) == i else Color("dce7e4"))
+	if sim.year() == 1936 and c.code == "DEU": add_action("restore_monarchy")
+	var g = grid(content, 2)
+	for i in range(sim.parties(session.player_id).size()):
+		var party = sim.parties(session.player_id)[i]
+		var box = card(g)
+		paragraph(box, "%s   ·   %.1f %%" % [party.name, c.support[i]], Color(party.color))
 		bar(box, c.support[i])
-		paragraph(box, bonuses[i])
-		add_action("campaign_%d" % i, box, "Wahlkampf · 25 Einfluss", "+9 Unterstützung, übrige Parteien verlieren Anteile")
+		paragraph(box, ("REGIERUNGSFÜHRUNG" if int(c.ruling) == i else "KOALITION" if i in c.coalition else "OPPOSITION") + (" · verboten / Exil" if not party.legal and not c.democratic else ""), GOLD)
+		paragraph(box, "Politiker: " + ", ".join(party.candidates.map(func(person): return person.name)))
+		add_action("campaign_%d" % i, box, "Wahlkampf · 25 Einfluss", "+9 Unterstützung vor Normalisierung · 15 Tage Abklingzeit")
+		if i != int(c.ruling):
+			add_action("coalition_%d" % i, box, "Koalition verlassen" if i in c.coalition else "In Koalition aufnehmen", "30 Einfluss · Koalitionswechsel räumt betroffene Ministerämter")
+			add_action("government_%d" % i, box, "Regierung führen lassen", "80 Einfluss · benötigt Koalitionsmehrheit und freie Wahlen")
+
+func cabinet_tab(c: Dictionary):
+	var sim = session.sim
+	heading("Dein Kabinett", "Du bestimmst die Besetzung. Koalitionsparteien stellen die Kandidaten für vier Ressorts.")
+	var leaders = grid(content)
+	for pair in [[c.head_title, c.head_name], [c.premier_title, c.premier]]:
+		var box = card(leaders)
+		box.add_child(label(pair[0].to_upper(), 11, GOLD))
+		box.add_child(label(pair[1], 21))
+	paragraph(content, "Startpersonal nach Epoche. Die vier Ressorts bilden ein Spielkabinett; Besetzung, Koalitionen und Fachboni sind vereinfacht. Fachprofil = Spielrolle, keine Bewertung realer Fähigkeiten.")
+	var g = grid(content)
+	for role in sim.Politics.ROLES:
+		var person = sim.Politics.person(sim.year(), c.code, c.cabinet[role])
+		var box = card(g)
+		box.add_theme_constant_override("separation", 5)
+		box.add_child(label(sim.Politics.ROLES[role].to_upper(), 11, GOLD))
+		var title = "Vakant" if person.is_empty() else person.name
+		var initials = "—"
+		if not person.is_empty(): initials = person.name.left(1) + person.name.get_slice(" ", person.name.get_slice_count(" ") - 1).left(1)
+		box.add_child(label(initials, 26, Color("76bdbe")))
+		paragraph(box, title, Color.WHITE)
+		if not person.is_empty(): paragraph(box, sim.parties(session.player_id)[int(person.party)].name + " · Profil: " + sim.Politics.ROLES[person.focus])
+		var effects = {"finance": "Steuereffizienz", "economy": "Wirtschaftsleistung", "defense": "effektive Armeestärke", "foreign": "Wirkung von Staatsbesuchen"}
+		paragraph(box, "+%.0f %% %s" % [sim.Politics.bonus(c, sim.year(), role) * 100, effects[role]], GOLD)
+		button(box, "Minister ernennen …", func(): choose_minister(role))
+
+func choose_minister(role: String):
+	var sim = session.sim
+	var c = sim.country(session.player_id)
+	var dialog = AcceptDialog.new()
+	dialog.title = "Ernennung · " + sim.Politics.ROLES[role]
+	dialog.get_ok_button().text = "Zurück"
+	add_child(dialog)
+	dialog.confirmed.connect(dialog.queue_free)
+	var list_scroll = ScrollContainer.new()
+	list_scroll.custom_minimum_size = Vector2(620, 460)
+	dialog.add_child(list_scroll)
+	var box = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list_scroll.add_child(box)
+	paragraph(box, "20 Einfluss je Ernennung. Passendes Profil: +12 %, sonst +4 %. Jede Person kann ein Amt besetzen. Weitere Kandidaten durch Koalitionsverhandlungen unter Parteien freischalten.")
+	for p in sim.Politics.candidates(sim.year(), c.code):
+		var action = "appoint_%s_%s" % [role, p.id]
+		var error = sim.reason(session.player_id, action)
+		var b = button(box, "%s · %s" % [p.name, sim.parties(session.player_id)[int(p.party)].name], func(): session.command(action); dialog.queue_free())
+		b.disabled = not error.is_empty()
+		b.tooltip_text = error if not error.is_empty() else "Profil: " + sim.Politics.ROLES[p.focus]
+	dialog.popup_centered()
 
 func economy_tab(c: Dictionary):
-	heading("Wirtschaft & Aufbau", "Projekte belegen jeweils einen von zwei Plätzen. Einnahmen, Unterhalt und Steuern werden täglich abgerechnet.")
+	var sim = session.sim
+	var e = c.econ
+	var book = sim.Economy.ledger(c, sim.year(), sim.war_count(session.player_id))
+	heading("Wirtschaft & Staatshaushalt", "Modellwerte in M und Gütereinheiten. Produktion, Vorräte, Arbeitsplätze, Steuern und Schulden werden täglich miteinander verrechnet.")
+	var summary = grid(content, 3)
+	for item in [["MONATSSALDO", "%+.1f M" % book.balance], ["STAATSSCHULDEN", "%.0f M · %.2f %% Zins" % [e.debt, book.rate]], ["VERSORGUNG", "%.0f %% · %.1f %% Schäden" % [book.supply * 100, e.damage]]]:
+		var box = card(summary)
+		box.add_child(label(item[0], 11, MUTED))
+		box.add_child(label(item[1], 21, GOLD))
+	var columns = grid(content)
+	var revenue = card(columns)
+	revenue.add_child(label("EINNAHMEN / MONAT", 12, GOLD))
+	for item in [["Einkommensteuer", book.personal], ["Unternehmenssteuer", book.corporate], ["Verbrauchsteuer", book.consumption], ["Gesamt", book.revenue]]: ledger_row(revenue, item[0], item[1])
+	var expenses = card(columns)
+	expenses.add_child(label("AUSGABEN / MONAT", 12, GOLD))
+	for item in [["Verwaltung", book.admin], ["Soziales", book.social], ["Bildung", book.education], ["Verteidigung", book.military], ["Kriegskosten", book.war], ["Zinsen", book.interest], ["Gesamt", book.expenses]]: ledger_row(expenses, item[0], item[1])
+	var charts = grid(content)
+	for key in ["gdp", "balance"]:
+		var chart = Trend.new()
+		chart.caption = "MONATS-BIP" if key == "gdp" else "HAUSHALTSSALDO / MONAT"
+		chart.values = e.history.map(func(point): return point[key])
+		charts.add_child(chart)
+	content.add_child(label("VERSORGUNG & PRODUKTION", 14, GOLD))
+	var resources = grid(content, 3)
+	var demand = sim.Economy.demand(c)
+	for good in sim.Economy.GOODS:
+		var box = card(resources)
+		box.add_child(label({"energy": "ENERGIE", "food": "NAHRUNG", "materials": "MATERIAL"}[good], 11, MUTED))
+		box.add_child(label("%.0f Einheiten" % e.stock[good], 22, GOLD))
+		paragraph(box, "Bedarf %.1f / Monat\nReserve für %.0f Tage" % [demand[good], e.stock[good] / maxf(1, demand[good]) * 30])
+	paragraph(content, "Fehlende Vorräte senken Produktion und Armeestärke. Kriegsschäden drücken die Leistung. Handelsverträge unter Diplomatie liefern nur, wenn der Partner Überschüsse hat und du zahlen kannst. Importzahlungen kommen zusätzlich zum laufenden Haushalt hinzu.")
+	content.add_child(label("STEUERN & BUDGETS", 14, GOLD))
+	var controls = grid(content, 3)
+	var income_box = card(controls)
+	income_box.add_child(label("Einkommensteuer · %d %%" % c.tax, 15, GOLD))
+	add_action("tax_up", income_box)
+	add_action("tax_down", income_box)
+	for key in ["corporate", "vat", "social", "education", "defense"]:
+		var box = card(controls)
+		var names = {"corporate": "Unternehmenssteuer", "vat": "Verbrauchsteuer", "social": "Sozialbudget", "education": "Bildungsbudget", "defense": "Verteidigungsbudget"}
+		paragraph(box, "%s · %.0f %s" % [names[key], e[key], "%" if key in ["corporate", "vat"] else "/ 100"], GOLD)
+		var explanations = {"corporate": "Besteuert Unternehmensgewinne.", "vat": "Besteuert Konsum im Modell.", "social": "Höheres Budget stabilisiert die Gesellschaft.", "education": "Steigert die Produktivität über Zeit.", "defense": "Erhöht Unterhalt und effektive Armeestärke."}
+		paragraph(box, explanations[key])
+		add_action(key + "_up", box)
+		add_action(key + "_down", box)
+	var debt = grid(content)
+	add_action("loan", card(debt))
+	add_action("repay", card(debt))
+	content.add_child(label("INVESTITIONEN · ZWEI PROJEKTPLÄTZE", 14, GOLD))
 	projects(c)
-	for action in ["industry", "research", "recruit", "tax_up", "tax_down"]: add_action(action)
+	paragraph(content, "Kapazitäten: Industrie %.0f · Energie %.0f · Landwirtschaft %.0f · Dienstleistungen %.0f" % [c.industry, e.energy, e.farms, e.services])
+	var investments = grid(content, 3)
+	for action in ["industry", "energy", "farms", "services", "research", "recruit"]: add_action(action, card(investments))
+	for contract in sim.state.trades:
+		if int(contract.a) == session.player_id:
+			paragraph(content, "%s → %s · geliefert %.1f · bezahlt %.1f M%s" % [sim.country(int(contract.b)).name, {"energy": "Energie", "food": "Nahrung", "materials": "Material"}[contract.good], contract.delivered, contract.spent, " · wegen Krieg ausgesetzt" if sim.at_war(int(contract.a), int(contract.b)) else ""])
+
+func ledger_row(parent: Node, title: String, value: float):
+	var row = HBoxContainer.new()
+	parent.add_child(row)
+	var text_label = label(title, 14, MUTED)
+	text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(text_label)
+	row.add_child(label("%.1f M" % value, 14))
+
+func war_tab(_c: Dictionary):
+	var sim = session.sim
+	heading("Kriegsraum", "Strategischer Verlauf ohne Front- oder Einheitensteuerung. Größe, Qualität, Versorgung und Staatsführung bestimmen die wirksame Stärke.")
+	if sim.state.wars.is_empty(): paragraph(content, "Aktuell herrscht Frieden. Wähle einen Staat auf der Karte und öffne Diplomatie, um Beziehungen oder eine Kriegserklärung vorzubereiten.")
+	for w in sim.state.wars + sim.state.war_archive.slice(0, 3):
+		var box = panel(content)
+		paragraph(box, "%s ↔ %s" % [sim.country(int(w.a)).name, sim.country(int(w.b)).name], GOLD)
+		paragraph(box, "BEENDET" if w.has("ended") else "AKTIV · TAG %d" % w.days, GOLD)
+		bar(box, (w.progress + 100) / 2)
+		paragraph(box, "Fortschritt %+.1f / 100\n+100: Angreifer siegt · −100: Verteidiger siegt" % w.progress)
+		paragraph(box, "Verluste: %.2f / %.2f Tsd.\nZusätzliche Kriegskosten: %.1f / %.1f M\nStärke jetzt: %.0f / %.0f" % [w.loss_a, w.loss_b, w.cost_a, w.cost_b, sim.power(int(w.a)), sim.power(int(w.b))])
+		var chart = Trend.new()
+		chart.caption = "KRIEGSFORTSCHRITT / WOCHEN"
+		chart.values = w.history.map(func(point): return point.progress)
+		box.add_child(chart)
+		if not w.has("ended"):
+			var pa = sim.power(int(w.a))
+			var pb = sim.power(int(w.b))
+			var rate = (pa - pb) / maxf(1, pa + pb) * 4
+			paragraph(box, "Patt: Kräfte annähernd ausgeglichen." if absf(rate) < 0.05 else "Bei unveränderter Stärke: noch ungefähr %.0f Tage. Versorgung und Politik können den Verlauf ändern." % ((100 - w.progress * signf(rate)) / absf(rate)))
+		for entry in w.reports.slice(0, 6): paragraph(box, "%s · %s" % [date_text(int(entry.day)), entry.text])
 
 func projects(c: Dictionary):
 	if c.projects.is_empty(): paragraph(content, "2 freie Projektplätze. Investiere unter Wirtschaft.")
@@ -281,7 +449,8 @@ func foreign_tab(_c: Dictionary):
 	var sim = session.sim
 	var target = int(sim.country(selected).owner)
 	var c = sim.country(target)
-	heading(c.name, "Klicke auf der Karte auf einen Staat, um Handel, Diplomatie oder einen Krieg vorzubereiten.")
+	heading(c.name, "%s · %s\n%s · %s" % [c.head_title, c.head_name, c.premier_title, c.premier])
+	paragraph(content, "Regierung: " + sim.parties(target)[int(c.ruling)].name, GOLD)
 	paragraph(content, "Stärke %.0f  ·  %.0f Tsd. Soldaten\nQualität %.2f  ·  Stabilität %.0f %%\nBeziehungen %+d" % [sim.power(target), c.army, c.quality, c.stability, sim.relation(session.player_id, target)])
 	for w in sim.state.wars:
 		if int(w.a) == target or int(w.b) == target or int(w.a) == session.player_id or int(w.b) == session.player_id:
@@ -289,8 +458,8 @@ func foreign_tab(_c: Dictionary):
 			box.add_child(label("%s ↔ %s" % [sim.country(int(w.a)).name, sim.country(int(w.b)).name], 14, GOLD))
 			bar(box, (w.progress + 100) / 2)
 			paragraph(box, "Tag %d · Angreiferfortschritt %+.1f / 100\n+100: Angreifer siegt. −100: Verteidiger siegt." % [w.days, w.progress])
-	for action in ["trade", "diplomacy", "war", "peace"]: add_action(action)
-	paragraph(content, "Stärke = Größe × Qualität × Stabilitätsfaktor. Die stärkere Armee setzt sich über Zeit durch. Bei Gleichstand bleibt der Krieg stehen.")
+	for action in ["trade", "import_food", "import_materials", "diplomacy", "war", "peace"]: add_action(action)
+	paragraph(content, "Stärke = Größe × Qualität × Stabilität × Versorgung × Verteidigungsbudget × Kabinettsfaktor. Die stärkere Armee setzt sich über Zeit durch. Bei Gleichstand bleibt der Krieg stehen.")
 
 func add_action(action: String, parent: Node = null, title: String = "", detail: String = ""):
 	if parent == null: parent = content
@@ -309,7 +478,7 @@ func add_action(action: String, parent: Node = null, title: String = "", detail:
 func confirm_war(target: int):
 	var dialog = ConfirmationDialog.new()
 	dialog.title = "Kriegserklärung"
-	dialog.dialog_text = "Krieg gegen %s erklären?\n70 Einfluss, −12 Stabilität und 24 M Kriegsunterhalt / Monat.\nEigene Stärke: %.0f · Gegner: %.0f\nDer Krieg läuft automatisch, bis ein Staat gewinnt oder ein Waffenstillstand gilt." % [session.sim.country(target).name, session.sim.power(session.player_id), session.sim.power(target)]
+	dialog.dialog_text = "Krieg gegen %s erklären?\n70 Einfluss, −12 Stabilität und laufende Kriegskosten (mindestens 24 M / Monat).\nEigene Stärke: %.0f · Gegner: %.0f\nDer Krieg läuft automatisch, bis ein Staat gewinnt oder ein Waffenstillstand gilt." % [session.sim.country(target).name, session.sim.power(session.player_id), session.sim.power(target)]
 	dialog.confirmed.connect(func(): session.command("war", target); dialog.queue_free())
 	dialog.canceled.connect(dialog.queue_free)
 	add_child(dialog)
@@ -352,7 +521,7 @@ func refresh_setup():
 		var b = button(grid, entry.name, func(): session.solo(i, setup_year); selected = i; refresh(); modal.hide())
 		b.custom_minimum_size.x = 230
 		b.tooltip_text = "Industrie %d · Armee %d · Qualität %.2f · %s" % [entry.industry, entry.army, entry.quality, "Freie Wahlen" if entry.democratic else "Autoritäre Regierung"]
-	paragraph(setup_content, "Reale Staaten auf einer vereinfachten Europakarte. Historische Grenzen sind schematisch; Wirtschaft, Militär und politische Anteile sind Spielwerte. Der Verlauf ist frei, keine festgelegte Geschichtswiederholung.")
+	paragraph(setup_content, "Reale Staaten auf einer vereinfachten Europakarte. Historische Grenzen sind schematisch; Wirtschaft, Militär und politische Anteile sind Spielwerte. Personen und Parteien beziehen sich auf den Szenariostart am 1. Januar; spätere Regierungswechsel folgen der Simulation. Der Verlauf ist frei, keine festgelegte Geschichtswiederholung.")
 	paragraph(setup_content, "Mit ▶ oder Leertaste starten. Maus-Rad: Kartenzoom. LAN / direkte IP findest du im Menü.")
 
 func show_menu():
@@ -367,10 +536,10 @@ func show_menu():
 	menu.add_child(box)
 	button(box, "Partie speichern", func():
 		if not session.is_host(): show_notice("Nur der Host kann speichern."); return
-		var error = session.sim.save_game("user://campaign-v2.json", session.player_id)
+		var error = session.sim.save_game("user://campaign-v3.json", session.player_id)
 		show_notice("Partie gespeichert." if error == OK else "Speichern fehlgeschlagen: %s" % error_string(error)))
 	var load_button = button(box, "Gespeicherte Partie laden", func():
-		var id = session.sim.read_game("user://campaign-v2.json")
+		var id = session.sim.read_game("user://campaign-v3.json")
 		if id < 0: show_notice("Kein gültiger Spielstand gefunden."); return
 		session.player_id = id
 		session.running = false
@@ -383,7 +552,7 @@ func show_menu():
 	new_button.disabled = session.online
 	button(box, "LAN / Direkte IP", func(): menu.hide(); show_network())
 	button(box, "Spielanleitung", func(): menu.hide(); show_help())
-	paragraph(box, "Staatskunst 0.2.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
+	paragraph(box, "Staatskunst 0.3.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
 
@@ -417,7 +586,7 @@ func show_network():
 func show_help():
 	var help = AcceptDialog.new()
 	help.title = "So spielst du Staatskunst"
-	help.dialog_text = "STAAT: Ziele, Ereignisse und laufende Projekte.\nPOLITIK: Wahlkampf verändert die nächste Regierung.\nWIRTSCHAFT: Industrie, Qualität, Rekrutierung und Steuern.\nAUSLAND: Land auf der Karte auswählen; handeln oder Krieg erklären.\n\nEin Tag dauert bei 1× eine Sekunde. Leertaste pausiert.\nEin Modellmonat hat 30 Tage, ein Modelljahr 360 Tage.\nProjekte: maximal zwei gleichzeitig. Entscheidungen: 15 Tage Abklingzeit.\nRegelmäßige Wahlen: alle 180 Tage. Ereignisse: alle 75 Tage.\nKriegsfortschritt hängt allein von relativer Stärke ab.\nEin Sieg gliedert alle Gebiete des Verlierers ein.\n\nSIEG: 5 Länder oder ab Tag 365 mindestens 100 Industrie / 75 Stabilität.\nSPEICHERN: Menü → Partie speichern. Nur der Host kann speichern.\nBei Host-Trennung kannst du den Stand alleine weiterspielen."
+	help.dialog_text = "STAAT: Ziele, Ereignisse und laufende Projekte.\nPARTEIEN: Wahlkampf, Koalitionen und Regierungswechsel.\nKABINETT: Minister aus den Koalitionsparteien ernennen.\nWIRTSCHAFT: Sektoren, Vorräte, Steuern, Budgets und Schulden.\nKRIEG: Verlauf, Verluste, Versorgung und Wochenberichte.\nAUSLAND: Land auf der Karte auswählen; handeln oder Krieg erklären.\n\nEin Tag dauert bei 1× eine Sekunde. Leertaste pausiert.\nEin Modellmonat hat 30 Tage, ein Modelljahr 360 Tage.\nProjekte: maximal zwei gleichzeitig. Entscheidungen: 15 Tage Abklingzeit.\nRegelmäßige Wahlen: alle 180 Tage. Ereignisse: alle 75 Tage.\nKriegsfortschritt folgt relativer Stärke inklusive Versorgung und Budget.\nEin Sieg gliedert alle Gebiete des Verlierers ein.\n\nSIEG: 5 Länder oder ab Tag 365 mindestens 100 Industrie / 75 Stabilität.\nSPEICHERN: Menü → Partie speichern. Nur der Host kann speichern.\nBei Host-Trennung kannst du den Stand alleine weiterspielen."
 	add_child(help)
 	help.confirmed.connect(help.queue_free)
 	help.popup_centered(Vector2i(720, 450))

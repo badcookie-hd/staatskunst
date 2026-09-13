@@ -1,87 +1,89 @@
 # Staatskunst
 
-Ein eigenständiges politisches Strategiespiel in **Godot 4.5.1** mit realen europäischen Staaten und zwei wählbaren Szenarien: **1936** und **2026**. Politische Strömungen fördern, die Wirtschaft ausbauen und außenpolitische Entscheidungen treffen. Kriege werden über die relative Gesamtstärke automatisch über Zeit entschieden.
+Ein politisches Strategiespiel in **Godot 4.5.1**. Regiere einen realen europäischen Staat im Szenario **1936** oder **2026**: Parteien, Koalitionen, eigene Minister, Wirtschaftsaufbau und Diplomatie stehen im Mittelpunkt. Armeen kämpfen automatisch über Zeit, ohne Einheitenbefehle oder Frontverwaltung.
 
-**Version 0.2.0 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI und direkte ENet-Verbindungen für bis zu acht Spieler. Keine Fronten, Einheitenbefehle, Einkesselungen oder getrennte Marine- und Luftkämpfe. Keine zentralen Server oder Spielerkonten. Kartengrundlage: Natural Earth; keine übernommenen Assets aus Hearts of Iron.
+**Version 0.3.0 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
 
-![Politische Karte und Kabinett](docs/screen-0.png)
+[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.3.0) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
 
-## Zwei Szenarien
+![Eigenes Kabinett](docs/screen-modern-2.png)
 
-Im Startfenster zuerst **1936** oder **2026** wählen, danach den gewünschten Staat anklicken. Über **Menü → Neue Partie** lässt sich das Szenario erneut wählen.
+## Spielen
 
-| | 1936 — Europa am Scheideweg | 2026 — Europa der Gegenwart |
+Unter Releases **Staatskunst-Windows.zip** herunterladen, vollständig entpacken und **Staatskunst.exe** starten. Windows x64 / OpenGL 3.3; Godot ist zum Spielen nicht erforderlich. Der Export ist nicht digital signiert.
+
+Für Entwicklung: Repository klonen, `project.godot` in Godot 4.5.1 öffnen und F5 drücken. Keine weiteren Pakete nötig.
+
+1. Epoche und Staat wählen. Die Zeit beginnt pausiert.
+2. Unter **Parteien** Wahlkampf führen und eine Koalition bilden.
+3. Unter **Kabinett** vier Ministerämter mit realen Politikern besetzen.
+4. Unter **Wirtschaft** Haushalt, Vorräte und Projekte abstimmen.
+5. **Fortsetzen** oder Leertaste startet die Zeit; 1×, 3× und 5× sind verfügbar.
+6. Einen Staat auf der Karte wählen und **Diplomatie** öffnen. Im **Krieg**-Bereich erscheinen laufende und abgeschlossene Kriegsberichte.
+
+## Zwei Epochen
+
+| | 1936 | 2026 |
 |---|---|---|
 | Start | 1. Januar 1936 | 1. Januar 2026 |
-| Spielbare Staaten | 16 | 17 |
-| Deutschland | Deutsches Reich, schematische Grenzen vor 1938, einschließlich Ostpreußen | Deutschland in heutigen Grenzen |
-| Mitteleuropa | Eigenständiges Österreich und Tschechoslowakei | Eigenständiges Österreich, Tschechien und Slowakei |
-| Politik | Demokratien und autoritäre Regime; Verfassungsreform als Alternativpfad | Freie Wahlen in allen ausgewählten Staaten |
-| Aufbau | Industrie, Modernisierung, Freiwilligenwerbung | Digitale Infrastruktur, Technologieprogramm, Berufsarmee |
-| Ausgangslage | Geringerer Technikstand, unterschiedliche Industrie und Streitkräfte | Höherer Technikstand und eigene Ausgangswerte |
-| Ereignisse | Industriearbeit, Versorgung, Bildung | Automatisierung, Energiewende, digitale Bildung |
+| Staaten | 16 | 17 |
+| Deutschland | Deutsches Reich; schematische Grenzen einschließlich Ostpreußen | Deutschland |
+| Mitteleuropa | Eigenständiges Österreich und Tschechoslowakei | Österreich, Tschechien und Slowakei |
+| Politik | Demokratien und autoritäre Regime; verbotene Parteien als demokratischer Alternativpfad | Reale Parteien und Politiker zum Szenariostart |
+| Deutsche christliche Parteien | Zentrum nach Verfassungsreform | CDU und CSU |
 
-Spielbar in beiden Epochen: Deutschland/Deutsches Reich, Frankreich, Vereinigtes Königreich, Italien, Spanien, Polen, Österreich, Tschechoslowakei/Tschechien, Ungarn, Belgien, Niederlande, Schweiz, Portugal, Dänemark, Schweden und Norwegen. Im Jahr 2026 kommt die Slowakei als eigener Staat hinzu.
+In beiden Epochen: Deutschland, Frankreich, Vereinigtes Königreich, Italien, Spanien, Polen, Österreich, Tschechoslowakei/Tschechien, Ungarn, Belgien, Niederlande, Schweiz, Portugal, Dänemark, Schweden und Norwegen. 2026 kommt die Slowakei hinzu. Die Karte ist ein **europäischer Ausschnitt**, keine vollständige Weltkarte. Graue Gebiete sind Hintergrund. Mausrad: Zoom; mittlere Maustaste: Verschieben.
 
-Die Karte ist ein **europäischer Ausschnitt**, keine vollständige Weltkampagne. Graue Gebiete sind Hintergrund und nicht spielbar. Mit dem **Mausrad zoomen**, mit gedrückter **mittlerer Maustaste verschieben**. Kleine Staaten tragen bei geringer Vergrößerung Kürzel; beim Überfahren erscheint der volle Name.
+Identitäten beziehen sich auf den 1. Januar der jeweiligen Epoche. Der spätere Verlauf ist frei: historische Amtswechsel, Sterbedaten, laufende reale Kriege und Kolonien sind nicht geskriptet. Grenzen sind schematisch. Wirtschaft, Militär, Parteianteile, Koalitionen und Fachprofile sind vereinfachte Spielwerte; keine aktuellen Umfragen oder amtlichen Wirtschaftsstatistiken.
 
-Historische Grenzen sind selbst erstellte schematische Anpassungen, keine detailgetreue Grenzrekonstruktion. Kolonien, Danzig als eigener Staat und laufende reale Kriege werden nicht simuliert. Militär, Wirtschaft und politische Anteile sind **Spielwerte**, keine historischen Statistiken oder aktuellen Wahlergebnisse. Die vier politischen Strömungen abstrahieren das Parteienspektrum; reale Parteien und Koalitionen werden nicht einzeln abgebildet. Ab dem Start entwickelt sich jede Partie frei.
+## Parteien und Staatsführung
 
-![Wirtschaft im Szenario 2026](docs/screen-2026.png)
+116 Partei- und parteilose Kandidatenlisten über beide Epochen ersetzen die früheren vier generischen Lager. Staatsoberhaupt und Regierungschef haben eigene Namen und Amtstitel, beispielsweise Bundespräsident, Bundeskanzler, König oder Reichsverweser. Die Diplomatie zeigt auch die Staatsführung anderer Länder.
 
-## Sofort spielen
+Wahlkampf kostet 25 Einfluss und erhöht einen Parteianteil um neun Punkte vor Normalisierung. Alle Anteile ergeben 100 %. Eine Kampagne ist alle 15 Tage möglich. Modellwahlen finden alle 180 Tage statt: Die stärkste Partei führt eine automatisch zusammengestellte Mehrheitskoalition. Das ist eine einheitliche Spielregel, keine Nachbildung aller nationalen Wahlgesetze.
 
-Unter **[Releases](../../releases)** die Datei `Staatskunst-Windows.zip` herunterladen, vollständig entpacken und `Staatskunst.exe` starten. Windows x64 mit OpenGL 3.3 wird benötigt. Das Programm ist nicht digital signiert. Godot muss zum Spielen des Exports nicht installiert sein.
+Koalitionswechsel kosten 30 Einfluss und haben 15 Tage Abklingzeit. Mit einer Mehrheit über 50 % und 80 Einfluss lässt sich eine andere Koalitionspartei mit der Regierungsführung beauftragen. Deren erster Kandidat übernimmt das Regierungsamt. Ein getrenntes Staatsoberhaupt bleibt im Amt. Die Schweiz ist ebenfalls auf dieses Spielmodell vereinfacht.
 
-Für die Entwicklung: Repository klonen, `project.godot` in Godot 4.5.1 öffnen und **F6/F5** bzw. „Projekt ausführen“ verwenden. Es gibt keine externen Pakete oder kostenpflichtigen Dienste.
+In autoritären Staaten schaltet eine demokratische Verfassung für 180 M, 120 Einfluss und acht Stabilität freie Parteien und Wahlen frei. Im deutschen 1936-Alternativpfad wird Paul Löbe Übergangspräsident. Danach kann Wilhelm II. für 200 M und 200 Einfluss als konstitutioneller Kaiser zurückgerufen werden; dies kostet zwölf Stabilität. Diese Entwicklungen sind ausdrücklich Alternativgeschichte.
 
-## Die erste Partie
+## Eigenes Kabinett
 
-1. Im Startfenster 1936 oder 2026 und dann einen Staat auswählen. Die Zeit beginnt pausiert.
-2. Unter **Wirtschaft** Industrie ausbauen. Höchstens zwei Projekte können gleichzeitig laufen.
-3. **Fortsetzen** oder **Leertaste** drücken. Bei 1× dauert ein Spieltag eine Sekunde; 3× und 5× beschleunigen.
-4. Unter **Politik** Wahlkampf für eine Strömung machen. In Demokratien übernimmt alle 180 Tage die stärkste Strömung die Regierung. Autoritäre Staaten benötigen dafür zuerst eine Verfassungsreform.
-5. Auf der Karte einen anderen Staat anklicken und unter **Ausland** Handel, Staatsbesuche oder Krieg wählen.
-6. Im **Staat**-Reiter Kabinettsereignisse entscheiden und die Siegziele verfolgen.
+Vier Ressorts: Finanzen, Wirtschaft & Energie, Verteidigung und Auswärtiges Amt. Kandidaten kommen aus den Koalitionsparteien. Ernennung: 20 Einfluss, 15 Tage Abklingzeit je Ressort. Eine Person hat höchstens ein Amt. Ein Koalitionsaustritt räumt die Ministerämter dieser Partei; freie Ämter geben keinen Bonus. Ein Regierungswechsel besetzt das Kabinett neu.
 
-Eine Kampagne wird gewonnen durch **fünf kontrollierte Länder** oder **ab Tag 365 mindestens 100 Industrie und 75 % Stabilität**. Ein verlorener Krieg gliedert den gesamten Staat beim Sieger ein; danach ist Beobachten oder ein Neustart möglich. Ein Modellmonat hat 30 Tage, ein Modelljahr 360 Tage.
+Passendes Spielprofil gibt +12 %, ein anderes Profil +4 %: Steuereffizienz, Wirtschaftsleistung, effektive Armeestärke oder Wirkung von Staatsbesuchen. Das Profil ist eine Spielrolle und bewertet keine realen Fähigkeiten. Die vier Ministerämter bilden ein verkleinertes Spielkabinett. In Deutschland starten sie mit den entsprechenden Ressortinhabern der Epoche; andernorts erfolgt eine vereinfachte Besetzung aus dem Kandidatenpool, gegebenenfalls mit Vakanzen.
 
-## Politik und Wirtschaft
+## Wirtschaft
 
-| Partei | Regierungswirkung |
-|---|---|
-| Liberale | Monatliches Zusatzeinkommen: 16 % des Industriewerts |
-| Sozialisten (1936) / Sozialdemokraten (2026) | +0,035 Stabilität pro Tag, 6 M Kosten pro Monat |
-| Konservative | +0,25 Einfluss pro Tag |
-| Faschisten (1936) / Nationalkonservative (2026) | +0,025 Tsd. Soldaten pro Tag, −0,02 Stabilität pro Tag |
+![Haushalt und Wirtschaft](docs/screen-modern-3.png)
 
-Wahlkampf kostet 25 Einfluss und erhöht den Anteil einer Partei um 9 Punkte vor Normalisierung. Andere Parteien verlieren Anteile. Alle Parteien zusammen haben immer 100 %. Eine gemeinsame Abklingzeit verhindert sofortige Kampagnenketten.
+Die Wirtschaft verbindet Industrie, Energie, Landwirtschaft, Dienstleistungen, Arbeitskräfte und Produktivität. Kapazitäten erzeugen Güter. Energie, Nahrung und Material werden täglich verbraucht. Vorräte überbrücken Engpässe; danach deckt die laufende Produktion den Bedarf nur anteilig. Mangel senkt Wirtschaftsleistung und Armeestärke. Kriegsschäden senken die Produktion und werden im Frieden langsam repariert.
 
-Die demokratische Verfassung kostet 180 M und 120 Einfluss sowie 8 Stabilität. Sie schaltet freie Wahlen und Wahlkampf frei. Ohne Reform bleibt in autoritären Staaten die Startregierung im Amt. Regierungsboni sind abstrakte Spielmechaniken und keine Bewertung oder Gleichsetzung der Ideologien.
+Der Haushalt zeigt Einkommensteuer, Unternehmenssteuer und Verbrauchsteuer getrennt. Ausgaben umfassen Verwaltung, Soziales, Bildung, Verteidigung, Kriegskosten und Schuldzinsen. Sozialausgaben wirken auf Stabilität, Bildung auf langfristige Produktivität und das Verteidigungsbudget auf Armeestärke und Unterhalt. Beschäftigung folgt den verfügbaren Arbeitsplätzen; Knappheit und Krieg treiben die Modellinflation. Geldbeträge in M sind gemeinsame Recheneinheiten, keine nationalen Währungen.
 
-Industrie, Steuern, Stabilität, Handel, Gebietsbesitz, Regierung und militärischer Unterhalt bestimmen den Haushalt. Der angezeigte Monatssaldo wird täglich zu einem Dreißigstel abgerechnet. Bei Zahlungsunfähigkeit sinken Armeegröße und Stabilität. Hohe Steuern und Krieg drücken die Stabilität; Sozialpolitik kann sie wiederherstellen.
+Fehlbeträge werden bis zum Kreditlimit automatisch finanziert. Staatsanleihen erhöhen Kasse und Schulden um jeweils 200 M; Tilgung senkt beide um 200 M. Das Limit beträgt 150 % des Modell-Jahres-BIP. Zinssatz und Zinslast steigen mit Verschuldung und Inflation. Ist das Kreditlimit ausgeschöpft, senkt Zahlungsunfähigkeit Stabilität und Armee. Monatsverläufe zeigen BIP und Haushaltssaldo.
 
-| Projekt | Kosten | Dauer | Ergebnis |
+| Projekt | Kosten | Dauer | Wirkung |
 |---|---|---|---|
-| Industrie | 180 M + 35 Einfluss | 45 Tage | +8 Industrie |
-| Modernisierung | 140 M + 30 Einfluss | 60 Tage | +0,25 Qualität, maximal 3 |
-| Rekrutierung | 90 M + 20 Einfluss | 30 Tage | +15 Tsd. Soldaten |
+| Industrie | 180 M / 2026: 220 M + 35 Einfluss | 45 Tage | +8 Industrie |
+| Energie, Landwirtschaft oder Dienstleistungen | 160 M + 30 Einfluss | 45 Tage | +12 Kapazität |
+| Modernisierung | 140 M / 2026: 180 M + 30 Einfluss | 60 Tage | +0,25 Qualität, maximal 3 |
+| Rekrutierung | 90 M / 2026: 110 M + 20 Einfluss | 30 Tage | +15 Tsd. Soldaten |
 
-2026 kosten die entsprechenden Projekte 220, 180 und 110 M. Einflusskosten, Bauzeiten und Verbesserungen bleiben gleich; alle Staaten beginnen mit höherer Qualität.
+Höchstens zwei Projekte gleichzeitig. Die Projektkosten werden sofort bezahlt. Das Modell abstrahiert Baumaterialkosten in den Geldkosten.
 
-Alle 75 Tage entsteht eine von drei Kabinettsvorlagen. Nach 30 Tagen ohne Auswahl wird die Entscheidung vertagt: +20 Einfluss und −5 Stabilität. In dieser ersten Version teilen die drei Vorlagen dieselben zwei wirtschaftlichen Antwortmöglichkeiten.
+Handelsverträge importieren bis zu zehn Gütereinheiten pro Monat. Energie kostet 1 M, Nahrung 0,8 M, Material 1,4 M je Einheit. Verkäufer erhalten die tatsächliche Zahlung und verlieren die gelieferten Vorräte. Ohne Überschüsse oder Geld findet keine Lieferung statt. Krieg unterbricht den Handel; Eingliederung beendet betroffene Verträge. Maximal vier Importverträge, Abschlusskosten jeweils 50 M und 25 Einfluss. Importzahlungen stehen zusätzlich zum laufenden Haushalt in der Vertragsübersicht. Preise sind in dieser Version fest, ohne Weltmarkt oder Wechselkurse.
 
 ## Automatische Kriege
 
-```
-Stärke = Armeegröße × Qualität × (0,6 + Stabilität / 200)
-Täglicher Fortschritt = 4 × (Angreiferstärke − Verteidigerstärke)
-                           / (Angreiferstärke + Verteidigerstärke)
-```
+![Kriegsraum und strategische Karte](docs/screen-war.png)
 
-Bei +100 gewinnt der Angreifer, bei −100 der Verteidiger. Eine stärkere Armee gewinnt über Zeit, solange ihr Vorteil bestehen bleibt. Politik, Aufrüstung und Zahlungsunfähigkeit können den Vorteil während des Krieges verändern. Bei gleich starken Armeen entsteht eine Pattsituation. Täglich verlieren beide Seiten 0,1 % ihrer Soldaten; Armeegröße fällt dabei nicht unter 5 Tsd. Jeder Krieg kostet zusätzlich 24 M pro Monat und senkt die Stabilität.
+Effektive Stärke = Armeegröße × Qualität × Stabilitätsfaktor × Versorgung × Verteidigungsbudgetfaktor × Ministerfaktor. Der tägliche Fortschritt entspricht viermal der Stärkedifferenz geteilt durch die Summe beider Stärken. Bei +100 gewinnt der Angreifer, bei −100 der Verteidiger. Eine überlegene Armee gewinnt über Zeit, sofern ihr Vorteil bestehen bleibt; bei Gleichstand entsteht ein Patt.
 
-Kriege benötigen eine gemeinsame Landgrenze oder einen festgelegten Seezugang. Seezugänge verbinden das Vereinigte Königreich mit Frankreich, den Niederlanden und Norwegen sowie Dänemark mit Schweden und Norwegen. Sie ermöglichen abstrakte Kriege ohne Flottensteuerung. Jeder Staat führt höchstens einen Krieg gleichzeitig. Nach mindestens 30 Tagen und bei Fortschritt zwischen −45 und +45 kann für 30 Einfluss ein beiderseitig bindender, 180 Tage dauernder Waffenstillstand geschlossen werden. Der Sieger übernimmt alle Gebiete des Verlierers sowie 35 % dessen Industrie; die Eingliederung kostet Stabilität.
+Der Kriegsraum zeigt Verlauf, Verluste, laufende Stärke, kumulierte Zusatzkosten, wöchentliche Lageberichte und eine Schätzung der Restdauer bei unveränderten Kräften. Die Karte zeigt Vormarschrichtung und strategischen Druck. Dies sind keine taktischen Frontlinien. Verluste betragen ungefähr 0,06–0,14 % der Armee täglich, abhängig vom Kräfteverhältnis. Zusätzlicher Monatsunterhalt je Staat: 24 M plus 0,15 M je Tsd. Soldaten. Hinzu kommen Produktionsschäden und Stabilitätsverlust.
+
+Kriege erfordern eine gemeinsame Grenze oder einen im Szenario festgelegten Seezugang. Ein Staat führt höchstens einen Krieg gleichzeitig. Nach 30 Tagen und bei Fortschritt zwischen −45 und +45 ist ein Waffenstillstand für 30 Einfluss möglich; er gilt 180 Tage. Der Sieger übernimmt die Gebiete des Verlierers und 35 % seiner Industrie. Berichte bleiben im Kriegsarchiv erhalten.
+
+Siegbedingung: fünf kontrollierte Länder oder ab Tag 365 mindestens 100 Industrie und 75 % Stabilität. Ein Modellmonat hat 30 Tage, ein Jahr 360 Tage. Alle 75 Tage entsteht eine Kabinettsvorlage mit zwei Antwortmöglichkeiten. Die einfache KI investiert periodisch und stabilisiert ihren Staat; autoritäre KI-Staaten können ab Tag 240 bei deutlicher Überlegenheit Krieg beginnen.
 
 ## LAN und Portweiterleitung
 
@@ -97,19 +99,20 @@ Der Host prüft Befehle, Ressourcen, Zielstaat und Spielerzuordnung. Clients dü
 
 Netzwerktechnik: [offizielle Godot-Dokumentation](https://docs.godotengine.org/en/4.5/tutorials/networking/high_level_multiplayer.html).
 
+
 ## Speichern
 
-**Menü → Partie speichern** schreibt einen lokalen JSON-Spielstand einschließlich Szenario in Godots Benutzerdatenordner, unter Windows normalerweise `%APPDATA%/Godot/app_userdata/Staatskunst/campaign-v2.json`. Es gibt einen manuellen Speicherplatz. Spielstände aus 0.1.0 mit erfundenen Staaten sind nicht kompatibel und bleiben in ihrer alten Datei erhalten. Im Netzwerk speichert nur der Host. Laden und Neustart sind während einer Netzwerkpartie deaktiviert; zuerst die Sitzung trennen. Gespeicherte Multiplayer-Welten können als Einzelspieler geladen und anschließend erneut gehostet werden, die Spielerzuordnungen werden neu vergeben. Der Host überträgt das gewählte Szenario automatisch an alle Gäste.
+Menü → Partie speichern. Ein manueller Speicherplatz: `user://campaign-v3.json`, unter Windows normalerweise im Godot-Benutzerdatenordner unter AppData. Gespeichert werden Epoche, Kabinett, Koalitionen, Wirtschaftsverläufe, Verträge und Kriegsarchive. Ältere Spielstände sind nicht kompatibel und bleiben in ihren bisherigen Dateien erhalten. Im Netzwerk speichert nur der Host; Laden und Neustart erfordern das Trennen der Sitzung. Eine gespeicherte Welt kann erneut gehostet werden, wobei Gaststaaten neu zugewiesen werden.
 
 ## Projektstruktur
 
-- `scripts/simulation.gd`: Regeln, KI, Wahlen, Wirtschaft, Kriege, Save-Validierung.
-- `scripts/session.gd`: lokale Sitzung und serverautorisierte ENet-RPCs.
-- `scripts/world_map.gd`: eigene Vektorkarte mit Länderwahl.
-- `scripts/scenarios.gd` und `data/scenarios.json`: getrennte Staaten, Geometrien und Ausgangswerte je Epoche.
-- `tools/build_maps.mjs`: reproduzierbare Datenkonvertierung und schematische historische Grenzanpassungen.
-- `scripts/main.gd`: Godot-Control-Oberfläche und Menüs.
-- `tests/`: Simulation, UI und zwei reale Netzwerkprozesse.
+- `scripts/simulation.gd`: Aktionen, Wahlen, KI, Handel, Krieg, Spielstände.
+- `scripts/politics.gd` und `data/politics.json`: reale Identitäten und Kabinettsregeln.
+- `scripts/economy.gd`: Produktion, Vorräte, Haushalt, Schulden, Beschäftigung.
+- `scripts/session.gd`: autoritative ENet-Verbindungen.
+- `scripts/main.gd`, `world_map.gd`, `trend.gd`: Oberfläche, Karte, Diagramme.
+- `tools/build_politics.mjs` und `tools/build_maps.mjs`: reproduzierbare Datengenerierung.
+- `tests/`: Simulations-, Oberflächen- und Netzwerkprüfungen.
 
 ## Prüfen und exportieren
 
@@ -126,7 +129,7 @@ godot --headless --path . --script res://tests/network_test.gd -- --server
 godot --headless --path . --script res://tests/network_test.gd -- --client
 ```
 
-Der Server läuft acht Sekunden, der Client vier. Für 2026 bei beiden Aufrufen `--modern` anhängen. UDP 24560 muss frei sein. Für Screenshots den UI-Test mit Rendering ausführen und `-- --screenshots` anhängen.
+Der Server läuft acht Sekunden, der Client fünf. Für 2026 bei beiden Aufrufen `--modern` anhängen. UDP 24560 muss frei sein. Für Screenshots den UI-Test mit Rendering ausführen und `-- --screenshots` anhängen.
 
 Die offiziellen Exportvorlagen für Godot 4.5.1 installieren, dann:
 
@@ -135,14 +138,13 @@ mkdir -p build
 godot --headless --path . --export-release "Windows Desktop" build/Staatskunst.exe
 ```
 
-Die CI führt Simulation und UI in Godot aus und prüft beide Epochen mit zwei Netzwerkprozessen. Prüfungen der Version 0.2.0: siehe [VALIDATION.md](docs/VALIDATION.md).
+Die CI führt Simulation und UI in Godot aus und prüft beide Epochen mit zwei Netzwerkprozessen. Prüfungen der Version 0.3.0: siehe [VALIDATION.md](docs/VALIDATION.md).
 
-## Umfang dieser Version
 
-Enthalten sind zwei Szenarien mit 16 bzw. 17 realen Staaten, vier politischen Strömungen pro Epoche, Regierungssysteme und Verfassungsreform, Haushalte, drei Bauprojekte, vier Handelsplätze, diplomatische Beziehungen, Kabinettsereignisse, einfache KI, Sieg/Niederlage, manuelles Speichern und direkte Netzwerkpartien. Die KI baut periodisch Projekte; Regierungen des vierten politischen Lagers können bei deutlicher Überlegenheit nach Tag 240 Kriege beginnen.
+## Grenzen des Prototyps
 
-Noch nicht enthalten: vollständige Weltkarte, exakte historische Grenzen, reale Parteien und Koalitionen, Fokusbäume, Produktionsketten, Bündniskriege, Audio, KI-Verhandlungsmodelle, Kampagneneditor und Reconnect-Identitäten. Die Balance ist ein erster spielbarer Entwurf.
+Ausgewählte europäische Staaten, kuratierte Parteiauswahl, vereinfachte Kabinette und ein einheitliches Wahlsystem. Noch keine vollständige Weltkampagne, Fokusbäume, Koalitionsverhandlungen mit eigener KI, diplomatischen Bündniskriege, dynamischen Weltmarktpreise, Audio oder Reconnect-Identitäten. Die Wirtschaft ist kausal verknüpft, aber keine wissenschaftlich kalibrierte Volkswirtschaftssimulation. Die Balance bleibt ein Spielentwurf.
 
 ## Lizenz
 
-Eigener Spielcode und eigene historische Geometrieanpassungen: [MIT](LICENSE). Natural-Earth-Geodaten: Public Domain. Godot wird separat unter MIT lizenziert; die Windows-Distribution enthält die zugehörigen Lizenzinformationen. [Quellen, Kartenvereinfachungen und Reproduktion](docs/SOURCES.md).
+Eigener Code und eigene historische Kartenanpassungen: [MIT](LICENSE). Natural-Earth-Geodaten: Public Domain. Godot: MIT, mit Lizenzinformationen im Windows-Paket. Keine Fotos oder Parteiembleme übernommen. [Quellen und Datenmodell](docs/SOURCES.md).

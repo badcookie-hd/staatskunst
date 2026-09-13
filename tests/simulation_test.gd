@@ -1,165 +1,162 @@
 extends SceneTree
 const Simulation = preload("res://scripts/simulation.gd")
-var failures = 0
 var checks = 0
-var sim
+var failures = 0
+var sim = Simulation.new()
 
 func check(condition: bool, message: String):
 	checks += 1
 	if not condition:
 		failures += 1
-		printerr("FAIL: " + message)
+		printerr("SIM FAIL: " + message)
 
-func reset():
-	sim = Simulation.new()
-	sim.new_game()
-	# Stable unit-test fixture, separate from scenario balance data.
-	sim.country(0).merge({"money":310.0,"industry":35.0,"stability":68.0,"army":48.0,"quality":1.0,"ruling":0,"support":[30.0,27.0,25.0,18.0],"democratic":true},true)
-	sim.country(1).merge({"money":318.0,"industry":42.0,"stability":68.0,"army":59.0,"quality":1.15,"ruling":1},true)
-
-func days(count: int):
-	for i in range(count): sim.advance(range(sim.count()))
+func reset(era: int = 2026):
+	sim.new_game(era)
+	sim.country(0).influence = 250
 
 func _initialize():
 	reset()
-	check(sim.state.countries.size() == 16, "Sixteen countries in 1936")
-	check(sim.reason(0, "war", 0) != "", "No self war")
-	check(sim.reason(0, "war", 12) != "", "No non-neighbor war")
-	check(sim.reason(-1, "industry") != "", "Invalid actor rejected")
-	check(sim.reason(0, "cheat") != "", "Unknown action rejected")
-	check(sim.reason(0, "campaign_99") != "", "Unknown party rejected")
-	var before = sim.country(0).money
-	var projected = sim.income(0)
-	days(1)
-	check(is_equal_approx(sim.country(0).money - before, projected / 30.0), "Budget includes ruling party")
-	sim.act(0, "industry")
-	check(sim.country(0).projects.size() == 1, "Project queued")
-	check(sim.reason(0, "industry") != "", "Cannot overspend or spam")
-	days(44)
-	check(sim.country(0).industry == 35, "Construction takes time")
-	days(1)
-	check(sim.country(0).industry == 43, "Construction completes")
+	var c = sim.country(0)
+	check(sim.parties(0).size() == 7, "Germany has seven actual parties")
+	check(sim.parties(0)[0].name == "CDU" and sim.parties(0)[1].name == "CSU", "Christian parties")
+	check(c.head_name == "Frank-Walter Steinmeier" and c.premier == "Friedrich Merz", "Separate offices")
+	check(sim.Politics.person(2026, c.code, c.cabinet.finance).name == "Lars Klingbeil", "Initial German finance minister")
+	check(sim.Politics.person(2026, c.code, c.cabinet.defense).name == "Boris Pistorius", "Initial German defense minister")
+	check(sim.reason(0, "appoint_finance_0:0") != "", "Premier cannot double as minister")
+	check(sim.reason(0, "appoint_finance_99:0") != "", "Unknown candidate denied")
+	check(sim.reason(0, "appoint_invalid_0:1") != "", "Unknown office denied")
+	check(sim.reason(0, "appoint_finance_4:0") != "", "Opposition appointment denied")
+	check(sim.reason(0, "appoint_finance_1:1") == "", "Coalition appointment available")
+	sim.act(0, "appoint_finance_1:1")
+	check(c.cabinet.finance == "1:1", "Minister appointed")
+	check(sim.reason(0, "appoint_finance_1:2") != "", "Office cooldown enforced")
+	check(sim.reason(0, "appoint_economy_1:1") != "", "One person, one portfolio")
+	sim.act(0, "coalition_1")
+	check(c.cabinet.finance == "" and 1 not in c.coalition, "Coalition departure removes minister")
+	check(sim.reason(0, "coalition_0") != "", "Governing party cannot leave")
 	reset()
-	sim.country(0).money = 2000
-	sim.act(0, "industry")
-	sim.act(0, "research")
-	check(sim.reason(0, "recruit") != "", "Two project limit")
-	days(60)
-	check(is_equal_approx(sim.country(0).quality, 1.25), "Research quality increase")
-	reset()
-	sim.act(0, "campaign_3")
-	check(sim.country(0).support[3] > 18, "Campaign changes support")
-	check(sim.reason(0, "campaign_2") != "", "Shared campaign cooldown")
+	c = sim.country(0)
+	sim.act(0, "government_2")
+	check(c.premier == "Lars Klingbeil" and c.head_name == "Frank-Walter Steinmeier", "Government change preserves president")
+	check(sim.reason(0, "government_4") != "", "Opposition cannot seize premiership")
+	sim.act(0, "campaign_6")
+	check(c.support[6] > 9.66, "Dynamic seventh-party campaign")
+	check(sim.reason(0, "campaign_99") != "" and sim.reason(0, "campaign_xyz") != "", "Invalid party campaign denied")
 	var total = 0.0
-	for value in sim.country(0).support: total += value
+	for value in c.support: total += value
 	check(absf(total - 100) < 0.001, "Support normalized")
-	sim.country(0).support = [5.0, 10.0, 75.0, 10.0]
-	days(180)
-	check(int(sim.country(0).ruling) == 2, "Election changes government")
+	reset(1936)
+	c = sim.country(0)
+	check(sim.parties(0)[1].name == "Zentrum" and not sim.parties(0)[1].legal, "Historical banned Zentrum")
+	check(sim.reason(0, "campaign_1") != "" and sim.reason(0, "coalition_1") != "", "Dictatorship blocks banned parties")
+	sim.act(0, "democratize")
+	check(c.democratic and sim.reason(0, "campaign_1") == "", "Democratic alternative opens campaigns")
+	c.money = 1000
+	c.influence = 250
+	sim.act(0, "restore_monarchy")
+	check(c.head_name == "Wilhelm II." and c.head_title == "Kaiser", "Constitutional Kaiser alternative")
 	reset()
-	sim.country(0).money = 5000
-	sim.country(0).army = 200
-	sim.country(0).quality = 2
+	c = sim.country(0)
+	var book = sim.Economy.ledger(c, 2026, 0)
+	check(absf(book.revenue - book.expenses - book.balance) < 0.001, "Budget balances")
+	var original_revenue = book.revenue
+	sim.act(0, "tax_up")
+	check(sim.Economy.ledger(c, 2026, 0).revenue > original_revenue, "Tax affects revenue")
+	var gdp = sim.Economy.ledger(c, 2026, 0).gdp
+	c.econ.stock.energy = 0
+	c.econ.energy = 0
+	check(sim.Economy.ledger(c, 2026, 0).gdp < gdp * 0.5, "Energy shortage reduces GDP")
+	var weak_power = sim.power(0)
+	c.econ.stock.energy = 1000
+	check(sim.power(0) > weak_power * 2, "Supply affects military power")
+	var money = c.money
+	var debt = c.econ.debt
+	sim.act(0, "loan")
+	check(c.money == money + 200 and c.econ.debt == debt + 200, "Borrowing books equal cash and debt")
+	sim.act(0, "repay")
+	check(c.money == money and c.econ.debt == debt, "Repayment balanced")
+	var interest = sim.Economy.ledger(c, 2026, 0).interest
+	c.econ.debt *= 2
+	check(sim.Economy.ledger(c, 2026, 0).interest > interest * 2, "Debt increases risk premium")
+	reset()
+	c = sim.country(0)
+	c.money = 2000
+	sim.act(0, "energy")
+	sim.act(0, "farms")
+	check(sim.reason(0, "industry") != "", "Two project slots")
+	var energy = c.econ.energy
+	for day in range(45): sim.advance(range(sim.count()))
+	check(c.econ.energy == energy + 12 and c.projects.is_empty(), "Sector investment completes")
+	check(c.econ.history.size() == 1, "Monthly economic history")
+	reset()
+	c = sim.country(0)
+	sim.act(0, "trade", 1)
+	var other = sim.country(1)
+	var cash_total = c.money + other.money
+	var goods_total = c.econ.stock.energy + other.econ.stock.energy
+	sim.advance_trade()
+	check(absf(c.money + other.money - cash_total) < 0.0001, "Trade conserves money")
+	check(absf(c.econ.stock.energy + other.econ.stock.energy - goods_total) < 0.0001, "Trade conserves goods")
+	check(sim.state.trades[0].delivered > 0, "Goods delivered")
+	other.econ.stock.energy = 0
+	var delivered = sim.state.trades[0].delivered
+	sim.advance_trade()
+	check(sim.state.trades[0].delivered == delivered, "No goods created when supplier empty")
+	c.influence = 250
 	sim.act(0, "war", 1)
-	check(sim.state.wars.size() == 1, "War starts")
-	days(1)
-	check(sim.alive(1), "War not instant")
-	check(sim.state.wars[0].progress > 0, "Stronger attacker advances")
-	check(sim.reason(0, "war", 6) != "", "One concurrent war per country")
-	days(80)
-	check(int(sim.country(1).owner) == 0, "Stronger army wins over time")
-	check(sim.state.wars.is_empty(), "Completed war removed")
-	check(sim.reason(1, "industry") != "", "Defeated state cannot act")
-	reset()
-	sim.country(1).army = 250
-	sim.country(1).money = 5000
-	sim.act(0, "war", 1)
-	days(90)
-	check(int(sim.country(0).owner) == 1, "Stronger defender wins")
-	reset()
-	sim.country(0).army = 100
-	sim.country(1).army = 100
-	sim.country(1).quality = 1
-	sim.country(1).ruling = 0
-	sim.country(1).stability = 56
-	sim.act(0, "war", 1)
-	days(31)
-	check(absf(sim.state.wars[0].progress) < 0.001, "Equal armies stalemate")
-	check(sim.reason(0, "peace", 1) == "", "Stalemate allows peace")
-	sim.act(0, "peace", 1)
-	check(sim.state.wars.is_empty(), "Armistice ends war")
-	sim.country(0).influence = 200
-	check(sim.reason(0, "war", 1) != "", "Truce prevents immediate war")
-	reset()
-	sim.country(0).money = 0
-	sim.country(0).army = 5000
-	days(1)
-	check(sim.country(0).money >= 0 and sim.country(0).army < 5000, "Bankruptcy reduces army")
-	reset()
-	days(75)
-	check(sim.country(0).event >= 0, "Scheduled event")
-	sim.act(0, "event_1")
-	check(sim.country(0).event == -1, "Event resolved")
-	reset()
-	check(sim.save_game("user://test-save.json", 3) == OK, "Save succeeds")
-	sim.country(0).money = 1
-	check(sim.read_game("user://test-save.json") == 3, "Saved player restored")
-	check(sim.country(0).money == 310, "State restored")
-	var file = FileAccess.open("user://bad-save.json", FileAccess.WRITE)
+	other.econ.stock.energy = 500
+	sim.advance_trade()
+	check(sim.state.trades[0].delivered == delivered, "War suspends trade")
+	check(sim.state.wars.size() == 1 and sim.alive(1), "War not instant victory")
+	for day in range(14): sim.advance(range(sim.count()))
+	var w = sim.state.wars[0]
+	check(w.history.size() == 2 and w.reports.size() >= 3, "Weekly reports and chart")
+	check(w.loss_a > 0 and w.cost_a > 0 and c.econ.damage > 0, "Losses, costs and damage tracked")
+	check(sim.save_game("user://test-v3.json", 0) == OK, "Save ongoing war")
+	var restored = Simulation.new()
+	check(restored.read_game("user://test-v3.json") == 0, "Load v3 snapshot")
+	check(restored.country(0).cabinet == c.cabinet and restored.state.wars[0].reports[0].text == w.reports[0].text and restored.state.wars[0].reports.size() == w.reports.size(), "Cabinet and war reports persist")
+	restored.country(0).influence = 250
+	check(restored.reason(0, "appoint_finance_1:1") == "", "Coalition candidate remains available after JSON load")
+	var file = FileAccess.open("user://bad-v3.json", FileAccess.WRITE)
 	var bad = sim.state.duplicate(true)
-	bad.countries[0].projects = [{"kind": "bad", "finish": 1}]
+	bad.countries[0].cabinet.finance = "999:3"
 	file.store_string(JSON.stringify({"state": bad, "player": 0}))
 	file.close()
-	check(sim.read_game("user://bad-save.json") == -1, "Malformed save rejected")
-	check(sim.country(0).money == 310, "Bad load preserves current state")
+	check(restored.read_game("user://bad-v3.json") == -1, "Reject invalid saved candidate")
 	reset()
-	sim.country(0).industry = 100
-	sim.country(0).stability = 90
-	sim.state.day = 364
-	days(1)
-	check(int(sim.state.winner) == 0, "Prosperity victory")
-	check(sim.reason(0, "industry") != "", "Completed games reject actions")
+	c = sim.country(0)
+	c.army = 400
+	c.money = 10000
+	for good in sim.Economy.GOODS: c.econ.stock[good] = 20000
+	sim.country(6).army = 10
+	sim.act(0, "war", 6)
+	for day in range(80): sim.advance(range(sim.count()))
+	check(int(sim.country(6).owner) == 0, "Overwhelming army wins over time")
+	check(sim.state.war_archive.size() == 1 and sim.state.war_archive[0].winner == 0, "Victory archived")
 	reset()
-	for i in range(5): sim.country(i).owner = 0
-	days(1)
-	check(int(sim.state.winner) == 0, "Territorial victory")
-	reset()
-	for i in range(1800): sim.advance([])
-	for c in sim.state.countries:
-		check(is_finite(c.money) and c.money >= 0 and c.stability >= 0 and c.stability <= 100, "Long simulation invariants " + c.name)
-	for scenario_year in [1936,2026]:
-		sim.new_game(scenario_year)
-		check(sim.year() == scenario_year, "Scenario selected %d" % scenario_year)
-		check(sim.count() == (16 if scenario_year == 1936 else 17), "Scenario country count")
-		check(sim.country(0).name == ("Deutsches Reich" if scenario_year == 1936 else "Deutschland"), "Era-specific German name")
-		check(sim.country(7).name == ("Tschechoslowakei" if scenario_year == 1936 else "Tschechien"), "Era-specific Czech state")
-		check(sim.country(0).democratic == (scenario_year == 2026), "Regime differs")
-		check(sim.borders(0,1) and sim.borders(2,1), "Land and maritime access")
-		check(not sim.borders(0,12), "No Germany-Portugal border")
-		for c in sim.Scenarios.get_scenario(scenario_year).countries:
-			for n in c.neighbors:
-				check(float(c.id) in sim.Scenarios.get_scenario(scenario_year).countries[int(n)].neighbors, "Symmetric borders")
-		check(sim.save_game("user://scenario-test.json", sim.count()-1) == OK, "Scenario save")
-		sim.new_game(2026 if scenario_year == 1936 else 1936)
-		check(sim.read_game("user://scenario-test.json") == sim.count()-1 and sim.year() == scenario_year, "Scenario restored across eras")
-		days(75)
-		check(sim.country(0).event >= 0, "Events in both eras")
-	sim.new_game(1936)
-	check(sim.reason(0,"campaign_0") != "", "Dictatorship blocks free campaigns")
-	sim.country(0).support = [90.0,4.0,3.0,3.0]
-	days(180)
-	check(int(sim.country(0).ruling) == 3, "Dictatorship has no automatic election")
-	sim.country(0).money = 1000
+	sim.act(0, "war", 1)
+	sim.state.wars[0].days = 30
 	sim.country(0).influence = 200
-	sim.act(0,"democratize")
-	check(sim.country(0).democratic, "Constitution enables democracy")
-	check(sim.reason(0,"campaign_0") == "", "Campaign unlocked by reform")
-	days(180)
-	check(int(sim.country(0).ruling) == 0, "Reformed state elects government")
-	var historic_polygons = sim.Scenarios.get_scenario(1936).countries[0].polygons
-	var modern_polygons = sim.Scenarios.get_scenario(2026).countries[0].polygons
-	check(historic_polygons != modern_polygons and historic_polygons.size() == 2, "Historical Germany includes separate East Prussia")
-	sim.new_game(2026)
-	check(sim.country(0).quality > 2 and sim.ACTIONS.industry[0] == "Digitale Infrastruktur", "Modern technology and decisions")
+	sim.act(0, "peace", 1)
+	check(sim.state.wars.is_empty() and sim.state.war_archive[0].winner == -1, "Ceasefire archived")
+	check(sim.reason(0, "war", 1) != "", "Truce enforced")
+	for era in [1936, 2026]:
+		reset(era)
+		check(sim.count() == (16 if era == 1936 else 17), "Scenario count")
+		for id in range(sim.count()):
+			var nation = sim.country(id)
+			check(sim.parties(id).size() >= 3 and not nation.premier.is_empty(), "Roster for %s / %d" % [nation.code, era])
+			for person in sim.Politics.candidates(era, nation.code):
+				check(not person.name.is_empty() and int(person.party) in range(sim.parties(id).size()), "Candidate identity and affiliation")
+		for day in range(720): sim.advance(range(sim.count()))
+		for id in range(sim.count()):
+			var nation = sim.country(id)
+			check(is_finite(sim.income(id)) and nation.money >= 0 and nation.econ.stock.energy >= 0, "Long-run economic bounds")
+		check(sim.save_game("user://test-v3.json", sim.count() - 1) == OK and restored.read_game("user://test-v3.json") == sim.count() - 1, "Both scenario snapshots round-trip")
+	reset(1936)
+	for day in range(720): sim.advance([])
+	for id in range(sim.count()):
+		check(is_finite(sim.income(id)) and sim.country(id).projects.size() <= 2, "Autonomous AI campaign remains valid")
 	print("SIMULATION: %d checks, %d failures" % [checks, failures])
-	quit(1 if failures > 0 else 0)
+	quit(1 if failures else 0)

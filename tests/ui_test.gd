@@ -39,7 +39,7 @@ func run():
 	check(game.map.hit(game.map.transform_point(game.map.center(4))) == 4, "Map hit test")
 	game.map.selected.emit(4)
 	check(game.selected == 4, "Map selection signal")
-	for i in range(4):
+	for i in range(6):
 		game.tab_buttons[i].pressed.emit()
 		await frame()
 		check(game.tab == i and game.content.get_child_count() > 2, "Tab renders %d" % i)
@@ -47,10 +47,20 @@ func run():
 		if "--screenshots" in OS.get_cmdline_user_args():
 			DirAccess.make_dir_recursive_absolute("res://docs")
 			root.get_texture().get_image().save_png("res://docs/screen-%d.png" % i)
-	game.tab_buttons[2].pressed.emit()
+	game.tab_buttons[3].pressed.emit()
 	await frame()
 	find_button(game.content, "Industrie ausbauen").pressed.emit()
 	check(game.session.sim.country(0).projects.size() == 1, "Economy button queues project")
+	game.session.solo(0, 2026)
+	game.tab_buttons[2].pressed.emit()
+	await frame()
+	find_button(game.content, "Minister ernennen …").pressed.emit()
+	await frame()
+	var appointment = find_button(game, "Alexander Dobrindt · CSU")
+	check(appointment != null and not appointment.disabled, "Coalition minister selectable")
+	appointment.pressed.emit()
+	await frame()
+	check(game.session.sim.country(0).cabinet.finance == "1:1", "UI appointment updates cabinet")
 	game.pause_button.pressed.emit()
 	await create_timer(1.2).timeout
 	check(game.session.sim.state.day >= 1, "Real game loop advances")
@@ -70,7 +80,7 @@ func run():
 	check(game.date_label.text.begins_with("01.01.2026"), "2026 date displayed")
 	check(game.map.regions.size() == 17, "Modern map rebuilt")
 	check(game.map.hit(game.map.transform_point(Vector2(19.5,48.8))) == 16, "Slovakia clickable in 2026")
-	game.tab_buttons[2].pressed.emit()
+	game.tab_buttons[3].pressed.emit()
 	await frame()
 	check(find_button(game.content, "Digitale Infrastruktur") != null, "Modern decisions shown")
 	if "--screenshots" in OS.get_cmdline_user_args(): root.get_texture().get_image().save_png("res://docs/screen-2026.png")
@@ -87,6 +97,27 @@ func run():
 		await frame()
 		for id in range(game.session.sim.count()):
 			check(game.map.hit(game.map.transform_point(game.map.center(id))) == id, "Country center clickable: %d / %d" % [era,id])
+	game.session.solo(0, 2026)
+	game.selected = 1
+	game.session.sim.country(0).influence = 250
+	game.session.command("war", 1)
+	for day in range(40): game.session.sim.advance(range(game.session.sim.count()))
+	game.tab_buttons[4].pressed.emit()
+	await frame()
+	check(game.session.sim.state.wars[0].reports.size() > 4, "War report panel populated")
+	if "--screenshots" in OS.get_cmdline_user_args():
+		root.get_texture().get_image().save_png("res://docs/screen-war.png")
+		game.session.solo(0, 2026)
+		for day in range(120): game.session.sim.advance(range(game.session.sim.count()))
+		for section in [1, 2, 3]:
+			game.tab_buttons[section].pressed.emit()
+			await frame()
+			root.get_texture().get_image().save_png("res://docs/screen-modern-%d.png" % section)
+	root.size = Vector2i(1152, 720)
+	for section in range(6):
+		game.tab_buttons[section].pressed.emit()
+		await frame()
+		check(game.content.size.x <= game.scroll.size.x + 1, "Minimum-width panel fits %d" % section)
 	game.show_help()
 	await frame()
 	check(game.get_child_count() > 4, "Help dialog renders")

@@ -19,7 +19,22 @@ Der 2026-Modus verwendet die heutigen Staatsgebiete der 17 ausgewählten europä
 
 ## Politische und wirtschaftliche Abstraktion
 
-Die politischen Strömungen, Unterstützungsanteile, Regierungsboni, Industrie, Geld, Stabilität, Qualität und Soldatenzahlen sind handbalancierte Spielwerte. Sie stammen nicht aus Volkswirtschafts-, Militär- oder Wahldaten. Sie sind keine Aussage über tatsächliche Regierungskoalitionen im Jahr 2026. Die vier Kategorien bündeln viele unterschiedliche Parteien; sie setzen deren Ideologien nicht gleich.
+Die Parteien und Personen sind kuratierte reale Identitäten. Die Auswahl ist nicht vollständig. Bezugspunkt ist der 1. Januar der Epoche; spätere Amtswechsel und Lebensläufe werden nicht nachgespielt. Parteianteile, Koalitionen, Ministerprofile, Wirtschaft und Armeen sind Modellwerte. Parteilosengruppen stellen reale Personen ohne behauptete Parteimitgliedschaft bereit. Startkoalitionen außerhalb Deutschlands sind stark vereinfacht. Deutschland verwendet vier zeitgenössische Ressortinhaber; sonst entstehen Spielkabinette aus verfügbaren Kandidaten, mit möglichen Vakanzen. Die generierten `sources`-Felder sind biografische Rechercheeinstiege, keine Belege für das gesamte jeweilige Parteiverzeichnis.
+
+Dokumentierte Bezugspunkte:
+
+- Deutscher Bundestag: [Zusammensetzung der Bundesregierung vom 6. Mai 2025](https://www.bundestag.de/dokumente/textarchiv/2025/kw19-de-kanzlerwahl-bundesregierung-1063886): Merz sowie Klingbeil, Reiche, Pistorius und Wadephul; Grundlage der deutschen Ressorts im Januar-2026-Start.
+- Bundespräsident: [Frank-Walter Steinmeier](https://www.bundespraesident.de/DE/bundespraesident/frank-walter-steinmeier_node.html).
+- Deutsches Historisches Museum: [Heinrich Brüning](https://www.dhm.de/lemo/biografie/heinrich-bruening), [Gleichschaltung](https://www.dhm.de/lemo/kapitel/ns-regime/etablierung/gleichschaltung): Zentrum und Unterdrückung anderer Parteien unter der NS-Diktatur.
+- Deutsches Historisches Museum: [Hjalmar Schacht](https://www.dhm.de/lemo/biografie/hjalmar-schacht), [Schwerin von Krosigk](https://www.dhm.de/lemo/biografie/johann-ludwig-lutz-graf-von-schwerin-von-krosigk): Wirtschafts- und Finanzressort im historischen Start.
+- Élysée: [Ernennung Sébastien Lecornus, 10. Oktober 2025](https://www.elysee.fr/emmanuel-macron/2025/10/10/nomination-de-sebastien-lecornu-premier-ministre): französischer Regierungschef zum modernen Szenariostart.
+- Assemblée nationale: [Pierre Laval](https://www.assemblee-nationale.fr/gouv_parl/fiches_personnalites/Laval.asp): französischer Regierungschef Anfang 1936.
+- Dänisches Staatsministerium: [Regierung Stauning III](https://stm.dk/regeringen/regeringer-siden-1848/regeringen-stauning-iii/): historische dänische Regierung.
+- Norwegische Regierung: [Johan Nygaardsvold](https://www.regjeringen.no/no/om-regjeringa/tidligere-regjeringer-og-historie/historiske-artikler/embeter/statsminister-1814-/johan-nygaardsvold/id463389/).
+- Schwedische Regierung: [Geschichte des Ministerpräsidentenamtes](https://www.regeringen.se/sa-styrs-sverige/statsministerambetet-i-sverige/).
+- Schweizer SECO: [WEF-Treffen Januar 2026](https://www.seco-cooperation.admin.ch/en/newnsb/BB2yuZ1ufxIdCfGI4be_C): Einordnung damaliger Regierungsvertreter, unter anderem Parmelin, De Wever und Schoof.
+
+Wilhelm II. als zurückkehrender Kaiser und Paul Löbe als Übergangspräsident sind ausdrücklich alternative Spielentwicklungen, keine historischen Ämter im Jahr 1936. Die demokratische Freischaltung verbotener Parteien abstrahiert Freilassungen, Rückkehr aus dem Exil und Wiederzulassungen.
 
 1936 starten Deutschland und Italien als Diktaturen sowie Österreich, Polen, Ungarn und Portugal als autoritäre Staaten. Dort gibt es keine freien Kampagnen oder automatischen Regierungswechsel, bis die Spieler eine demokratische Verfassung beschließen. Der weitere Verlauf folgt den Spielentscheidungen, nicht einem historischen Ereignisskript.
 
@@ -32,3 +47,7 @@ node tools/build_maps.mjs /path/to/ne_110m_admin_0_countries.geojson
 ```
 
 Das erzeugt `data/scenarios.json`. Die Grenzanpassungen sind direkt im Skript enthalten. Zur Laufzeit sind keine Downloads nötig.
+
+## Parteien reproduzieren
+
+Im Repository-Verzeichnis: `node tools/build_politics.mjs`. Die kuratierten Identitäten stehen im Skript; der Generator erzeugt `data/politics.json`. Fachprofile sind bewusst Spielrollen. Es werden keine Personenfotos, Logos oder fremden Beschreibungstexte verteilt.
