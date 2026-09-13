@@ -1,0 +1,8 @@
+.godot/
+build/
+*.exe
+*.pck
+*.zip
+export_credentials.cfg
+.DS_Store
+Thumbs.db
