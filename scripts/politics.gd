@@ -42,7 +42,12 @@ static func person(year: int, code: String, id: String) -> Dictionary:
 static func fill_cabinet(c: Dictionary, year: int):
 	c.cabinet = {"finance": "", "economy": "", "defense": "", "foreign": ""}
 	for role in ROLES:
-		for candidate in candidates(year, c.code):
+		var pool = candidates(year, c.code)
+		pool.sort_custom(func(a, b):
+			var score_a = (4 if int(a.party) == int(c.ruling) else 0) + (2 if a.focus == role else 0)
+			var score_b = (4 if int(b.party) == int(c.ruling) else 0) + (2 if b.focus == role else 0)
+			return score_a > score_b if score_a != score_b else a.id < b.id)
+		for candidate in pool:
 			if candidate.party not in c.coalition or candidate.name == c.premier or candidate.name == c.head_name: continue
 			if candidate.id in c.cabinet.values(): continue
 			c.cabinet[role] = candidate.id

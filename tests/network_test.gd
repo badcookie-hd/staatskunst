@@ -25,6 +25,8 @@ func run():
 			printerr("NET FAIL: cabinet command not applied on host"); failed = true
 		if session.sim.country(0).cabinet.defense == "1:0":
 			printerr("NET FAIL: cabinet command changed host country"); failed = true
+		if session.sim.country(1).law.stage != 0 or not session.sim.country(1).democratic:
+			printerr("NET FAIL: unauthorized dictatorship command changed constitution"); failed = true
 		print("NETWORK HOST: " + ("FAIL" if failed else "PASS"))
 		session.disconnect_session()
 		quit(1 if failed else 0)
@@ -50,6 +52,10 @@ func run():
 		await create_timer(0.6).timeout
 		if session.sim.country(1).cabinet.defense != "1:0" or not session.sim.country(1).has("econ"):
 			printerr("NET FAIL: new cabinet and economy state not synchronized"); failed = true
+		session.command("law_dictatorship")
+		await create_timer(0.4).timeout
+		if not session.sim.country(1).democratic or session.sim.country(1).law.stage != 0:
+			printerr("NET FAIL: guest bypassed constitutional prerequisites"); failed = true
 		print("NETWORK CLIENT: " + ("FAIL" if failed else "PASS"))
 		session.disconnect_session()
 		quit(1 if failed else 0)

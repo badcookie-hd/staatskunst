@@ -3,6 +3,7 @@ extends RefCounted
 const Scenarios = preload("res://scripts/scenarios.gd")
 const Politics = preload("res://scripts/politics.gd")
 const Economy = preload("res://scripts/economy.gd")
+const Constitution = preload("res://scripts/constitution.gd")
 var NAMES: Array:
 	get: return state.countries.map(func(c): return c.name)
 const BASE_ACTIONS = {
@@ -47,12 +48,13 @@ func count() -> int:
 func new_game(scenario_year: int = 1936, seed_value: int = 1936):
 	if not Scenarios.available(scenario_year): scenario_year = 1936
 	var setup = Scenarios.get_scenario(scenario_year)
-	state = {"version": 3, "scenario": scenario_year, "seed": seed_value, "day": 0, "countries": [], "wars": [], "war_archive": [], "trades": [], "log": [], "winner": -1}
+	state = {"version": 4, "scenario": scenario_year, "seed": seed_value, "day": 0, "countries": [], "wars": [], "war_archive": [], "trades": [], "log": [], "winner": -1}
 	for entry in setup.countries:
 		var c = entry.duplicate(true)
 		for key in ["polygons", "neighbors", "sea_neighbors", "center", "color"]: c.erase(key)
 		c.merge({"owner": int(c.id), "tax": 25, "trade": 0, "projects": [], "relations": {}, "event": -1, "event_day": 0, "cooldowns": {}, "truce": {}})
 		Politics.initialize(c, scenario_year)
+		Constitution.initialize(c, scenario_year)
 		Economy.initialize(c)
 		state.countries.append(c)
 	log_entry("%d · %s. Dein Kabinett wartet auf Entscheidungen." % [scenario_year, setup.title])
@@ -77,7 +79,15 @@ func parties(id: int) -> Array:
 	return Politics.roster(year(), country(id).code).parties
 
 func income(id: int) -> float:
-	return Economy.ledger(country(id), year(), war_count(id)).balance
+	return budget(id).net
+
+func budget(id: int) -> Dictionary:
+	var c = country(id)
+	var book = Economy.ledger(c, year(), war_count(id))
+	book.imports = c.econ.trade_out * 30
+	book.exports = c.econ.trade_in * 30
+	book.net = book.balance + book.exports - book.imports
+	return book
 
 func war_count(id: int) -> int:
 	var count = 0
@@ -105,6 +115,12 @@ func reason(id: int, action: String, target: int = -1) -> String:
 	if not alive(id): return "Dein Staat wurde eingegliedert. Starte eine neue Partie."
 	if int(state.winner) >= 0: return "Diese Partie ist abgeschlossen."
 	var c = country(id)
+	if action.begins_with("law_"): return Constitution.reason(c, action, int(state.day), Politics.coalition_support(c))
+	if action.begins_with("cancel_trade_"):
+		var suffix = action.trim_prefix("cancel_trade_")
+		if not suffix.is_valid_int() or int(suffix) not in range(state.trades.size()): return "Unbekannter Vertrag."
+		if int(state.trades[int(suffix)].a) != id: return "Nur eigene Importverträge kündigen."
+		return ""
 	var political_error = politics_reason(id, action)
 	if political_error != "__other__": return political_error
 	if action.begins_with("campaign_"):
@@ -141,6 +157,10 @@ func reason(id: int, action: String, target: int = -1) -> String:
 		if action in ["trade", "import_food", "import_materials", "diplomacy"] and at_war(id, target): return "Im Krieg nicht möglich."
 		if action in ["trade", "import_food", "import_materials"] and c.trade >= 4: return "Alle vier Handelsplätze sind belegt."
 		if action in ["trade", "import_food", "import_materials"] and relation(id, target) < -20: return "Beziehungen zuerst verbessern."
+		if action in ["trade", "import_food", "import_materials"]:
+			var good = {"trade": "energy", "import_food": "food", "import_materials": "materials"}[action]
+			for contract in state.trades:
+				if int(contract.a) == id and int(contract.b) == target and contract.good == good: return "Dieser Vertrag besteht bereits."
 		if action == "war":
 			if not borders(id, target): return "Kein gemeinsamer Grenz- oder Seezugang im Szenario."
 			if at_war(id, target): return "Ihr befindet euch bereits im Krieg."
@@ -154,9 +174,28 @@ func reason(id: int, action: String, target: int = -1) -> String:
 	return ""
 
 func act(id: int, action: String, target: int = -1) -> String:
+	if not alive(id): return "Dieser Staat ist nicht unabhängig."
+	var c = country(id)
+	var before = float(c.money)
+	var debt_before = float(c.econ.debt)
+	var result = apply_action(id, action, target)
+	if not is_equal_approx(before, c.money) or not is_equal_approx(debt_before, c.econ.debt):
+		Economy.transaction(c, int(state.day), ACTIONS.get(action, [result])[0], c.money - before, c.econ.debt - debt_before)
+	return result
+
+func apply_action(id: int, action: String, target: int = -1) -> String:
 	var error = reason(id, action, target)
 	if error != "": return error
 	var c = country(id)
+	if action.begins_with("law_"):
+		var message = Constitution.act(c, action, int(state.day))
+		if action == "law_dictatorship": Politics.fill_cabinet(c, year())
+		log_entry(message)
+		return message
+	if action.begins_with("cancel_trade_"):
+		state.trades.remove_at(int(action.trim_prefix("cancel_trade_")))
+		c.trade = maxi(0, int(c.trade) - 1)
+		return "Importvertrag gekündigt. Handelsplatz ist wieder frei."
 	if politics_reason(id, action) != "__other__": return politics_act(id, action)
 	if action.begins_with("campaign_"):
 		c.influence -= 25
@@ -179,6 +218,10 @@ func act(id: int, action: String, target: int = -1) -> String:
 	match action:
 		"democratize":
 			c.democratic = true
+			Constitution.initialize(c, year())
+			c.premier_title = Politics.roster(year(), c.code).premier_title
+			c.head_name = Politics.roster(year(), c.code).head
+			c.head_title = Politics.roster(year(), c.code).head_title
 			if c.code == "DEU" and year() == 1936:
 				c.head_name = "Paul Löbe"
 				c.head_title = "Übergangspräsident"
@@ -246,10 +289,15 @@ func advance(humans: Array = [0]):
 	if int(state.winner) >= 0: return
 	state.day += 1
 	var day = int(state.day)
+	var cash_before = state.countries.map(func(c): return float(c.money))
+	for c in state.countries:
+		c.econ.trade_in = 0.0
+		c.econ.trade_out = 0.0
 	for c in state.countries:
 		var id = int(c.id)
 		if not alive(id): continue
 		Economy.advance(c, year(), war_count(id), day)
+		Constitution.advance(c)
 		c.influence = minf(250, c.influence + 0.7 + c.support[int(c.ruling)] / 100.0)
 		var drift = (0.04 if c.tax <= 25 else -0.06) - war_count(id) * 0.07
 		c.stability = clampf(c.stability + drift, 0, 100)
@@ -273,6 +321,7 @@ func advance(humans: Array = [0]):
 				if Politics.coalition_support(c) > 50: break
 				if i not in c.coalition: c.coalition.append(i)
 			Politics.form_government(c, year(), elected)
+			Constitution.new_government(c, day)
 			c.stability = minf(100, c.stability + 3)
 			log_entry("Wahl in %s: %s führt die neue Koalition." % [c.name, parties(id)[elected].name])
 		if day % 75 == 0 and int(c.event) < 0:
@@ -280,8 +329,14 @@ func advance(humans: Array = [0]):
 			c.event_day = day
 		if int(c.event) >= 0 and day - int(c.event_day) >= 30:
 			act(id, "event_1")
-		if id not in humans and day % 30 == 0: ai_turn(id)
 	advance_trade()
+	for c in state.countries:
+		if not alive(int(c.id)): continue
+		c.econ.last_cash_change = c.money - cash_before[int(c.id)]
+		Economy.transaction(c, day, "Tagesabschluss inkl. Handel und Finanzierung", c.econ.last_cash_change, c.econ.last_borrowing)
+		if day % 30 == 0:
+			var book = budget(int(c.id))
+			c.econ.history.append({"day": day, "gdp": book.gdp, "balance": book.net, "debt": c.econ.debt, "inflation": c.econ.inflation})
 	for w in state.wars.duplicate():
 		var a = int(w.a)
 		var b = int(w.b)
@@ -297,8 +352,8 @@ func advance(humans: Array = [0]):
 		country(b).army -= loss_b
 		w.loss_a += loss_a
 		w.loss_b += loss_b
-		w.cost_a += (24 + country(a).army * 0.15) / 30.0
-		w.cost_b += (24 + country(b).army * 0.15) / 30.0
+		w.cost_a += country(a).econ.last_war_charge
+		w.cost_b += country(b).econ.last_war_charge
 		for combatant in [a, b]: country(combatant).econ.damage = minf(65, country(combatant).econ.damage + 0.045)
 		if int(w.days) % 7 == 0:
 			w.history.append({"day": state.day, "progress": w.progress})
@@ -319,6 +374,7 @@ func advance(humans: Array = [0]):
 			log_entry("%s siegt nach %d Tagen. %s wird eingegliedert." % [country(victor).name, w.days, country(loser).name])
 	for c in state.countries:
 		var id = int(c.id)
+		if alive(id) and id not in humans and day % 30 == 0: ai_turn(id)
 		if alive(id) and (territories(id) >= 5 or (day >= 365 and c.industry >= 100 and c.stability >= 75)):
 			state.winner = id
 			log_entry("%s gewinnt: eine neue Ordnung für den Kontinent." % c.name)
@@ -329,6 +385,12 @@ func ai_turn(id: int):
 	if int(c.event) >= 0: act(id, "event_0" if c.money > 130 else "event_1")
 	if c.stability < 55: act(id, "welfare")
 	var choice = ["industry", "research", "recruit"][(int(state.day) / 30 + id) % 3]
+	var plan = Economy.flow(c)
+	for good in ["food", "energy"]:
+		if plan.production[good] < plan.demand[good] and c.econ.stock[good] < plan.demand[good] * 3:
+			choice = "energy" if good == "energy" else "farms"
+	if income(id) < 0 and c.tax < 35: act(id, "tax_up")
+	if choice == "recruit" and income(id) < 25: choice = "services"
 	act(id, choice)
 	if int(state.day) >= 240 and not c.democratic and c.stability > 50:
 		for target in range(count()):
@@ -393,6 +455,7 @@ func politics_act(id: int, action: String) -> String:
 	if action.begins_with("government_"):
 		c.influence -= 80
 		Politics.form_government(c, year(), int(action.get_slice("_", 1)))
+		Constitution.new_government(c, int(state.day))
 		log_entry("%s: %s übernimmt das Amt %s." % [c.name, c.premier, c.premier_title])
 		return "Neue Regierung gebildet. Das Kabinett wurde neu besetzt."
 	var role = action.get_slice("_", 1)
@@ -423,6 +486,8 @@ func advance_trade():
 		seller.econ.stock[good] -= quantity
 		contract.delivered += quantity
 		contract.spent += quantity * price
+		buyer.econ.trade_out += quantity * price
+		seller.econ.trade_in += quantity * price
 
 func war_report(w: Dictionary, message: String):
 	w.reports.push_front({"day": int(state.day), "text": message})
@@ -442,7 +507,7 @@ func read_game(path: String) -> int:
 	var data = JSON.parse_string(file.get_as_text())
 	if not data is Dictionary or not data.get("state") is Dictionary: return -1
 	var s = data.state
-	if s.get("version") != 3 or not number_in(s.get("scenario"), 1936, 2026): return -1
+	if s.get("version") != 4 or not number_in(s.get("scenario"), 1936, 2026): return -1
 	if not Scenarios.available(int(s.scenario)): return -1
 	var template = get_script().new()
 	template.new_game(int(s.scenario))
@@ -476,6 +541,12 @@ func read_game(path: String) -> int:
 			if c.econ[key] < 0: return -1
 		for good in Economy.GOODS:
 			if c.econ.stock[good] < 0: return -1
+		if not number_in(c.law.stage, 0, 3) or not number_in(c.law.party, -1, c.support.size() - 1): return -1
+		for key in ["rule_of_law", "press", "resistance"]:
+			if not number_in(c.law[key], 0, 100): return -1
+		if c.econ.transactions.size() > 80: return -1
+		for entry in c.econ.transactions:
+			if not structure(entry, {"day": 0, "text": "", "amount": 0, "debt": 0}): return -1
 		if c.econ.history.size() > 120: return -1
 		for point in c.econ.history:
 			if not structure(point, {"day": 0, "gdp": 0, "balance": 0, "debt": 0, "inflation": 0}): return -1

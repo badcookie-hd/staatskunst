@@ -19,7 +19,7 @@ Der 2026-Modus verwendet die heutigen Staatsgebiete der 17 ausgewählten europä
 
 ## Politische und wirtschaftliche Abstraktion
 
-Die Parteien und Personen sind kuratierte reale Identitäten. Die Auswahl ist nicht vollständig. Bezugspunkt ist der 1. Januar der Epoche; spätere Amtswechsel und Lebensläufe werden nicht nachgespielt. Parteianteile, Koalitionen, Ministerprofile, Wirtschaft und Armeen sind Modellwerte. Parteilosengruppen stellen reale Personen ohne behauptete Parteimitgliedschaft bereit. Startkoalitionen außerhalb Deutschlands sind stark vereinfacht. Deutschland verwendet vier zeitgenössische Ressortinhaber; sonst entstehen Spielkabinette aus verfügbaren Kandidaten, mit möglichen Vakanzen. Die generierten `sources`-Felder sind biografische Rechercheeinstiege, keine Belege für das gesamte jeweilige Parteiverzeichnis.
+Die ursprünglichen Parteien und Personen sind kuratierte reale Identitäten; die separat markierte CfD ist eine fiktive Ergänzung ab Version 0.4. Die Auswahl ist nicht vollständig. Bezugspunkt ist der 1. Januar der Epoche; spätere Amtswechsel und Lebensläufe werden nicht nachgespielt. Parteianteile, Koalitionen, Ministerprofile, Wirtschaft und Armeen sind Modellwerte. Parteilosengruppen stellen reale Personen ohne behauptete Parteimitgliedschaft bereit. Startkoalitionen außerhalb Deutschlands sind stark vereinfacht. Deutschland verwendet vier zeitgenössische Ressortinhaber; sonst entstehen Spielkabinette aus verfügbaren Kandidaten, mit möglichen Vakanzen. Die generierten `sources`-Felder sind biografische Rechercheeinstiege, keine Belege für das gesamte jeweilige Parteiverzeichnis.
 
 Dokumentierte Bezugspunkte:
 
@@ -51,3 +51,9 @@ Das erzeugt `data/scenarios.json`. Die Grenzanpassungen sind direkt im Skript en
 ## Parteien reproduzieren
 
 Im Repository-Verzeichnis: `node tools/build_politics.mjs`. Die kuratierten Identitäten stehen im Skript; der Generator erzeugt `data/politics.json`. Fachprofile sind bewusst Spielrollen. Es werden keine Personenfotos, Logos oder fremden Beschreibungstexte verteilt.
+
+## Ergänzungen für Version 0.4
+
+Die CfD (Christen für Deutschland) und ihre sechs Politiker sind ausdrücklich erfunden, in beiden Epochen als solche markiert. [Bilder und vollständige Prompts](ART.md).
+
+Grundgesetz-Panel: [Artikel 1](https://www.gesetze-im-internet.de/gg/art_1.html), [Artikel 5](https://www.gesetze-im-internet.de/gg/art_5.html), [Artikel 20](https://www.gesetze-im-internet.de/gg/art_20.html), [Artikel 21](https://www.gesetze-im-internet.de/gg/art_21.html), [Artikel 38](https://www.gesetze-im-internet.de/gg/art_38.html) und [Artikel 79](https://www.gesetze-im-internet.de/gg/art_79.html), Gesetze im Internet. Die Ewigkeitsklausel wird nicht als regulär abschaltbare Gesetzesoption dargestellt. Der Machtpfad ist ein abstrakter, ausdrücklich verfassungswidriger Alternativverlauf, keine Tatsachenbehauptung über das zukünftige Verhalten einer realen Partei.

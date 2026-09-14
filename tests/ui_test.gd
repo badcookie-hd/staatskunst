@@ -39,7 +39,7 @@ func run():
 	check(game.map.hit(game.map.transform_point(game.map.center(4))) == 4, "Map hit test")
 	game.map.selected.emit(4)
 	check(game.selected == 4, "Map selection signal")
-	for i in range(6):
+	for i in range(7):
 		game.tab_buttons[i].pressed.emit()
 		await frame()
 		check(game.tab == i and game.content.get_child_count() > 2, "Tab renders %d" % i)
@@ -114,10 +114,36 @@ func run():
 			await frame()
 			root.get_texture().get_image().save_png("res://docs/screen-modern-%d.png" % section)
 	root.size = Vector2i(1152, 720)
-	for section in range(6):
+	for section in range(7):
 		game.tab_buttons[section].pressed.emit()
 		await frame()
 		check(game.content.size.x <= game.scroll.size.x + 1, "Minimum-width panel fits %d" % section)
+	root.size = Vector2i(1440, 900)
+	game.session.solo(0, 2026)
+	game.session.sim.country(0).influence = 250
+	game.session.command("coalition_7")
+	game.session.command("government_7")
+	game.tab_buttons[2].pressed.emit()
+	await frame()
+	check(game.session.sim.country(0).premier == "Jan Mertens", "Fictional CfD cabinet rendered")
+	if "--screenshots" in OS.get_cmdline_user_args(): root.get_texture().get_image().save_png("res://docs/screen-cfd-cabinet.png")
+	game.tab_buttons[6].pressed.emit()
+	await frame()
+	check(game.tab == 6 and find_button(game.content, "Verfassungskrise auslösen").disabled, "Constitution path requires waiting")
+	if "--screenshots" in OS.get_cmdline_user_args(): root.get_texture().get_image().save_png("res://docs/screen-constitution.png")
+	game.session.sim.state.day = 15
+	game.session.sim.country(0).influence = 250
+	game.refresh()
+	await frame()
+	var crisis = find_button(game.content, "Verfassungskrise auslösen")
+	check(not crisis.disabled, "Crisis unlocked after new government tenure")
+	crisis.pressed.emit()
+	await frame()
+	var confirmation = game.get_child(game.get_child_count() - 1)
+	check(confirmation is ConfirmationDialog and confirmation.visible, "Explicit in-game constitutional breach confirmation")
+	confirmation.confirmed.emit()
+	await frame()
+	check(game.session.sim.country(0).law.stage == 1, "Confirmed constitutional choice applied")
 	game.show_help()
 	await frame()
 	check(game.get_child_count() > 4, "Help dialog renders")

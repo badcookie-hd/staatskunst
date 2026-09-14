@@ -60,6 +60,14 @@ C(1936,'PRT','Óscar Carmona',pres,'António de Oliveira Salazar',pm,[P('União 
 C(1936,'DNK','Christian X.',king,'Thorvald Stauning',pm,[P('Socialdemokratiet','social','Thorvald Stauning;Hans Hedtoft;Vilhelm Buhl'),P('Radikale Venstre','liberal','Peter Munch;Jørgen Jørgensen'),P('Det Konservative Folkeparti','conservative','John Christmas Møller;Ole Bjørn Kraft')]);
 C(1936,'SWE','Gustaf V.',king,'Per Albin Hansson',pm,[P('Socialdemokraterna','social','Per Albin Hansson;Ernst Wigforss;Gustav Möller'),P('Allmänna valmansförbundet','conservative','Gösta Bagge;Fritiof Domö'),P('Bondeförbundet','conservative','Axel Pehrsson-Bramstorp;Karl Gustaf Westman')]);
 C(1936,'NOR','Haakon VII.',king,'Johan Nygaardsvold',pm,[P('Arbeiderpartiet','social','Johan Nygaardsvold;Halvdan Koht;Oscar Torp'),P('Høyre','conservative','Johan H. Andresen;C. J. Hambro'),P('Venstre','liberal','Johan Ludwig Mowinckel;Per Berg Lund')]);
+for(const year of [1936,2026]) {
+  const party=P('Christen für Deutschland','christian','Jan Mertens;Clara Winter;Tobias Falk;Miriam Seidel;Lukas Ahrens;Elisabeth Voss',year===2026);
+  party.fictional=true;
+  party.short='CfD';
+  party.description='Fiktive Spielpartei: christlich-soziale Politik, Familienförderung und regionale Wirtschaft. Ihr politischer Weg wird vom Spieler bestimmt.';
+  party.candidates.forEach((p,i)=>{p.fictional=true;p.portrait=i;p.focus=['foreign','finance','economy','defense','foreign','finance'][i];});
+  result[year].DEU.parties.push(party);
+}
 for(const countries of Object.values(result)) for(const c of Object.values(countries)) {
   c.sources=[`https://en.wikipedia.org/wiki/${encodeURIComponent(c.premier.replaceAll(' ','_'))}`];
   c.parties.forEach((p,party)=>p.candidates.forEach((candidate,index)=>{candidate.id=`${party}:${index}`;candidate.party=party;}));

@@ -199,6 +199,65 @@
               "party": 6
             }
           ]
+        },
+        {
+          "name": "Christen für Deutschland",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": false,
+          "candidates": [
+            {
+              "name": "Jan Mertens",
+              "focus": "foreign",
+              "fictional": true,
+              "portrait": 0,
+              "id": "7:0",
+              "party": 7
+            },
+            {
+              "name": "Clara Winter",
+              "focus": "finance",
+              "fictional": true,
+              "portrait": 1,
+              "id": "7:1",
+              "party": 7
+            },
+            {
+              "name": "Tobias Falk",
+              "focus": "economy",
+              "fictional": true,
+              "portrait": 2,
+              "id": "7:2",
+              "party": 7
+            },
+            {
+              "name": "Miriam Seidel",
+              "focus": "defense",
+              "fictional": true,
+              "portrait": 3,
+              "id": "7:3",
+              "party": 7
+            },
+            {
+              "name": "Lukas Ahrens",
+              "focus": "foreign",
+              "fictional": true,
+              "portrait": 4,
+              "id": "7:4",
+              "party": 7
+            },
+            {
+              "name": "Elisabeth Voss",
+              "focus": "finance",
+              "fictional": true,
+              "portrait": 5,
+              "id": "7:5",
+              "party": 7
+            }
+          ],
+          "fictional": true,
+          "short": "CfD",
+          "description": "Fiktive Spielpartei: christlich-soziale Politik, Familienförderung und regionale Wirtschaft. Ihr politischer Weg wird vom Spieler bestimmt."
         }
       ],
       "coalition": [
@@ -1646,6 +1705,65 @@
               "party": 6
             }
           ]
+        },
+        {
+          "name": "Christen für Deutschland",
+          "kind": "christian",
+          "color": "75a9d0",
+          "legal": true,
+          "candidates": [
+            {
+              "name": "Jan Mertens",
+              "focus": "foreign",
+              "fictional": true,
+              "portrait": 0,
+              "id": "7:0",
+              "party": 7
+            },
+            {
+              "name": "Clara Winter",
+              "focus": "finance",
+              "fictional": true,
+              "portrait": 1,
+              "id": "7:1",
+              "party": 7
+            },
+            {
+              "name": "Tobias Falk",
+              "focus": "economy",
+              "fictional": true,
+              "portrait": 2,
+              "id": "7:2",
+              "party": 7
+            },
+            {
+              "name": "Miriam Seidel",
+              "focus": "defense",
+              "fictional": true,
+              "portrait": 3,
+              "id": "7:3",
+              "party": 7
+            },
+            {
+              "name": "Lukas Ahrens",
+              "focus": "foreign",
+              "fictional": true,
+              "portrait": 4,
+              "id": "7:4",
+              "party": 7
+            },
+            {
+              "name": "Elisabeth Voss",
+              "focus": "finance",
+              "fictional": true,
+              "portrait": 5,
+              "id": "7:5",
+              "party": 7
+            }
+          ],
+          "fictional": true,
+          "short": "CfD",
+          "description": "Fiktive Spielpartei: christlich-soziale Politik, Familienförderung und regionale Wirtschaft. Ihr politischer Weg wird vom Spieler bestimmt."
         }
       ],
       "coalition": [

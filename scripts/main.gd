@@ -132,7 +132,7 @@ func build_ui():
 	nav.add_theme_constant_override("separation", 8)
 	body.add_child(nav)
 	nav.add_child(label("REGIERUNGSZENTRALE", 10, MUTED))
-	var names = ["01   Übersicht", "02   Parteien", "03   Kabinett", "04   Wirtschaft", "05   Krieg", "06   Diplomatie"]
+	var names = ["01   Übersicht", "02   Parteien", "03   Kabinett", "04   Wirtschaft", "05   Krieg", "06   Diplomatie", "07   Verfassung"]
 	for i in range(names.size()):
 		var b = button(nav, names[i], func(): tab = i; scroll.scroll_vertical = 0; refresh())
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -141,7 +141,7 @@ func build_ui():
 	var spacer = Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	nav.add_child(spacer)
-	paragraph(nav, "STAATSKUNST\nPOLITISCHE STRATEGIE\n\n1936 / 2026\nVERSION 0.3", MUTED)
+	paragraph(nav, "STAATSKUNST\nPOLITISCHE STRATEGIE\n\n1936 / 2026\nVERSION 0.4", MUTED)
 	var left = VBoxContainer.new()
 	map_area = left
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -222,6 +222,7 @@ func refresh():
 		3: economy_tab(c)
 		4: war_tab(c)
 		5: foreign_tab(c)
+		6: constitution_tab(c)
 	clear(chronicle)
 	for entry in sim.state.log.slice(0, 3):
 		var l = label("%s   %s" % [date_text(int(entry.day)), entry.text], 12, MUTED)
@@ -250,6 +251,7 @@ func bar(parent: Node, value: float):
 	parent.add_child(p)
 
 func state_tab(c: Dictionary):
+	banner(content, 115)
 	heading("Die Staatsführung", "%s · %s\n%s · %s" % [c.head_title, c.head_name, c.premier_title, c.premier])
 	paragraph(content, "Regierung: " + session.sim.parties(session.player_id)[int(c.ruling)].name, GOLD)
 	var goal = panel(content, Color("203a3e"))
@@ -287,13 +289,30 @@ func card(parent: Node) -> VBoxContainer:
 func politics_tab(c: Dictionary):
 	var sim = session.sim
 	heading("Parlament & Parteien", "Nächste Modellwahl in %d Tagen. Koalitionsanteil: %.1f %% · %s" % [180 - int(sim.state.day) % 180, sim.Politics.coalition_support(c), "freie Wahlen" if c.democratic else "autoritäre Herrschaft"])
-	paragraph(content, "Reale Personen und Parteien. Unterstützung und Koalitionen sind Spielwerte, keine Umfragen. Historisch verbotene Parteien werden durch eine Verfassungsreform als Alternativpfad verfügbar.")
+	paragraph(content, "Reale Parteien und die fiktive CfD. Unterstützung und Koalitionen sind Spielwerte, keine Umfragen. Historisch verbotene Parteien werden durch eine Verfassungsreform als Alternativpfad verfügbar.")
 	if not c.democratic: add_action("democratize")
 	if sim.year() == 1936 and c.code == "DEU": add_action("restore_monarchy")
 	var g = grid(content, 2)
-	for i in range(sim.parties(session.player_id).size()):
+	var order = range(sim.parties(session.player_id).size())
+	if c.code == "DEU":
+		order.erase(7)
+		order.push_front(7)
+	for i in order:
 		var party = sim.parties(session.player_id)[i]
 		var box = card(g)
+		if party.get("fictional", false):
+			var emblem = TextureRect.new()
+			emblem.texture = load("res://assets/cfd-emblem.svg")
+			emblem.custom_minimum_size = Vector2(48, 48)
+			emblem.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			emblem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			emblem.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+			box.add_child(emblem)
+			paragraph(box, "CfD · FIKTIVE SPIELPARTEI", GOLD)
+			paragraph(box, party.description)
+			var faces = HFlowContainer.new()
+			box.add_child(faces)
+			for person in party.candidates: portrait(faces, person, 65)
 		paragraph(box, "%s   ·   %.1f %%" % [party.name, c.support[i]], Color(party.color))
 		bar(box, c.support[i])
 		paragraph(box, ("REGIERUNGSFÜHRUNG" if int(c.ruling) == i else "KOALITION" if i in c.coalition else "OPPOSITION") + (" · verboten / Exil" if not party.legal and not c.democratic else ""), GOLD)
@@ -310,6 +329,8 @@ func cabinet_tab(c: Dictionary):
 	for pair in [[c.head_title, c.head_name], [c.premier_title, c.premier]]:
 		var box = card(leaders)
 		box.add_child(label(pair[0].to_upper(), 11, GOLD))
+		var leader = find_person(c, pair[1])
+		if not leader.is_empty() and leader.has("portrait"): portrait(box, leader, 100)
 		box.add_child(label(pair[1], 21))
 	paragraph(content, "Startpersonal nach Epoche. Die vier Ressorts bilden ein Spielkabinett; Besetzung, Koalitionen und Fachboni sind vereinfacht. Fachprofil = Spielrolle, keine Bewertung realer Fähigkeiten.")
 	var g = grid(content)
@@ -321,7 +342,8 @@ func cabinet_tab(c: Dictionary):
 		var title = "Vakant" if person.is_empty() else person.name
 		var initials = "—"
 		if not person.is_empty(): initials = person.name.left(1) + person.name.get_slice(" ", person.name.get_slice_count(" ") - 1).left(1)
-		box.add_child(label(initials, 26, Color("76bdbe")))
+		if person.has("portrait"): portrait(box, person, 130)
+		else: box.add_child(label(initials, 26, Color("76bdbe")))
 		paragraph(box, title, Color.WHITE)
 		if not person.is_empty(): paragraph(box, sim.parties(session.player_id)[int(person.party)].name + " · Profil: " + sim.Politics.ROLES[person.focus])
 		var effects = {"finance": "Steuereffizienz", "economy": "Wirtschaftsleistung", "defense": "effektive Armeestärke", "foreign": "Wirkung von Staatsbesuchen"}
@@ -346,7 +368,11 @@ func choose_minister(role: String):
 	for p in sim.Politics.candidates(sim.year(), c.code):
 		var action = "appoint_%s_%s" % [role, p.id]
 		var error = sim.reason(session.player_id, action)
-		var b = button(box, "%s · %s" % [p.name, sim.parties(session.player_id)[int(p.party)].name], func(): session.command(action); dialog.queue_free())
+		var row = HBoxContainer.new()
+		box.add_child(row)
+		if p.has("portrait"): portrait(row, p, 60)
+		var b = button(row, "%s · %s" % [p.name, sim.parties(session.player_id)[int(p.party)].name], func(): session.command(action); dialog.queue_free())
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.disabled = not error.is_empty()
 		b.tooltip_text = error if not error.is_empty() else "Profil: " + sim.Politics.ROLES[p.focus]
 	dialog.popup_centered()
@@ -354,20 +380,21 @@ func choose_minister(role: String):
 func economy_tab(c: Dictionary):
 	var sim = session.sim
 	var e = c.econ
-	var book = sim.Economy.ledger(c, sim.year(), sim.war_count(session.player_id))
+	var book = sim.budget(session.player_id)
 	heading("Wirtschaft & Staatshaushalt", "Modellwerte in M und Gütereinheiten. Produktion, Vorräte, Arbeitsplätze, Steuern und Schulden werden täglich miteinander verrechnet.")
 	var summary = grid(content, 3)
-	for item in [["MONATSSALDO", "%+.1f M" % book.balance], ["STAATSSCHULDEN", "%.0f M · %.2f %% Zins" % [e.debt, book.rate]], ["VERSORGUNG", "%.0f %% · %.1f %% Schäden" % [book.supply * 100, e.damage]]]:
+	for item in [["LAUFENDER MONATSSALDO", "%+.1f M" % book.net], ["STAATSSCHULDEN", "%.0f M · %.2f %% Zins" % [e.debt, book.rate]], ["VERSORGUNG", "%.0f %% · %.1f %% Schäden" % [book.supply * 100, e.damage]]]:
 		var box = card(summary)
 		box.add_child(label(item[0], 11, MUTED))
 		box.add_child(label(item[1], 21, GOLD))
 	var columns = grid(content)
 	var revenue = card(columns)
 	revenue.add_child(label("EINNAHMEN / MONAT", 12, GOLD))
-	for item in [["Einkommensteuer", book.personal], ["Unternehmenssteuer", book.corporate], ["Verbrauchsteuer", book.consumption], ["Gesamt", book.revenue]]: ledger_row(revenue, item[0], item[1])
+	for item in [["Einkommensteuer", book.personal], ["Unternehmenssteuer", book.corporate], ["Verbrauchsteuer", book.consumption], ["Exporte (letzte Lieferrate)", book.exports], ["Gesamt", book.revenue + book.exports]]: ledger_row(revenue, item[0], item[1])
 	var expenses = card(columns)
 	expenses.add_child(label("AUSGABEN / MONAT", 12, GOLD))
-	for item in [["Verwaltung", book.admin], ["Soziales", book.social], ["Bildung", book.education], ["Verteidigung", book.military], ["Kriegskosten", book.war], ["Zinsen", book.interest], ["Gesamt", book.expenses]]: ledger_row(expenses, item[0], item[1])
+	for item in [["Verwaltung", book.admin], ["Soziales", book.social], ["Bildung", book.education], ["Verteidigung", book.military], ["Kriegskosten", book.war], ["Zinsen", book.interest], ["Repressionsapparat", book.repression], ["Importe (letzte Lieferrate)", book.imports], ["Gesamt", book.expenses + book.imports]]: ledger_row(expenses, item[0], item[1])
+	paragraph(content, "Letzter Tagesabschluss: Kasse %+.2f M · davon automatische Kredite %+.2f M. Laufender Monatssaldo enthält die letzte tatsächliche Handelsrate; einmalige Projekte und Kredite stehen im Kontobuch." % [e.last_cash_change, e.last_borrowing], GOLD)
 	var charts = grid(content)
 	for key in ["gdp", "balance"]:
 		var chart = Trend.new()
@@ -377,12 +404,15 @@ func economy_tab(c: Dictionary):
 	content.add_child(label("VERSORGUNG & PRODUKTION", 14, GOLD))
 	var resources = grid(content, 3)
 	var demand = sim.Economy.demand(c)
+	var flow = sim.Economy.flow(c)
 	for good in sim.Economy.GOODS:
 		var box = card(resources)
 		box.add_child(label({"energy": "ENERGIE", "food": "NAHRUNG", "materials": "MATERIAL"}[good], 11, MUTED))
 		box.add_child(label("%.0f Einheiten" % e.stock[good], 22, GOLD))
-		paragraph(box, "Bedarf %.1f / Monat\nReserve für %.0f Tage" % [demand[good], e.stock[good] / maxf(1, demand[good]) * 30])
-	paragraph(content, "Fehlende Vorräte senken Produktion und Armeestärke. Kriegsschäden drücken die Leistung. Handelsverträge unter Diplomatie liefern nur, wenn der Partner Überschüsse hat und du zahlen kannst. Importzahlungen kommen zusätzlich zum laufenden Haushalt hinzu.")
+		paragraph(box, "Produktion %.1f / Monat\nBedarf %.1f / Monat\nBilanz %+.1f / Monat\nUngedeckt %.1f / Monat" % [flow.production[good], demand[good], flow.production[good] - demand[good], flow.shortfall[good]])
+		var deficit = demand[good] - flow.production[good]
+		paragraph(box, "Engpass in etwa %.0f Tagen" % (e.stock[good] / deficit * 30) if deficit > 0.01 else "Produktion deckt den Bedarf", GOLD)
+	paragraph(content, "Fehlende Vorräte senken Produktion und Armeestärke. Kriegsschäden drücken die Leistung. Handelsverträge unter Diplomatie liefern nur, wenn der Partner Überschüsse hat und du zahlen kannst. Importe und Exporte sind im Saldo enthalten, basierend auf der letzten tatsächlichen Lieferung.")
 	content.add_child(label("STEUERN & BUDGETS", 14, GOLD))
 	var controls = grid(content, 3)
 	var income_box = card(controls)
@@ -405,9 +435,16 @@ func economy_tab(c: Dictionary):
 	paragraph(content, "Kapazitäten: Industrie %.0f · Energie %.0f · Landwirtschaft %.0f · Dienstleistungen %.0f" % [c.industry, e.energy, e.farms, e.services])
 	var investments = grid(content, 3)
 	for action in ["industry", "energy", "farms", "services", "research", "recruit"]: add_action(action, card(investments))
-	for contract in sim.state.trades:
+	for contract_index in range(sim.state.trades.size()):
+		var contract = sim.state.trades[contract_index]
 		if int(contract.a) == session.player_id:
 			paragraph(content, "%s → %s · geliefert %.1f · bezahlt %.1f M%s" % [sim.country(int(contract.b)).name, {"energy": "Energie", "food": "Nahrung", "materials": "Material"}[contract.good], contract.delivered, contract.spent, " · wegen Krieg ausgesetzt" if sim.at_war(int(contract.a), int(contract.b)) else ""])
+
+			add_action("cancel_trade_%d" % contract_index, content, "Vertrag kündigen", "Kostenlos · Handelsplatz freigeben")
+	content.add_child(label("KONTOBUCH · LETZTE BUCHUNGEN", 14, GOLD))
+	if e.transactions.is_empty(): paragraph(content, "Noch keine Buchungen. Die Zeit ist pausiert; Entscheidungen buchen sofort, der Haushalt täglich.")
+	for entry in e.transactions.slice(0, 12):
+		paragraph(content, "%s · %s · %+.2f M%s" % [date_text(int(entry.day)), entry.text, entry.amount, " · Schulden %+.2f M" % entry.debt if absf(entry.debt) > 0.001 else ""])
 
 func ledger_row(parent: Node, title: String, value: float):
 	var row = HBoxContainer.new()
@@ -467,8 +504,11 @@ func add_action(action: String, parent: Node = null, title: String = "", detail:
 		title = session.sim.ACTIONS[action][0]
 		detail = session.sim.ACTIONS[action][1]
 	var target = int(session.sim.country(selected).owner)
+	var preview = budget_preview(action)
+	if not preview.is_empty(): detail += "\n" + preview
 	var b = button(parent, title, func():
 		if action == "war": confirm_war(target)
+		elif action.begins_with("law_") and action != "law_defend": confirm_law(action)
 		else: session.command(action, target))
 	var error = session.sim.reason(session.player_id, action, target)
 	b.disabled = error != ""
@@ -536,10 +576,10 @@ func show_menu():
 	menu.add_child(box)
 	button(box, "Partie speichern", func():
 		if not session.is_host(): show_notice("Nur der Host kann speichern."); return
-		var error = session.sim.save_game("user://campaign-v3.json", session.player_id)
+		var error = session.sim.save_game("user://campaign-v4.json", session.player_id)
 		show_notice("Partie gespeichert." if error == OK else "Speichern fehlgeschlagen: %s" % error_string(error)))
 	var load_button = button(box, "Gespeicherte Partie laden", func():
-		var id = session.sim.read_game("user://campaign-v3.json")
+		var id = session.sim.read_game("user://campaign-v4.json")
 		if id < 0: show_notice("Kein gültiger Spielstand gefunden."); return
 		session.player_id = id
 		session.running = false
@@ -552,7 +592,7 @@ func show_menu():
 	new_button.disabled = session.online
 	button(box, "LAN / Direkte IP", func(): menu.hide(); show_network())
 	button(box, "Spielanleitung", func(): menu.hide(); show_help())
-	paragraph(box, "Staatskunst 0.3.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
+	paragraph(box, "Staatskunst 0.4.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
 
@@ -595,3 +635,86 @@ func _unhandled_key_input(event):
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_SPACE:
 		if get_viewport().gui_get_focus_owner() is LineEdit: return
 		session.toggle_pause()
+
+func banner(parent: Node, height: int = 150):
+	var picture = TextureRect.new()
+	picture.texture = load("res://assets/parliament.png")
+	picture.custom_minimum_size.y = height
+	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	parent.add_child(picture)
+
+func portrait(parent: Node, person: Dictionary, edge: int = 110):
+	var atlas = AtlasTexture.new()
+	atlas.atlas = load("res://assets/cfd-portraits.png")
+	var cell = atlas.atlas.get_size() / Vector2(3, 2)
+	var index = int(person.portrait)
+	atlas.region = Rect2(Vector2(index % 3, index / 3) * cell, cell)
+	var picture = TextureRect.new()
+	picture.texture = atlas
+	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	picture.custom_minimum_size = Vector2(edge, edge)
+	picture.tooltip_text = person.name + " · fiktive Spielfigur"
+	parent.add_child(picture)
+
+func find_person(c: Dictionary, person_name: String) -> Dictionary:
+	for person in session.sim.Politics.candidates(session.sim.year(), c.code):
+		if person.name == person_name: return person
+	return {}
+
+func budget_preview(action: String) -> String:
+	var sim = session.sim
+	var c = sim.country(session.player_id).duplicate(true)
+	var before = sim.Economy.ledger(c, sim.year(), sim.war_count(session.player_id)).balance
+	var key = action.get_slice("_", 0)
+	if action in ["tax_up", "tax_down"]:
+		c.tax += 5 if action.ends_with("up") else -5
+		c.stability = clampf(c.stability + (-5 if action.ends_with("up") else 4), 0, 100)
+	elif key in ["social", "education", "defense", "corporate", "vat"]:
+		c.econ[key] += (5 if key in ["corporate", "vat"] else 10) * (1 if action.ends_with("up") else -1)
+	else: return ""
+	var after = sim.Economy.ledger(c, sim.year(), sim.war_count(session.player_id)).balance
+	return "Haushaltswirkung sofort: %+.1f M / Monat" % (after - before)
+
+func constitution_tab(c: Dictionary):
+	var sim = session.sim
+	var law = c.law
+	banner(content, 150)
+	heading(law.name + " & Staatsordnung", "Amtierende Regierung: %s · %s" % [sim.parties(session.player_id)[int(c.ruling)].name, c.premier])
+	var info = grid(content, 3)
+	for entry in [["RECHTSSTAAT", law.rule_of_law], ["PRESSEFREIHEIT", law.press], ["WIDERSTAND", law.resistance]]:
+		var box = card(info)
+		box.add_child(label(entry[0], 11, GOLD))
+		box.add_child(label("%.0f / 100" % entry[1], 24))
+		bar(box, entry[1])
+	paragraph(content, "Staatsform: " + ("Demokratie" if c.democratic else "Diktatur / autoritäre Regierung") + (" · Verfassungsbruch" if law.breached else ""), GOLD)
+	if c.code == "DEU" and sim.year() == 2026:
+		var articles = grid(content)
+		for entry in [["Art. 1 & 20", "Menschenwürde, Demokratie, Sozialstaat und Bindung staatlicher Gewalt an Recht und Verfassung."], ["Art. 5", "Meinungs- und Pressefreiheit. Staatliche Zensur ist untersagt."], ["Art. 21 & 38", "Parteien wirken an politischer Willensbildung mit; die Bundestagswahl ist frei und gleich."], ["Art. 79", "Änderungen benötigen Zweidrittelmehrheiten in Bundestag und Bundesrat. Die in Art. 1 und 20 geschützten Grundsätze sind einer Änderung entzogen."]]:
+			var box = card(articles)
+			box.add_child(label(entry[0], 17, GOLD))
+			paragraph(box, entry[1])
+		paragraph(content, "Kurzfassung der Grundgesetz-Grundsätze. Unterstützung im Spiel ist keine echte Sitz- oder Bundesratsmehrheit. Die folgenden Machtaktionen sind ein fiktiver Verfassungsbruch, keine rechtmäßige Änderung des Grundgesetzes.")
+	else:
+		paragraph(content, "Abstrakte Verfassungsregeln dieser Epoche. Das Grundgesetz von 1949 gilt im 1936-Szenario nicht. Pressefreiheit, Rechtsstaat und freie Wahlen werden als Spielwerte dargestellt.")
+	content.add_child(label("ALTERNATIVER MACHTPFAD", 15, GOLD))
+	paragraph(content, "Zuerst eine andere Partei an die Regierung bringen: zum Beispiel AfD oder die fiktive CfD. Danach sind bewusste autoritäre Entscheidungen möglich. Keine Partei löst diesen Verlauf automatisch aus. Widerstand, Stabilitätsverluste, zusätzliche Kosten und schlechtere Kreditbedingungen sind die Folgen.")
+	var stages = grid(content, 3)
+	for entry in [["crisis", "1 · Verfassungskrise", "Neue Regierungspartei, Koalitionsmehrheit, 15 Tage im Amt. 100 Einfluss. −8 Stabilität, Rechtsstaat sinkt auf 65."], ["centralize", "2 · Machtzentralisierung", "30 Tage nach Krisenbeginn. 100 Einfluss. −10 Stabilität, Rechtsstaat und Pressefreiheit sinken auf 35."], ["dictatorship", "3 · Diktatur", "Weitere 30 Tage, mindestens 30 % Unterstützung der Regierungspartei. 150 Einfluss. −12 Stabilität, freie Wahlen enden."]]:
+		var box = card(stages)
+		box.add_child(label(entry[1], 16, GOLD))
+		paragraph(box, entry[2])
+		add_action("law_" + entry[0], box, sim.Constitution.TITLES[entry[0]], "Bewusster alternativer Spielpfad")
+	if c.democratic: add_action("law_defend", content, "Verfassung verteidigen · 60 Einfluss", "Krise beenden, Grundrechte wiederherstellen, +5 Stabilität")
+	else: add_action("democratize")
+	paragraph(content, "Eine andere gewählte Regierung beendet den laufenden Machtpfad. Nach Errichtung einer Diktatur bleiben Wirtschafts-, Kabinetts- und Außenpolitik spielbar; Wahlkampf ist gesperrt.")
+
+func confirm_law(action: String):
+	var dialog = ConfirmationDialog.new()
+	dialog.title = "Staatsordnung verändern"
+	dialog.dialog_text = "Diesen alternativen Spielpfad bewusst fortsetzen?\nDie Aktion verletzt die demokratische Verfassungsordnung.\nWiderstand, Stabilitätsverlust und wirtschaftliche Kosten folgen.\nKosten: %.0f Einfluss." % session.sim.Constitution.COSTS[action.trim_prefix("law_")]
+	dialog.confirmed.connect(func(): session.command(action); dialog.queue_free())
+	dialog.canceled.connect(dialog.queue_free)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(650, 220))

@@ -17,7 +17,7 @@ func reset(era: int = 2026):
 func _initialize():
 	reset()
 	var c = sim.country(0)
-	check(sim.parties(0).size() == 7, "Germany has seven actual parties")
+	check(sim.parties(0).size() == 8, "Germany has seven actual parties and fictional CfD")
 	check(sim.parties(0)[0].name == "CDU" and sim.parties(0)[1].name == "CSU", "Christian parties")
 	check(c.head_name == "Frank-Walter Steinmeier" and c.premier == "Friedrich Merz", "Separate offices")
 	check(sim.Politics.person(2026, c.code, c.cabinet.finance).name == "Lars Klingbeil", "Initial German finance minister")
