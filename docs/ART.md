@@ -12,6 +12,7 @@ Use case: historical-scene. Asset type: single politician portrait for the Godot
 
 ## Dateien
 
+- `assets/strategy-room.png`: neue eigene Hauptmenüillustration (0.6), mit dem eingebauten OpenAI-Bildgenerierungswerkzeug erstellt und unverändert ins Projekt kopiert. Keine übernommenen Hearts-of-Iron-Bilder.
 - `assets/cfd-portraits.png`: ein Atlas aus sechs Porträts, drei Spalten und zwei Zeilen. Godot liest die einzelnen Bildbereiche über AtlasTexture, ohne zusätzliche Bildbearbeitung.
 - `assets/parliament.png`: dekorative Parlamentsillustration für Übersicht und Verfassungsbereich.
 - `assets/cfd-emblem.svg`: eigenes einfaches Vektorzeichen mit Kreuz, direkt im Projekt erstellt.
@@ -25,3 +26,7 @@ Create ONE game-ready portrait atlas for the political strategy game Staatskunst
 ## Verwendeter Parlaments-Prompt
 
 Use case: stylized-concept. Create a single wide 3:1 cinematic game illustration banner for a German-language political grand strategy game, elegant hand-painted realism with dark navy, warm gold and teal palette. View from the rear gallery into a generic European parliamentary chamber with curved rows of blue seats, a central lectern, warm daylight and tall windows; distant faceless tiny silhouettes only, no identifiable real politicians. Architecture inspired by democratic civic buildings but do not copy a precise real photograph. Rich subtle texture and depth, restrained not triumphant. Keep the center and left visually quiet enough for game UI overlays. No text, no flags, no political logos, no watermarks, no emblems. This is decorative political decision-making artwork for an actual playable game interface, not a UI mockup.
+
+## Hauptmenü-Prompt (0.6)
+
+Use case: stylized-concept. Asset type: original full-screen main menu background for a political grand strategy game named Staatskunst. Wide 16:9, cinematic historically inspired 1930s diplomatic strategy room at dusk, overhead angled view of a large wood desk with an antique world atlas, brass divider and compass, muted globe on the right, folded diplomatic papers, old radio and shaded desk lamp. No people, no weapons, no flags, no political symbols, no readable text, no logos. Deep charcoal and military olive palette with restrained warm brass highlights and slate blue shadows, painterly realistic AAA strategy game illustration. Left third very dark and visually quiet for menu text overlay, most detailed objects on right. Entirely original scene, do not reproduce artwork or UI from any existing video game. The world map on the desk is decorative and must not contain legible labels. A functional geographic world map is rendered separately in game.

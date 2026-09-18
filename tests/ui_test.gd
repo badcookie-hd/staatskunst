@@ -13,7 +13,7 @@ func _initialize():
 	call_deferred("run")
 
 func find_button(node: Node, caption: String):
-	if node is Button and node.text == caption: return node
+	if node is Button and node.text == caption and node.is_visible_in_tree(): return node
 	for child in node.get_children():
 		var found = find_button(child, caption)
 		if found: return found
@@ -27,6 +27,9 @@ func run():
 	root.size = Vector2i(1440, 900)
 	game = load("res://scenes/main.tscn").instantiate()
 	root.add_child(game)
+	await frame()
+	check(game.title_screen.visible, "Main menu opens")
+	find_button(game.title_screen, "Neue Kampagne").pressed.emit()
 	await frame()
 	check(game.modal.visible, "Welcome opens")
 	find_button(game.modal, "Frankreich").pressed.emit()

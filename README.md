@@ -2,13 +2,15 @@
 
 Ein politisches Strategiespiel in **Godot 4.5.1**. Regiere einen realen europäischen Staat im Szenario **1936** oder **2026**: Parteien, Koalitionen, eigene Minister, Wirtschaftsaufbau und Diplomatie stehen im Mittelpunkt. Armeen kämpfen automatisch über Zeit, ohne Einheitenbefehle oder Frontverwaltung.
 
-**Version 0.5.0 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
+**Version 0.6.0 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
 
-[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.5.0) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
+[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.6.0) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
 
-Neu in 0.5: **Bilder für alle 314 unterschiedlichen Personen** der enthaltenen Parteien und Staatsämter: 307 Wikimedia-Fotos, eine gekennzeichnete KI-Illustration für Manuel Giménez Fernández sowie sechs erfundene CfD-Politiker. Parteikarten mit Namen unter jedem Bild, bebilderte Ministerauswahl und anklickbare Großansichten mit Bildnachweisen. Alles funktioniert offline. [Bildquellen und Lizenzen](docs/PORTRAIT-CREDITS.md).
+Neu in 0.6: **Weltkarte mit allen Kontinenten**, 177 Referenzregionen, frei verschiebbarer Ansicht und Zoom. Dunkle olivfarbene Oberfläche mit Messingakzenten, ständig sichtbare Karte neben den Regierungsakten und ein illustriertes Hauptmenü. Einstellungen für Vollbild, VSync, FPS-Limit, Ländernamen, Gradnetz, Kriegsanimationen und Zoomgeschwindigkeit werden lokal gespeichert.
 
-![CfD und eigene Bilder](docs/screen-modern-1.png)
+![Neues Hauptmenü](docs/screen-main-menu.png)
+
+Alle 314 unterschiedlichen Personen bleiben bebildert: 307 Wikimedia-Fotos, eine gekennzeichnete KI-Illustration für Manuel Giménez Fernández sowie sechs erfundene CfD-Politiker. Porträts anklicken für Bildnachweise. Alles funktioniert offline. [Bildquellen und Lizenzen](docs/PORTRAIT-CREDITS.md).
 
 ## Spielen
 
@@ -16,7 +18,7 @@ Unter Releases **Staatskunst-Windows.zip** herunterladen, vollständig entpacken
 
 Für Entwicklung: Repository klonen, `project.godot` in Godot 4.5.1 öffnen und F5 drücken. Keine weiteren Pakete nötig.
 
-1. Epoche und Staat wählen. Die Zeit beginnt pausiert.
+1. Im Hauptmenü **Neue Kampagne**, dann Epoche und Staat wählen. Die Zeit beginnt pausiert.
 2. Unter **Parteien** Wahlkampf führen und eine Koalition bilden.
 3. Unter **Kabinett** vier Ministerämter mit realen Politikern besetzen.
 4. Unter **Wirtschaft** Haushalt, Vorräte und Projekte abstimmen.
@@ -34,7 +36,11 @@ Für Entwicklung: Repository klonen, `project.godot` in Godot 4.5.1 öffnen und 
 | Politik | Demokratien und autoritäre Regime; verbotene Parteien als demokratischer Alternativpfad | Reale Parteien und Politiker zum Szenariostart; zusätzliche fiktive CfD |
 | Deutsche christliche Parteien | Zentrum; fiktive CfD nach Verfassungsreform | CDU, CSU und fiktive CfD |
 
-In beiden Epochen: Deutschland, Frankreich, Vereinigtes Königreich, Italien, Spanien, Polen, Österreich, Tschechoslowakei/Tschechien, Ungarn, Belgien, Niederlande, Schweiz, Portugal, Dänemark, Schweden und Norwegen. 2026 kommt die Slowakei hinzu. Die Karte ist ein **europäischer Ausschnitt**, keine vollständige Weltkarte. Graue Gebiete sind Hintergrund. Mausrad: Zoom; mittlere Maustaste: Verschieben.
+In beiden Epochen: Deutschland, Frankreich, Vereinigtes Königreich, Italien, Spanien, Polen, Österreich, Tschechoslowakei/Tschechien, Ungarn, Belgien, Niederlande, Schweiz, Portugal, Dänemark, Schweden und Norwegen. 2026 kommt die Slowakei hinzu. Die **gesamte Welt ist sichtbar**; spielbar bleiben diese 16 beziehungsweise 17 europäischen Kampagnenländer. Die 177 Weltregionen sind geografischer Hintergrund ohne zusätzliche Simulation. Außerhalb der Kampagnenländer gelten moderne Referenzgrenzen, auch 1936.
+
+![Weltkarte](docs/screen-world.png)
+
+Mausrad: Zoom; rechte oder mittlere Maustaste ziehen: Verschieben. **Welt** passt alle Kontinente ein, **Mein Land** fokussiert die eigene Regierung. **Akte schließen** vergrößert die Karte. Escape öffnet das Spielmenü. Im Haupt- und Spielmenü liegen **Einstellungen**; Änderungen gelten sofort und bleiben nach einem Neustart erhalten.
 
 Identitäten beziehen sich auf den 1. Januar der jeweiligen Epoche. Der spätere Verlauf ist frei: historische Amtswechsel, Sterbedaten, laufende reale Kriege und Kolonien sind nicht geskriptet. Grenzen sind schematisch. Wirtschaft, Militär, Parteianteile, Koalitionen und Fachprofile sind vereinfachte Spielwerte; keine aktuellen Umfragen oder amtlichen Wirtschaftsstatistiken.
 

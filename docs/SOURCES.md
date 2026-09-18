@@ -4,7 +4,8 @@
 
 - Natural Earth, `ne_110m_admin_0_countries.geojson`, abgerufen für Version 0.2.0: [Originaldatei](https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_admin_0_countries.geojson).
 - [Natural Earth Terms of Use](https://www.naturalearthdata.com/about/terms-of-use/): Public Domain.
-- Aus der Weltkarte werden europäische Außenringe ausgeschnitten; außereuropäische Gebiete, kleine Inseln und Löcher werden teilweise weggelassen. Die Genauigkeit entspricht einer strategischen Übersicht, nicht einer Vermessungskarte.
+- `data/world.json` enthält ab Version 0.6 alle 177 Referenzregionen einschließlich Antarktika. `tools/build_world.mjs` übernimmt Außenringe und deutsche Beschriftungen aus der Originaldatei, mit vier Nachkommastellen. Innenlöcher werden weggelassen; selbstberührende Ringe werden bei der Darstellung normalisiert. Die Genauigkeit entspricht einer strategischen Übersicht, nicht einer Vermessungskarte.
+- Darüber liegen die bisherigen europäischen Kampagnengeometrien. Nur diese Länder sind spielbar. Die Welt außerhalb der Kampagnenländer verwendet moderne Referenzgrenzen und Namen auch 1936, keine historische globale Grenzrekonstruktion.
 
 ## Historische Einordnung
 

@@ -38,7 +38,8 @@ func run():
 	var game = load("res://scenes/main.tscn").instantiate()
 	root.add_child(game)
 	await frame()
-	game.modal.hide()
+	game.title_screen.hide()
+	game.panel_open = true
 	for year in [1936, 2026]:
 		game.session.solo(0, year)
 		for id in range(game.session.sim.count()):

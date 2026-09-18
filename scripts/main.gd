@@ -3,6 +3,7 @@ const Session = preload("res://scripts/session.gd")
 const WorldMap = preload("res://scripts/world_map.gd")
 const Trend = preload("res://scripts/trend.gd")
 const Portraits = preload("res://scripts/portraits.gd")
+const Settings = preload("res://scripts/settings.gd")
 const GOLD = Color("e2c28a")
 const MUTED = Color("9eafc4")
 var session
@@ -26,8 +27,15 @@ var map_area: VBoxContainer
 var detail_panel: PanelContainer
 var setup_year = 1936
 var setup_content: VBoxContainer
+var preferences = Settings.new()
+var title_screen: Control
+var settings_window: AcceptDialog
+var campaign_started = false
+var panel_open = false
 
 func _ready():
+	preferences.read()
+	preferences.apply_display()
 	build_theme()
 	session = Session.new()
 	session.name = "Session"
@@ -36,9 +44,9 @@ func _ready():
 	session.notice.connect(show_notice)
 	build_ui()
 	refresh()
-	show_start()
+	show_main_menu()
 
-func style(bg: Color, border: Color = Color.TRANSPARENT, radius: int = 6) -> StyleBoxFlat:
+func style(bg: Color, border: Color = Color.TRANSPARENT, radius: int = 2) -> StyleBoxFlat:
 	var s = StyleBoxFlat.new()
 	s.bg_color = bg
 	s.border_color = border
@@ -56,15 +64,15 @@ func build_theme():
 	t.set_color("font_color", "Label", Color("e3e9e7"))
 	t.set_color("font_color", "Button", Color("d8e5e2"))
 	t.set_color("font_disabled_color", "Button", Color("60757c"))
-	t.set_stylebox("normal", "Button", style(Color("22334a"), Color("34465d")))
-	t.set_stylebox("hover", "Button", style(Color("344b67"), GOLD))
-	t.set_stylebox("pressed", "Button", style(Color("3c5268"), GOLD))
-	t.set_stylebox("disabled", "Button", style(Color("162335"), Color("25364b")))
+	t.set_stylebox("normal", "Button", style(Color("343c39"), Color("686650")))
+	t.set_stylebox("hover", "Button", style(Color("505c50"), GOLD))
+	t.set_stylebox("pressed", "Button", style(Color("5c6551"), GOLD))
+	t.set_stylebox("disabled", "Button", style(Color("252b29"), Color("42483e")))
 	t.set_stylebox("focus", "Button", style(Color(0,0,0,0), GOLD))
-	t.set_stylebox("panel", "AcceptDialog", style(Color("152336"), Color("62766e")))
-	t.set_stylebox("normal", "LineEdit", style(Color("0d2129"), Color("48636a")))
+	t.set_stylebox("panel", "AcceptDialog", style(Color("262e2c"), Color("62766e")))
+	t.set_stylebox("normal", "LineEdit", style(Color("191e1c"), Color("48636a")))
 	t.set_color("font_color", "LineEdit", Color("e3e9e7"))
-	t.set_stylebox("background", "ProgressBar", style(Color("152336"), Color.TRANSPARENT, 3))
+	t.set_stylebox("background", "ProgressBar", style(Color("262e2c"), Color.TRANSPARENT, 3))
 	t.set_stylebox("fill", "ProgressBar", style(Color("bfa66e"), Color.TRANSPARENT, 3))
 	t.set_constant("separation", "VBoxContainer", 10)
 	t.set_constant("separation", "HBoxContainer", 10)
@@ -75,24 +83,31 @@ func label(text_value: String, size_value: int = 15, color: Color = Color("e3e9e
 	l.text = text_value
 	l.add_theme_font_size_override("font_size", size_value)
 	l.add_theme_color_override("font_color", color)
+	l.clip_text = true
+	l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	l.tooltip_text = text_value
 	return l
 
 func paragraph(parent: Node, value: String, color: Color = MUTED):
 	var l = label(value, 14, color)
+	l.clip_text = false
+	l.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	parent.add_child(l)
 
 func button(parent: Node, value: String, callback: Callable) -> Button:
 	var b = Button.new()
 	b.text = value
+	b.clip_text = true
+	b.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	b.pressed.connect(callback)
 	parent.add_child(b)
 	return b
 
-func panel(parent: Node, color: Color = Color("152336")) -> VBoxContainer:
+func panel(parent: Node, color: Color = Color("262e2c")) -> VBoxContainer:
 	var p = PanelContainer.new()
-	p.add_theme_stylebox_override("panel", style(color, Color("2d3e53")))
+	p.add_theme_stylebox_override("panel", style(color, Color("5d624e")))
 	parent.add_child(p)
 	var box = VBoxContainer.new()
 	p.add_child(box)
@@ -106,75 +121,69 @@ func clear(node: Node):
 func build_ui():
 	var margin = MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	for edge in ["left", "right", "top", "bottom"]: margin.add_theme_constant_override("margin_" + edge, 20)
+	for edge in ["left", "right", "top", "bottom"]: margin.add_theme_constant_override("margin_" + edge, 12)
 	add_child(margin)
 	root_box = VBoxContainer.new()
-	root_box.add_theme_constant_override("separation", 14)
+	root_box.add_theme_constant_override("separation", 6)
 	margin.add_child(root_box)
 	var header = HBoxContainer.new()
 	root_box.add_child(header)
-	var brand = VBoxContainer.new()
+	var brand = label("S T A A T S K U N S T", 22, GOLD)
 	brand.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(brand)
-	brand.add_child(label("S T A A T S K U N S T", 26, GOLD))
-	brand.add_child(label("MACHT IST EINE FRAGE DER ENTSCHEIDUNG", 10, MUTED))
-	date_label = label("", 17)
+	date_label = label("", 16)
+	date_label.custom_minimum_size.x = 180
 	header.add_child(date_label)
 	pause_button = button(header, "▶ Fortsetzen", func(): session.toggle_pause())
-	for speed in [1, 3, 5]: button(header, "%d×" % speed, func(): session.set_speed(speed))
-	button(header, "Menü", show_menu)
+	pause_button.custom_minimum_size.x = 125
+	for speed in [1, 3, 5]: button(header, "%d×" % speed, func(): session.set_speed(speed)).custom_minimum_size.x = 45
+	button(header, "Menü", show_menu).custom_minimum_size.x = 85
 	stats = HBoxContainer.new()
 	root_box.add_child(stats)
+	var nav = HBoxContainer.new()
+	root_box.add_child(nav)
+	var names = ["Übersicht", "Parteien", "Kabinett", "Wirtschaft", "Krieg", "Diplomatie", "Verfassung"]
+	for i in range(names.size()):
+		var b = button(nav, names[i], func(): tab = i; panel_open = true; scroll.scroll_vertical = 0; refresh())
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.custom_minimum_size.y = 38
+		tab_buttons.append(b)
 	var body = HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root_box.add_child(body)
-	var nav = VBoxContainer.new()
-	nav.custom_minimum_size.x = 164
-	nav.add_theme_constant_override("separation", 8)
-	body.add_child(nav)
-	nav.add_child(label("REGIERUNGSZENTRALE", 10, MUTED))
-	var names = ["01   Übersicht", "02   Parteien", "03   Kabinett", "04   Wirtschaft", "05   Krieg", "06   Diplomatie", "07   Verfassung"]
-	for i in range(names.size()):
-		var b = button(nav, names[i], func(): tab = i; scroll.scroll_vertical = 0; refresh())
-		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.custom_minimum_size.y = 49
-		tab_buttons.append(b)
-	var spacer = Control.new()
-	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	nav.add_child(spacer)
-	paragraph(nav, "STAATSKUNST\nPOLITISCHE STRATEGIE\n\n1936 / 2026\nVERSION 0.5", MUTED)
-	var left = VBoxContainer.new()
-	map_area = left
-	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	body.add_child(left)
+	map_area = VBoxContainer.new()
+	map_area.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.add_child(map_area)
 	var map_header = HBoxContainer.new()
-	left.add_child(map_header)
-	nation_label = label("", 16)
+	map_area.add_child(map_header)
+	nation_label = label("", 12, GOLD)
 	nation_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	map_header.add_child(nation_label)
-	map_caption = label("", 11, MUTED)
+	map_caption = label("", 10, MUTED)
+	map_caption.custom_minimum_size.x = 100
 	map_header.add_child(map_caption)
 	map = WorldMap.new()
 	map.sim = session.sim
+	map.settings = preferences
 	map.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	map.custom_minimum_size = Vector2(400, 290)
-	map.selected.connect(func(id): selected = id; refresh())
-	left.add_child(map)
-	var key = HBoxContainer.new()
-	left.add_child(key)
-	key.add_child(label("◎ Dein Staatsgebiet     ━ Ausgewählter Staat     ┄ Aktiver Krieg", 12, MUTED))
-	var journal = panel(left)
-	journal.add_child(label("LAGEBERICHT", 11, GOLD))
+	map.custom_minimum_size = Vector2(300, 260)
+	map.selected.connect(func(id): selected = id; tab = 5; panel_open = true; refresh())
+	map.reference_selected.connect(func(country_name): show_notice(country_name + " · Weltkartenregion. Derzeit sind die europäischen Kampagnenländer spielbar."))
+	map_area.add_child(map)
+	var controls = HBoxContainer.new()
+	map_area.add_child(controls)
+	for entry in [["Welt", func(): map.fit_world()], ["Mein Land", func(): map.focus_country(session.player_id)], ["+", func(): map.zoom_at(map.size / 2, 1)], ["−", func(): map.zoom_at(map.size / 2, -1)], ["Kartenmodus", func(): map.mode = "diplomatic" if map.mode == "political" else "political"; map.queue_redraw()]]:
+		var b = button(controls, entry[0], entry[1])
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	chronicle = VBoxContainer.new()
-	journal.add_child(chronicle)
-	var side = PanelContainer.new()
-	side.custom_minimum_size.x = 420
-	detail_panel = side
-	side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side.add_theme_stylebox_override("panel", style(Color("152336"), Color("304058")))
-	body.add_child(side)
+	map_area.add_child(chronicle)
+	detail_panel = PanelContainer.new()
+	detail_panel.custom_minimum_size.x = 550
+	detail_panel.add_theme_stylebox_override("panel", style(Color("242a2a"), Color("756c51")))
+	body.add_child(detail_panel)
 	var side_box = VBoxContainer.new()
-	side.add_child(side_box)
+	detail_panel.add_child(side_box)
+	button(side_box, "Akte schließen  ×", func(): panel_open = false; refresh())
 	scroll = ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -183,8 +192,7 @@ func build_ui():
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("separation", 12)
 	scroll.add_child(content)
-	status_label = label("Wähle ein Land und gestalte seine Zukunft. Leertaste: Pause.", 13, GOLD)
-	status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	status_label = label("Weltkarte · Mausrad zum Zoomen · Rechts oder Mitte ziehen zum Verschieben", 12, GOLD)
 	root_box.add_child(status_label)
 
 func refresh():
@@ -207,7 +215,8 @@ func refresh():
 	map.player_id = session.player_id
 	map.ensure_cache()
 	map.queue_redraw()
-	map_area.visible = tab in [0, 4, 5]
+	map_area.visible = true
+	detail_panel.visible = panel_open
 	for i in range(tab_buttons.size()): tab_buttons[i].modulate = GOLD if tab == i else Color.WHITE
 	clear(content)
 	if int(sim.state.winner) >= 0:
@@ -225,7 +234,7 @@ func refresh():
 		5: foreign_tab(c)
 		6: constitution_tab(c)
 	clear(chronicle)
-	for entry in sim.state.log.slice(0, 3):
+	for entry in sim.state.log.slice(0, 1):
 		var l = label("%s   %s" % [date_text(int(entry.day)), entry.text], 12, MUTED)
 		l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		chronicle.add_child(l)
@@ -234,7 +243,8 @@ func metric(title: String, value: String, detail: String):
 	var box = panel(stats)
 	box.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.add_child(label(title, 10, MUTED))
-	box.add_child(label(value, 25, GOLD))
+	box.add_theme_constant_override("separation", 2)
+	box.add_child(label(value, 20, GOLD))
 	box.add_child(label(detail, 11, MUTED))
 
 func date_text(day: int) -> String:
@@ -277,7 +287,7 @@ func state_tab(c: Dictionary):
 
 func grid(parent: Node, columns: int = 2) -> GridContainer:
 	var g = GridContainer.new()
-	g.columns = columns
+	g.columns = mini(columns, 2)
 	g.add_theme_constant_override("h_separation", 16)
 	g.add_theme_constant_override("v_separation", 16)
 	parent.add_child(g)
@@ -314,7 +324,7 @@ func politics_tab(c: Dictionary):
 			paragraph(box, party.description)
 		paragraph(box, "%s   ·   %.1f %%" % [party.name, c.support[i]], Color(party.color))
 		var faces = GridContainer.new()
-		faces.columns = 3 if party.candidates.size() > 4 else mini(party.candidates.size(), 4)
+		faces.columns = 2
 		faces.add_theme_constant_override("h_separation", 10)
 		box.add_child(faces)
 		for person in party.candidates:
@@ -325,6 +335,7 @@ func politics_tab(c: Dictionary):
 			var caption = label(person.name, 12)
 			caption.custom_minimum_size.x = 92
 			caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			caption.clip_text = false
 			caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			tile.add_child(caption)
 			if Portraits.credit(person).get("kind", "") == "illustration": tile.add_child(label("KI-Illustration", 10, MUTED))
@@ -465,7 +476,10 @@ func ledger_row(parent: Node, title: String, value: float):
 	var text_label = label(title, 14, MUTED)
 	text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(text_label)
-	row.add_child(label("%.1f M" % value, 14))
+	var amount = label("%.1f M" % value, 14)
+	amount.clip_text = false
+	amount.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	row.add_child(amount)
 
 func war_tab(_c: Dictionary):
 	var sim = session.sim
@@ -542,14 +556,23 @@ func show_notice(value: String):
 	if status_label: status_label.text = value
 
 func show_start():
+	if is_instance_valid(title_screen): title_screen.hide()
 	if is_instance_valid(modal): modal.queue_free()
 	modal = AcceptDialog.new()
 	modal.title = "Neue Partie · Szenario wählen"
 	modal.get_ok_button().text = "Zurück"
+	modal.confirmed.connect(func():
+		if not campaign_started: show_main_menu())
+	modal.canceled.connect(func():
+		if not campaign_started: show_main_menu())
 	add_child(modal)
+	var setup_scroll = ScrollContainer.new()
+	setup_scroll.custom_minimum_size = Vector2(750, 570)
+	setup_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	modal.add_child(setup_scroll)
 	var box = VBoxContainer.new()
-	box.custom_minimum_size = Vector2(720, 570)
-	modal.add_child(box)
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	setup_scroll.add_child(box)
 	box.add_child(label("Zwei Epochen. Dein politischer Kurs.", 28, GOLD))
 	var years = HBoxContainer.new()
 	box.add_child(years)
@@ -572,11 +595,11 @@ func refresh_setup():
 	setup_content.add_child(grid)
 	for i in range(scenario.countries.size()):
 		var entry = scenario.countries[i]
-		var b = button(grid, entry.name, func(): session.solo(i, setup_year); selected = i; refresh(); modal.hide())
+		var b = button(grid, entry.name, func(): session.solo(i, setup_year); selected = i; campaign_started = true; panel_open = false; refresh(); modal.hide(); map.fit_world())
 		b.custom_minimum_size.x = 230
 		b.tooltip_text = "Industrie %d · Armee %d · Qualität %.2f · %s" % [entry.industry, entry.army, entry.quality, "Freie Wahlen" if entry.democratic else "Autoritäre Regierung"]
-	paragraph(setup_content, "Reale Staaten auf einer vereinfachten Europakarte. Historische Grenzen sind schematisch; Wirtschaft, Militär und politische Anteile sind Spielwerte. Personen und Parteien beziehen sich auf den Szenariostart am 1. Januar; spätere Regierungswechsel folgen der Simulation. Der Verlauf ist frei, keine festgelegte Geschichtswiederholung.")
-	paragraph(setup_content, "Mit ▶ oder Leertaste starten. Maus-Rad: Kartenzoom. LAN / direkte IP findest du im Menü.")
+	paragraph(setup_content, "Globale Referenzkarte mit 177 Regionen und europäischen Kampagnenländern. Historische Grenzen sind schematisch; Wirtschaft, Militär und politische Anteile sind Spielwerte. Personen und Parteien beziehen sich auf den Szenariostart am 1. Januar; spätere Regierungswechsel folgen der Simulation. Der Verlauf ist frei, keine festgelegte Geschichtswiederholung.")
+	paragraph(setup_content, "Mit ▶ oder Leertaste starten. Mausrad: Zoom; Rechts/Mitte ziehen: Karte verschieben. Welt und Mein Land wechseln die Ansicht. Außerhalb der Kampagnenländer zeigt die Weltkarte moderne Referenzgrenzen, auch im Szenario 1936.")
 
 func show_menu():
 	if session.is_host() and session.running: session.toggle_pause()
@@ -585,9 +608,13 @@ func show_menu():
 	menu.get_ok_button().text = "Zurück"
 	add_child(menu)
 	menu.confirmed.connect(menu.queue_free)
+	var menu_scroll = ScrollContainer.new()
+	menu_scroll.custom_minimum_size = Vector2(490, 470)
+	menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	menu.add_child(menu_scroll)
 	var box = VBoxContainer.new()
-	box.custom_minimum_size = Vector2(470, 430)
-	menu.add_child(box)
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	menu_scroll.add_child(box)
 	button(box, "Partie speichern", func():
 		if not session.is_host(): show_notice("Nur der Host kann speichern."); return
 		var error = session.sim.save_game("user://campaign-v4.json", session.player_id)
@@ -606,8 +633,10 @@ func show_menu():
 	new_button.disabled = session.online
 	button(box, "LAN / Direkte IP", func(): menu.hide(); show_network())
 	button(box, "Spielanleitung", func(): menu.hide(); show_help())
+	button(box, "Einstellungen", func(): menu.hide(); show_settings())
+	button(box, "Zum Hauptmenü", func(): menu.hide(); show_main_menu())
 	button(box, "Über die Politikerbilder", func(): menu.hide(); show_portrait_info())
-	paragraph(box, "Staatskunst 0.5.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
+	paragraph(box, "Staatskunst 0.6.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
 
@@ -662,9 +691,154 @@ func show_help():
 	help.popup_centered(Vector2i(720, 450))
 
 func _unhandled_key_input(event):
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+		if is_instance_valid(title_screen) and title_screen.visible:
+			if campaign_started: title_screen.hide()
+		else: show_menu()
+		return
+	if is_instance_valid(title_screen) and title_screen.visible: return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_SPACE:
 		if get_viewport().gui_get_focus_owner() is LineEdit: return
 		session.toggle_pause()
+
+func show_main_menu():
+	if session.is_host() and session.running: session.toggle_pause()
+	if is_instance_valid(title_screen):
+		remove_child(title_screen)
+		title_screen.queue_free()
+	title_screen = Control.new()
+	title_screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	title_screen.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(title_screen)
+	var backdrop = TextureRect.new()
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	if ResourceLoader.exists("res://assets/strategy-room.png"): backdrop.texture = load("res://assets/strategy-room.png")
+	title_screen.add_child(backdrop)
+	var shade = ColorRect.new()
+	shade.color = Color(0.025, 0.04, 0.035, 0.5)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	title_screen.add_child(shade)
+	var layout = MarginContainer.new()
+	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for edge in ["left", "right", "top", "bottom"]: layout.add_theme_constant_override("margin_" + edge, 32)
+	title_screen.add_child(layout)
+	var row = HBoxContainer.new()
+	layout.add_child(row)
+	var menu = VBoxContainer.new()
+	menu.custom_minimum_size.x = 420
+	menu.add_theme_constant_override("separation", 8)
+	row.add_child(menu)
+	menu.add_child(label("P O L I T I S C H E   G L O B A L S T R A T E G I E", 11, GOLD))
+	menu.add_child(label("STAATSKUNST", 48, Color("e8d9b1")))
+	paragraph(menu, "Entscheidungen verändern die Welt.\n1936 / 2026", Color("b7b8a5"))
+	var gap = Control.new()
+	gap.custom_minimum_size.y = 20
+	menu.add_child(gap)
+	var resume = button(menu, "Partie fortsetzen", func(): title_screen.hide())
+	resume.disabled = not campaign_started
+	button(menu, "Neue Kampagne", show_start).disabled = session.online
+	var load_button = button(menu, "Spielstand laden", load_from_title)
+	load_button.disabled = session.online or not FileAccess.file_exists("user://campaign-v4.json")
+	button(menu, "LAN / Direkte IP", func(): campaign_started = true; title_screen.hide(); show_network())
+	button(menu, "Einstellungen", show_settings)
+	button(menu, "Spielanleitung", show_help)
+	button(menu, "Bildquellen & Mitwirkende", show_portrait_info)
+	button(menu, "Spiel beenden", func(): get_tree().quit())
+	for child in menu.get_children():
+		if child is Button:
+			for state in ["normal", "hover", "pressed", "disabled"]:
+				var button_style = child.get_theme_stylebox(state).duplicate()
+				button_style.content_margin_top = 7
+				button_style.content_margin_bottom = 7
+				child.add_theme_stylebox_override(state, button_style)
+	var bottom_gap = Control.new()
+	bottom_gap.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	menu.add_child(bottom_gap)
+	paragraph(menu, "VERSION 0.6 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
+	var space = Control.new()
+	space.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(space)
+
+func load_from_title():
+	var id = session.sim.read_game("user://campaign-v4.json")
+	if id < 0:
+		var error = AcceptDialog.new()
+		error.dialog_text = "Der Spielstand konnte nicht geladen werden."
+		add_child(error)
+		error.confirmed.connect(error.queue_free)
+		error.popup_centered()
+		return
+	session.player_id = id
+	session.running = false
+	selected = id
+	campaign_started = true
+	title_screen.hide()
+	refresh()
+
+func show_settings():
+	if session.is_host() and session.running: session.toggle_pause()
+	if is_instance_valid(settings_window): settings_window.queue_free()
+	settings_window = AcceptDialog.new()
+	settings_window.title = "Einstellungen"
+	settings_window.get_ok_button().text = "Fertig"
+	settings_window.confirmed.connect(settings_window.queue_free)
+	settings_window.canceled.connect(settings_window.queue_free)
+	add_child(settings_window)
+	var pages = TabContainer.new()
+	pages.custom_minimum_size = Vector2(650, 390)
+	settings_window.add_child(pages)
+	var graphics = settings_page(pages, "Grafik")
+	setting_toggle(graphics, "Vollbild", "fullscreen")
+	setting_toggle(graphics, "VSync", "vsync")
+	paragraph(graphics, "Bildratenlimit")
+	var fps = OptionButton.new()
+	for value in [30, 60, 120, 0]: fps.add_item("Unbegrenzt" if value == 0 else "%d FPS" % value, value)
+	fps.select([30, 60, 120, 0].find(preferences.fps_limit))
+	fps.item_selected.connect(func(index): preferences.fps_limit = fps.get_item_id(index); save_settings())
+	graphics.add_child(fps)
+	paragraph(graphics, "VSync synchronisiert die Darstellung mit deinem Bildschirm. Das FPS-Limit begrenzt zusätzlich die Bildrate. Einstellungen werden sofort angewendet und gespeichert.")
+	var cartography = settings_page(pages, "Karte")
+	setting_toggle(cartography, "Ländernamen anzeigen", "labels")
+	setting_toggle(cartography, "Gradnetz anzeigen", "map_grid")
+	setting_toggle(cartography, "Kriegsanimationen", "animations")
+	paragraph(cartography, "Zoomgeschwindigkeit")
+	var slider = HSlider.new()
+	slider.min_value = 0.5
+	slider.max_value = 2.0
+	slider.step = 0.1
+	slider.value = preferences.zoom_speed
+	slider.custom_minimum_size.y = 32
+	slider.value_changed.connect(func(value): preferences.zoom_speed = value; save_settings())
+	cartography.add_child(slider)
+	var controls = settings_page(pages, "Steuerung")
+	paragraph(controls, "Mausrad · Karte zoomen\nRechte oder mittlere Maustaste ziehen · Karte verschieben\nLinksklick · Kampagnenland auswählen\nWelt · Ganze Welt einpassen\nMein Land · Auf deine Regierung zoomen\nAkte schließen · Karte vergrößern\nLeertaste · Zeit pausieren / fortsetzen\nEscape · Spielmenü öffnen")
+	paragraph(controls, "Die Weltkarte zeigt 177 Referenzregionen. Spielbar sind die Länder der jeweiligen Kampagne. Außerhalb davon werden moderne Referenzgrenzen dargestellt, auch 1936.")
+	settings_window.popup_centered()
+
+func settings_page(pages: TabContainer, caption: String) -> VBoxContainer:
+	var viewport = ScrollContainer.new()
+	viewport.name = caption
+	viewport.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	pages.add_child(viewport)
+	var box = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	viewport.add_child(box)
+	return box
+
+func setting_toggle(parent: Node, caption: String, key: String):
+	var toggle = CheckButton.new()
+	toggle.text = caption
+	toggle.button_pressed = preferences.get(key)
+	toggle.toggled.connect(func(value): preferences.set(key, value); save_settings())
+	parent.add_child(toggle)
+
+func save_settings():
+	preferences.apply_display()
+	map.queue_redraw()
+	var result = preferences.save()
+	if result != OK: show_notice("Einstellungen konnten nicht gespeichert werden: " + error_string(result))
 
 func banner(parent: Node, height: int = 150):
 	var picture = TextureRect.new()
