@@ -57,3 +57,6 @@ Im Repository-Verzeichnis: `node tools/build_politics.mjs`. Die kuratierten Iden
 Die CfD (Christen für Deutschland) und ihre sechs Politiker sind ausdrücklich erfunden, in beiden Epochen als solche markiert. [Bilder und vollständige Prompts](ART.md).
 
 Grundgesetz-Panel: [Artikel 1](https://www.gesetze-im-internet.de/gg/art_1.html), [Artikel 5](https://www.gesetze-im-internet.de/gg/art_5.html), [Artikel 20](https://www.gesetze-im-internet.de/gg/art_20.html), [Artikel 21](https://www.gesetze-im-internet.de/gg/art_21.html), [Artikel 38](https://www.gesetze-im-internet.de/gg/art_38.html) und [Artikel 79](https://www.gesetze-im-internet.de/gg/art_79.html), Gesetze im Internet. Die Ewigkeitsklausel wird nicht als regulär abschaltbare Gesetzesoption dargestellt. Der Machtpfad ist ein abstrakter, ausdrücklich verfassungswidriger Alternativverlauf, keine Tatsachenbehauptung über das zukünftige Verhalten einer realen Partei.
+
+## Politikerfotos (Version 0.5)
+307 Fotos aus Wikimedia Commons; eindeutige Identitäten über Wikipedia/Wikidata und manuell geprüfte Namensauflösung. [Einzelne Bildnachweise und Lizenzen](PORTRAIT-CREDITS.md). Eine gekennzeichnete KI-Interpretation für Manuel Giménez Fernández und sechs erfundene CfD-Gesichter: [ART.md](ART.md). D66-Kandidat Jan Paternotte korrigiert.

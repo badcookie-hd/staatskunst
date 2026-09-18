@@ -21,6 +21,8 @@ jobs:
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/simulation_test.gd
       - name: UI smoke test
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/ui_test.gd
+      - name: Offline portraits and attribution
+        run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/portrait_test.gd
       - name: Constitution and economic regression tests
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/update_test.gd
       - name: Two-process networking

@@ -1,6 +1,14 @@
-# Bilder in Version 0.4
+# Spielillustrationen und Politikerfotos
 
-Erstellt mit dem eingebauten OpenAI-Bildgenerierungswerkzeug, ohne CLI/API-Fallback. Die sechs Personen sind erfundene Spielfiguren für die fiktive Partei **Christen für Deutschland (CfD)**. Zufällige Namensähnlichkeiten mit realen Menschen sind nicht beabsichtigt. Reale Politiker erhalten durch diese Bilder keine erfundenen Gesichter.
+Die ursprünglichen Illustrationen wurden mit dem eingebauten OpenAI-Bildgenerierungswerkzeug erstellt, ohne CLI/API-Fallback. Sechs Personen sind erfundene Spielfiguren für die fiktive Partei **Christen für Deutschland (CfD)**. Zufällige Namensähnlichkeiten mit realen Menschen sind nicht beabsichtigt.
+
+Version 0.5 ergänzt 307 Fotos realer Personen. Dateien, Urheber und Lizenzen stehen in [PORTRAIT-CREDITS.md](PORTRAIT-CREDITS.md) und `data/portraits.json`. Sie werden unverändert als Wikimedia-Vorschaubilder mitgeliefert. Zwei GIF-Dateien (Hermann Obrecht und Eduard von Steiger) wurden ohne visuelle Bearbeitung verlustfrei als PNG gespeichert, damit Godot sie laden kann. WebP-Dateien bleiben WebP. Die Oberfläche skaliert die Aufnahmen mit erhaltenem Seitenverhältnis. Fotos sind keine MIT-Assets.
+
+Für **Manuel Giménez Fernández** konnte keine passend lizenzierte Aufnahme gefunden werden. `assets/portraits/gimenez-illustration.png` ist deshalb eine neue, im Spiel gekennzeichnete KI-Interpretation. Sie ist **keine Archivaufnahme; historische Ähnlichkeit ist nicht gesichert**. Der reale Politiker wird dadurch nicht als fiktive Person eingeordnet. Die Originalausgabe des eingebauten Bildwerkzeugs wurde unverändert in das Projekt kopiert.
+
+## Prompt für die ergänzte Spielillustration (0.5)
+
+Use case: historical-scene. Asset type: single politician portrait for the Godot strategy game Staatskunst. Create an original, visibly hand-painted editorial portrait representing the historical Spanish politician and professor Manuel Giménez Fernández (1896–1968), CEDA, around 1936 at age 40. This will be explicitly labeled in-game as an AI-generated artistic interpretation, not an archival photograph or a verified likeness. Use your knowledge of this historical person where available. Head and shoulders, centered complete head, restrained thoughtful expression, period-appropriate civilian dark suit, white shirt and tie, simple dark navy background, muted warm ochre highlights, painterly brushwork and paper texture. Square image, no text, no party emblems, no flags, no watermarks, no other people. Avoid photographic realism; this must read as a game illustration.
 
 ## Dateien
 

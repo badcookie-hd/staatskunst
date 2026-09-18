@@ -1,4 +1,5 @@
 .godot/
+.portrait-cache/
 build/
 *.exe
 *.pck

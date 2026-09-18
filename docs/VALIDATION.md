@@ -1,6 +1,8 @@
-# Prüfung von Version 0.4.0
+# Prüfung von Version 0.5.0
 
-Godot 4.5.1 stable, Windows x64, 14. September 2026.
+Godot 4.5.1 stable, Windows x64, 14. September 2026; abschließender Porträt-/UI- und Exportlauf am 18. September 2026.
+
+- **1.419 zusätzliche Porträtprüfungen bestanden.** 314 eindeutige Personen aus beiden Epochen, ladbare Texturen, vorhandene Urheber und Quellen, alle Parteikarten und Kabinette in 33 Land-/Epochenkombinationen, keine leeren Bilder und Porträtklick mit passendem Staatsoberhaupt und Urhebernachweis. 307 Fotos, eine gekennzeichnete historische KI-Interpretation und sechs fiktive CfD-Gesichter. Gerenderte Kontaktbögen und aktualisierte Spielansichten geprüft. Die Bilddateien werden lokal geladen.
 
 - **425 Simulationsprüfungen bestanden.** Kandidatenlisten für alle 33 Land-/Epochenkombinationen einschließlich der fiktiven CfD, deutsche CDU/CSU und historisches Zentrum, getrennte Staatsämter, verbotene Parteien, demokratischer Alternativpfad, Kaiser-Rückkehr, Koalitionswechsel, Ressortzuweisung und Doppelämtersperre. Haushaltsgleichung, Besteuerung, Versorgung, Kredit/Tilgung, steigende Schuldzinsen, Sektorausbau, Handelsbilanz mit Erhaltung von Geld und Gütern, Lieferstopp bei Mangel und Krieg. Verzögerter Kriegssieg, Verluste/Kosten/Schäden, Wochenberichte, Kriegsarchiv, Waffenstillstand, Speichern/Laden und Ablehnung ungültiger Kandidatenreferenzen. Beide Epochen über 720 Tagesaufrufe sowie ein zusätzlicher autonomer KI-Durchlauf geprüft.
 - **41 zusätzliche Regressionen bestanden.** CfD-Regierungsübernahme und eigenes Kabinett; Diktatur ohne vorherige Machtübernahme gesperrt; Amtszeit und Stufenwartezeiten; Mindestzustimmung; AfD-Pfad; Abbruch durch Verfassungsverteidigung oder Regierungswechsel; demokratische Rückkehr; Speicherung einer Diktatur. Angezeigte Produktion entspricht der tatsächlichen Güterabrechnung; keine negativen Vorräte; reale Budgetauswirkung; Handelsraten im Saldo; Geldbestand und Tagesabschluss stimmen überein; Kündigung und Eigentumsprüfung von Verträgen; Projekte im Kontobuch; sichtbare Kreditaufnahme.
@@ -10,6 +12,8 @@ Godot 4.5.1 stable, Windows x64, 14. September 2026.
 
 Die Windows-Sandbox meldet einen Fehler beim Lesen des System-Zertifikatsspeichers. Das Spiel nutzt keine HTTPS-Verbindungen. Kein Gameplay- oder GDScript-Fehler in den abschließenden Läufen.
 
-Die CI wiederholt Import, Simulation, UI und beide ENet-Durchläufe unter Linux. Deren Ergebnis ist im GitHub-Actions-Lauf des Release-Commits sichtbar.
+Die CI wiederholt Import, Simulation, UI, Porträtprüfungen, Verfassungs-/Wirtschaftsregressionen und beide ENet-Durchläufe unter Linux. Deren Ergebnis ist im GitHub-Actions-Lauf des Release-Commits sichtbar.
 
 Nicht praktisch geprüft: zwei physische Rechner, echte Router-Portweiterleitung, acht gleichzeitig verbundene Spieler und längerer Netzwerkbetrieb. Die Wirtschaft ist ein Spielmodell, nicht an amtlichen makroökonomischen Daten kalibriert. Die historische und moderne Parteienauswahl ist kuratiert, nicht vollständig.
+
+Zusätzliche Prüfung des fertigen Windows-Exports: 308 einzelne Katalogbilder plus CfD-Atlas direkt aus der exportierten EXE geladen, 0 fehlende Ressourcen. Separater OpenGL-Spielstart: Exit-Code 0.

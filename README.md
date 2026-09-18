@@ -2,11 +2,11 @@
 
 Ein politisches Strategiespiel in **Godot 4.5.1**. Regiere einen realen europäischen Staat im Szenario **1936** oder **2026**: Parteien, Koalitionen, eigene Minister, Wirtschaftsaufbau und Diplomatie stehen im Mittelpunkt. Armeen kämpfen automatisch über Zeit, ohne Einheitenbefehle oder Frontverwaltung.
 
-**Version 0.4.0 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
+**Version 0.5.0 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
 
-[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.4.0) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
+[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.5.0) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
 
-Neu in 0.4: **CfD mit sechs erfundenen Politikern und Porträts**, Grundgesetz-Panel, bewusster Diktaturpfad nach Regierungsübernahme sowie korrigierte Güter- und Geldabrechnung. [Alle Änderungen und Spielabläufe](docs/UPDATE-0.4.md).
+Neu in 0.5: **Bilder für alle 314 unterschiedlichen Personen** der enthaltenen Parteien und Staatsämter: 307 Wikimedia-Fotos, eine gekennzeichnete KI-Illustration für Manuel Giménez Fernández sowie sechs erfundene CfD-Politiker. Parteikarten mit Namen unter jedem Bild, bebilderte Ministerauswahl und anklickbare Großansichten mit Bildnachweisen. Alles funktioniert offline. [Bildquellen und Lizenzen](docs/PORTRAIT-CREDITS.md).
 
 ![CfD und eigene Bilder](docs/screen-modern-1.png)
 
@@ -141,7 +141,7 @@ mkdir -p build
 godot --headless --path . --export-release "Windows Desktop" build/Staatskunst.exe
 ```
 
-Die CI führt Simulation und UI in Godot aus und prüft beide Epochen mit zwei Netzwerkprozessen. Prüfungen der Version 0.4.0: siehe [VALIDATION.md](docs/VALIDATION.md).
+Die CI führt Simulation und UI in Godot aus und prüft beide Epochen mit zwei Netzwerkprozessen. Prüfungen der Version 0.5.0: siehe [VALIDATION.md](docs/VALIDATION.md).
 
 
 ## Grenzen des Prototyps
@@ -150,4 +150,4 @@ Ausgewählte europäische Staaten, kuratierte Parteiauswahl, vereinfachte Kabine
 
 ## Lizenz
 
-Eigener Code und eigene historische Kartenanpassungen: [MIT](LICENSE). Natural-Earth-Geodaten: Public Domain. Godot: MIT, mit Lizenzinformationen im Windows-Paket. Eigene generierte Illustrationen für fiktive Figuren, ein eigenes CfD-Emblem und eine Parlamentsillustration; keine fremden Politikerfotos oder Parteiembleme übernommen. [Bilder und Prompts](docs/ART.md). [Quellen und Datenmodell](docs/SOURCES.md).
+Eigener Code und eigene historische Kartenanpassungen: [MIT](LICENSE). Natural-Earth-Geodaten: Public Domain. Godot: MIT, mit Lizenzinformationen im Windows-Paket. Politikerfotos behalten ihre jeweiligen Lizenzen; sie fallen nicht unter die MIT-Lizenz des Codes. [Vollständige Bildnachweise](docs/PORTRAIT-CREDITS.md). CfD-Emblem, Parlamentsillustration und generierte Porträts: [Bilder und Prompts](docs/ART.md). [Quellen und Datenmodell](docs/SOURCES.md).

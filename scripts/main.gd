@@ -2,6 +2,7 @@ extends Control
 const Session = preload("res://scripts/session.gd")
 const WorldMap = preload("res://scripts/world_map.gd")
 const Trend = preload("res://scripts/trend.gd")
+const Portraits = preload("res://scripts/portraits.gd")
 const GOLD = Color("e2c28a")
 const MUTED = Color("9eafc4")
 var session
@@ -141,7 +142,7 @@ func build_ui():
 	var spacer = Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	nav.add_child(spacer)
-	paragraph(nav, "STAATSKUNST\nPOLITISCHE STRATEGIE\n\n1936 / 2026\nVERSION 0.4", MUTED)
+	paragraph(nav, "STAATSKUNST\nPOLITISCHE STRATEGIE\n\n1936 / 2026\nVERSION 0.5", MUTED)
 	var left = VBoxContainer.new()
 	map_area = left
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -253,6 +254,7 @@ func bar(parent: Node, value: float):
 func state_tab(c: Dictionary):
 	banner(content, 115)
 	heading("Die Staatsführung", "%s · %s\n%s · %s" % [c.head_title, c.head_name, c.premier_title, c.premier])
+	leader_pictures(content, c)
 	paragraph(content, "Regierung: " + session.sim.parties(session.player_id)[int(c.ruling)].name, GOLD)
 	var goal = panel(content, Color("203a3e"))
 	goal.add_child(label("DEIN WEG ZUM SIEG", 11, GOLD))
@@ -310,13 +312,24 @@ func politics_tab(c: Dictionary):
 			box.add_child(emblem)
 			paragraph(box, "CfD · FIKTIVE SPIELPARTEI", GOLD)
 			paragraph(box, party.description)
-			var faces = HFlowContainer.new()
-			box.add_child(faces)
-			for person in party.candidates: portrait(faces, person, 65)
 		paragraph(box, "%s   ·   %.1f %%" % [party.name, c.support[i]], Color(party.color))
+		var faces = GridContainer.new()
+		faces.columns = 3 if party.candidates.size() > 4 else mini(party.candidates.size(), 4)
+		faces.add_theme_constant_override("h_separation", 10)
+		box.add_child(faces)
+		for person in party.candidates:
+			var tile = VBoxContainer.new()
+			tile.custom_minimum_size.x = 92
+			faces.add_child(tile)
+			portrait(tile, person, 82)
+			var caption = label(person.name, 12)
+			caption.custom_minimum_size.x = 92
+			caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			tile.add_child(caption)
+			if Portraits.credit(person).get("kind", "") == "illustration": tile.add_child(label("KI-Illustration", 10, MUTED))
 		bar(box, c.support[i])
 		paragraph(box, ("REGIERUNGSFÜHRUNG" if int(c.ruling) == i else "KOALITION" if i in c.coalition else "OPPOSITION") + (" · verboten / Exil" if not party.legal and not c.democratic else ""), GOLD)
-		paragraph(box, "Politiker: " + ", ".join(party.candidates.map(func(person): return person.name)))
 		add_action("campaign_%d" % i, box, "Wahlkampf · 25 Einfluss", "+9 Unterstützung vor Normalisierung · 15 Tage Abklingzeit")
 		if i != int(c.ruling):
 			add_action("coalition_%d" % i, box, "Koalition verlassen" if i in c.coalition else "In Koalition aufnehmen", "30 Einfluss · Koalitionswechsel räumt betroffene Ministerämter")
@@ -330,7 +343,7 @@ func cabinet_tab(c: Dictionary):
 		var box = card(leaders)
 		box.add_child(label(pair[0].to_upper(), 11, GOLD))
 		var leader = find_person(c, pair[1])
-		if not leader.is_empty() and leader.has("portrait"): portrait(box, leader, 100)
+		portrait(box, leader, 100)
 		box.add_child(label(pair[1], 21))
 	paragraph(content, "Startpersonal nach Epoche. Die vier Ressorts bilden ein Spielkabinett; Besetzung, Koalitionen und Fachboni sind vereinfacht. Fachprofil = Spielrolle, keine Bewertung realer Fähigkeiten.")
 	var g = grid(content)
@@ -342,7 +355,7 @@ func cabinet_tab(c: Dictionary):
 		var title = "Vakant" if person.is_empty() else person.name
 		var initials = "—"
 		if not person.is_empty(): initials = person.name.left(1) + person.name.get_slice(" ", person.name.get_slice_count(" ") - 1).left(1)
-		if person.has("portrait"): portrait(box, person, 130)
+		if not person.is_empty(): portrait(box, person, 130)
 		else: box.add_child(label(initials, 26, Color("76bdbe")))
 		paragraph(box, title, Color.WHITE)
 		if not person.is_empty(): paragraph(box, sim.parties(session.player_id)[int(person.party)].name + " · Profil: " + sim.Politics.ROLES[person.focus])
@@ -370,7 +383,7 @@ func choose_minister(role: String):
 		var error = sim.reason(session.player_id, action)
 		var row = HBoxContainer.new()
 		box.add_child(row)
-		if p.has("portrait"): portrait(row, p, 60)
+		portrait(row, p, 60)
 		var b = button(row, "%s · %s" % [p.name, sim.parties(session.player_id)[int(p.party)].name], func(): session.command(action); dialog.queue_free())
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.disabled = not error.is_empty()
@@ -487,6 +500,7 @@ func foreign_tab(_c: Dictionary):
 	var target = int(sim.country(selected).owner)
 	var c = sim.country(target)
 	heading(c.name, "%s · %s\n%s · %s" % [c.head_title, c.head_name, c.premier_title, c.premier])
+	leader_pictures(content, c)
 	paragraph(content, "Regierung: " + sim.parties(target)[int(c.ruling)].name, GOLD)
 	paragraph(content, "Stärke %.0f  ·  %.0f Tsd. Soldaten\nQualität %.2f  ·  Stabilität %.0f %%\nBeziehungen %+d" % [sim.power(target), c.army, c.quality, c.stability, sim.relation(session.player_id, target)])
 	for w in sim.state.wars:
@@ -592,9 +606,25 @@ func show_menu():
 	new_button.disabled = session.online
 	button(box, "LAN / Direkte IP", func(): menu.hide(); show_network())
 	button(box, "Spielanleitung", func(): menu.hide(); show_help())
-	paragraph(box, "Staatskunst 0.4.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
+	button(box, "Über die Politikerbilder", func(): menu.hide(); show_portrait_info())
+	paragraph(box, "Staatskunst 0.5.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
+
+func show_portrait_info():
+	var dialog = AcceptDialog.new()
+	dialog.title = "Über die Politikerbilder"
+	dialog.get_ok_button().text = "Schließen"
+	add_child(dialog)
+	dialog.confirmed.connect(dialog.queue_free)
+	dialog.canceled.connect(dialog.queue_free)
+	var box = VBoxContainer.new()
+	box.custom_minimum_size = Vector2(540, 300)
+	dialog.add_child(box)
+	paragraph(box, "Porträts anklicken für eine große Ansicht mit Quelle und Lizenz.")
+	paragraph(box, "307 reale Personen: Wikimedia-Fotos. Manuel Giménez Fernández: gekennzeichnete KI-Illustration ohne gesicherte historische Ähnlichkeit. Sechs CfD-Politiker: erfundene Figuren mit eigenen Illustrationen.")
+	paragraph(box, "Sämtliche Bilder sind offline enthalten. Fotos behalten ihre jeweiligen Lizenzen. Nachweise: PORTRAIT-CREDITS.md im Download.")
+	dialog.popup_centered()
 
 func show_network():
 	network_window = AcceptDialog.new()
@@ -644,24 +674,63 @@ func banner(parent: Node, height: int = 150):
 	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	parent.add_child(picture)
 
+func leader_pictures(parent: Node, c: Dictionary):
+	var row = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 16)
+	parent.add_child(row)
+	for person_name in [c.head_name, c.premier]: portrait(row, find_person(c, person_name), 72)
+
 func portrait(parent: Node, person: Dictionary, edge: int = 110):
-	var atlas = AtlasTexture.new()
-	atlas.atlas = load("res://assets/cfd-portraits.png")
-	var cell = atlas.atlas.get_size() / Vector2(3, 2)
-	var index = int(person.portrait)
-	atlas.region = Rect2(Vector2(index % 3, index / 3) * cell, cell)
 	var picture = TextureRect.new()
-	picture.texture = atlas
+	picture.texture = Portraits.texture(person)
 	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	picture.custom_minimum_size = Vector2(edge, edge)
-	picture.tooltip_text = person.name + " · fiktive Spielfigur"
+	picture.tooltip_text = person.get("name", "") + (" · KI-Illustration" if Portraits.credit(person).get("kind", "") == "illustration" else "") + " · Anklicken: Porträt und Bildquelle"
+	picture.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	picture.gui_input.connect(func(event):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			show_portrait(person)
+			picture.accept_event())
+	picture.focus_mode = Control.FOCUS_ALL
+	picture.gui_input.connect(func(event):
+		if event.is_action_pressed("ui_accept"): show_portrait(person); picture.accept_event())
 	parent.add_child(picture)
+	return picture
+
+func show_portrait(person: Dictionary):
+	var dialog = AcceptDialog.new()
+	dialog.title = person.get("name", "Porträt")
+	dialog.get_ok_button().text = "Schließen"
+	add_child(dialog)
+	dialog.confirmed.connect(dialog.queue_free)
+	dialog.canceled.connect(dialog.queue_free)
+	var box = VBoxContainer.new()
+	box.custom_minimum_size = Vector2(480, 0)
+	dialog.add_child(box)
+	var picture = TextureRect.new()
+	picture.texture = Portraits.texture(person)
+	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	picture.custom_minimum_size = Vector2(280, 280)
+	box.add_child(picture)
+	paragraph(box, person.get("name", ""), GOLD)
+	if person.get("fictional", false):
+		paragraph(box, "Fiktive Spielfigur der Christen für Deutschland. KI-generiertes Porträt für Staatskunst.")
+	else:
+		var source = Portraits.credit(person)
+		paragraph(box, ("Illustration: " if source.get("kind", "") == "illustration" else "Foto: ") + source.get("author", "Nicht verfügbar"))
+		paragraph(box, "Lizenz: " + source.get("license", "—"))
+		if not source.get("attribution", "").is_empty(): paragraph(box, source.attribution)
+		paragraph(box, source.get("note", "Wikimedia-Vorschaubild unverändert übernommen; Anzeige skaliert. Aufnahmen können aus einem anderen Jahr als dem Szenariostart stammen."))
+		if source.has("source"): button(box, "Bildquelle und vollständige Lizenz öffnen ↗", func(): OS.shell_open(source.source))
+		if not source.get("license_url", "").is_empty(): button(box, "Lizenzbedingungen öffnen ↗", func(): OS.shell_open(source.license_url))
+	dialog.popup_centered()
 
 func find_person(c: Dictionary, person_name: String) -> Dictionary:
 	for person in session.sim.Politics.candidates(session.sim.year(), c.code):
 		if person.name == person_name: return person
-	return {}
+	return {"name": person_name}
 
 func budget_preview(action: String) -> String:
 	var sim = session.sim
