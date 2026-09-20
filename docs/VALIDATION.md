@@ -1,6 +1,8 @@
-# Prüfung von Version 0.8.0
+# Prüfung von Version 0.8.1
 
 Godot 4.5.1 stable, Windows x64, 20. September 2026.
+
+Version 0.8.1: **27 Navigationsprüfungen mit OpenGL** bestanden (21 ohne Renderer). Echte GUI-Eingaben für Minikartenklick und Ziehen, kein Klickdurchreichen an Länder, Loslassen, Weltwechsel, Zoomrahmen, Kartenmodus, Vatikan-Auswahl, Textmittelpunkte innerhalb der Landespolygone bei drei Zoomstufen und zwei Fenstergrößen, nutzbare Steuerleiste neben einer Akte und gespeicherte Ausblendung. Neue Ansicht gerendert und visuell geprüft. Zusätzlich 25 WASD-, 81 UI-, 32 Grafik-/Menü- und 13 Kartografieprüfungen erneut bestanden. Die fertige Windows-EXE besteht dieselben 27 Navigationsprüfungen separat mit OpenGL (Exit-Code 0).
 
 Version 0.8: **13 neue Kartografieprüfungen** mit echtem OpenGL bestanden: Offline-Relief, Hauptstadtdaten, unterschiedliche Nachbarfarben, korrekte UV-Zuordnung, Kartenhöhe über 70 % bei 1440 × 900 und 1152 × 720, kollisionsfreie Beschriftung bei drei Zoomstufen und Kabinett bei Mindestauflösung. Welt-, Europa-, Detail- und Kabinettsansicht gerendert und visuell geprüft. Zusätzlich 25 WASD-, 81 UI- und 32 Grafik-/Menüprüfungen erneut bestanden.
 

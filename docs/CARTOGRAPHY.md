@@ -1,5 +1,9 @@
 # Karte und Oberfläche, Version 0.8
 
+Ab **0.8.1**: Die Minikarte rechts unten zeigt die Welt mit dem sichtbaren Kartenausschnitt. Klick oder Ziehen versetzt die Ansicht, ab der Weltansicht mit mindestens vierfacher Vergrößerung; die Weltgrenzen begrenzen weiterhin die Bewegung. Das Mausrad über der Minikarte zoomt um die Mitte der Hauptkarte. Sie lässt sich unter Einstellungen → Karte ausblenden, und die Auswahl bleibt gespeichert. Die untere Leiste zeigt die Zoomstufe und den aktiven Modus „Politisch“ oder „Beziehungen“.
+
+Die Anker normaler Ländernamen werden gegen die jeweiligen Landespolygone geprüft, auch beim Ausweichen vor Hauptstadtsternen. Bei Platzmangel wird die Beschriftung ausgeblendet, anstatt sie ins Nachbarland zu verschieben. Ausgewählte Länder behalten ihr hervorgehobenes Namensschild.
+
 Die Kartenansicht kombiniert eigene politische Farben und eine eigene Metalloberfläche mit geografischen Daten. Relief, Küsten, Auswahl, Hauptstadtmarkierungen und Beschriftung werden getrennt gezeichnet. Screenshots anderer Spiele dienten als Stilreferenz; es wurden keine Texturen, Symbole oder Oberflächenelemente daraus übernommen.
 
 - Relief: [Natural Earth Shaded Relief](https://www.naturalearthdata.com/downloads/10m-raster-data/10m-shaded-relief/), SR_HR 3.2.0, aus SRTM Plus abgeleitete Schattierung. [Originalarchiv](https://naturalearth.s3.amazonaws.com/10m_raster/SR_HR.zip). Public Domain gemäß [Natural Earth Nutzungsbedingungen](https://www.naturalearthdata.com/about/terms-of-use/).

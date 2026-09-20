@@ -2,9 +2,9 @@
 
 Ein politisches Strategiespiel in **Godot 4.5.1**. Regiere einen realen europäischen Staat im Szenario **1936** oder **2026**: Parteien, Koalitionen, eigene Minister, Wirtschaftsaufbau und Diplomatie stehen im Mittelpunkt. Armeen kämpfen automatisch über Zeit, ohne Einheitenbefehle oder Frontverwaltung.
 
-**Version 0.8.0 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
+**Version 0.8.1 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
 
-[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.8.0) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
+[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.8.1) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
 
 Neu in 0.8: **Reliefkarte und kompakte Metalloberfläche.** Echte Geländeschattierung, tiefblaues Meer, unterscheidbare Länderfarben, feine Grenzen und goldene Auswahl. Größere, teilweise gedrehte Ländernamen sowie Hauptstadtsterne mit Ortsnamen beim Heranzoomen. Kompakte Ressourcen- und Menüleisten lassen über 70 % der Fensterhöhe für die Karte. [Kartendaten und Verarbeitung](docs/CARTOGRAPHY.md).
 
@@ -12,7 +12,9 @@ Neu in 0.8: **Reliefkarte und kompakte Metalloberfläche.** Echte Geländeschatt
 
 Seit 0.7: **Alle 242 Länder und Gebiete anklickbar**, mit politischen Länderakten, zusätzlichem Personal und Offline-Porträts. Eine Ländersuche und vergrößerte Klickpunkte machen auch Kleinstaaten erreichbar. Detailliertere Küsten, ruhige Blau-Grau-/Grüntöne, goldene Auswahlmarkierungen und größere, kollisionsfreie Ländernamen ersetzen die bisherige Karte. [Datenumfang und Quellen des Weltatlas](docs/WORLD-ATLAS.md).
 
-![Reliefkarte mit neuer Oberfläche](docs/screen-relief-europe.png)
+Neu in **0.8.1**: anklickbare und ziehbare Minikarte mit sichtbarem Kartenausschnitt, Zoomanzeige und beschriftetem Kartenmodus. Ländernamen werden auf der eigenen Landesfläche platziert. Die Minikarte lässt sich unter Einstellungen → Karte ausblenden.
+
+![Kartensteuerung mit Minikarte](docs/screen-navigation.png)
 
 Alle bisherigen 314 unterschiedlichen Kampagnenpersonen bleiben bebildert: 307 Wikimedia-Fotos, eine gekennzeichnete KI-Illustration für Manuel Giménez Fernández sowie sechs erfundene CfD-Politiker. Der Weltatlas ergänzt weitere reale Politikerbilder. Wo kein frei verwendbares Foto erfasst ist, steht „Foto nicht verfügbar“. Porträts anklicken für Bildnachweise. Alles funktioniert offline. [Kampagnenbilder](docs/PORTRAIT-CREDITS.md) · [Neue Atlasbilder](docs/WORLD-PORTRAIT-CREDITS.md).
 

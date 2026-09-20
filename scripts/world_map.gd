@@ -7,6 +7,10 @@ var settings
 var keyboard_pan_allowed: Callable
 const PAN_SPEED = 650.0
 const RELIEF = preload("res://assets/world-relief.png")
+const Minimap = preload("res://scripts/minimap.gd")
+var minimap
+var label_anchors: Dictionary = {}
+var drawn_label_locations: Array = []
 var capitals: Array = []
 var marker_rects: Array[Rect2] = []
 var ocean_texture: NoiseTexture2D
@@ -81,6 +85,39 @@ func _ready():
 		var area = 0.0
 		for ring in rings: area += cache_bounds(ring).get_area()
 		if area < 0.08: tiny_regions.append(world.back())
+	minimap = Minimap.new()
+	minimap.world_map = self
+	add_child(minimap)
+	update_minimap_layout()
+	resized.connect(update_minimap_layout)
+
+func update_minimap_layout():
+	if not is_instance_valid(minimap): return
+	var width = clampf(size.x * 0.19, 156, 220)
+	minimap.size = Vector2(width, (width - 14) / 2 + 32)
+	minimap.position = size - minimap.size - Vector2(12, 38)
+	minimap.visible = settings == null or settings.minimap
+
+func inside_rings(point: Vector2, rings: Array) -> bool:
+	for ring in rings:
+		if cache_bounds(ring).has_point(point) and Geometry2D.is_point_in_polygon(point, ring): return true
+	return false
+
+func label_anchor(code: String, rings: Array, preferred: Vector2) -> Vector2:
+	var key = "%d:%s" % [cached_year, code]
+	if label_anchors.has(key): return label_anchors[key]
+	var result = preferred
+	if not inside_rings(preferred, rings):
+		var best = INF
+		for ring in rings:
+			var bounds = cache_bounds(ring)
+			for x in range(1, 10):
+				for y in range(1, 10):
+					var point = bounds.position + bounds.size * Vector2(x / 10.0, y / 10.0)
+					var distance = point.distance_squared_to(preferred)
+					if distance < best and Geometry2D.is_point_in_polygon(point, ring): result = point; best = distance
+	label_anchors[key] = result
+	return result
 
 func cache_bounds(ring: PackedVector2Array) -> Rect2:
 	var key = hash(ring)
@@ -270,7 +307,7 @@ func country_color(code: String) -> Color:
 	for letter in code.to_utf8_buffer(): index = (index * 31 + letter) % PALETTE.size()
 	return Color(PALETTE[index])
 
-func country_label(pos: Vector2, value: String, priority: bool = false, text_scale: int = 16, angle: float = 0.0):
+func country_label(pos: Vector2, value: String, priority: bool = false, text_scale: int = 16, angle: float = 0.0, rings: Array = []):
 	var short_names = {"Vereinigte Staaten": "USA", "Volksrepublik China": "China", "Vereinigtes Königreich": "Großbritannien", "Demokratische Republik Kongo": "DR Kongo", "Zentralafrikanische Republik": "Zentralafrika", "Bosnien und Herzegowina": "Bosnien-Herzegowina"}
 	value = short_names.get(value, value)
 	if not priority: value = value.to_upper()
@@ -283,6 +320,8 @@ func country_label(pos: Vector2, value: String, priority: bool = false, text_sca
 	for offset in [Vector2.ZERO, Vector2(0, -22), Vector2(0, 24), Vector2(0, -44), Vector2(-24, 0), Vector2(24, 0)]:
 		var placement = Transform2D(angle, pos + offset)
 		var candidate = placement * local_rect
+		var text_center = placement * Vector2(0, -font_size * 0.35)
+		if not priority and not rings.is_empty() and not inside_rings(geographic(text_center), rings): continue
 		if not Rect2(Vector2(12, 12), size - Vector2(24, 50)).encloses(candidate): continue
 		var blocked = false
 		for occupied in label_rects:
@@ -296,6 +335,7 @@ func country_label(pos: Vector2, value: String, priority: bool = false, text_sca
 		break
 	if not placed: return
 	label_rects.append(rect)
+	if not priority: drawn_label_locations.append({"point":geographic(Transform2D(angle, pos) * Vector2(0, -font_size * 0.35)), "rings":rings})
 	drawn_labels.append(value)
 	if priority: draw_style_box(label_style(), rect.grow(2))
 	draw_set_transform(pos, angle)
@@ -312,6 +352,8 @@ func label_style() -> StyleBoxFlat:
 
 func draw_country_labels(setup: Dictionary):
 	label_rects.clear()
+	drawn_label_locations.clear()
+	if is_instance_valid(minimap) and minimap.visible: label_rects.append(minimap.get_rect().grow(5))
 	drawn_labels.clear()
 	var campaign_codes = setup.countries.map(func(c): return c.code)
 	if selected_reference != "":
@@ -327,11 +369,11 @@ func draw_country_labels(setup: Dictionary):
 		if entry.code in campaign_codes or (sim.year() == 1936 and entry.code in ["CZE", "SVK"]): continue
 		var area = 0.0
 		for ring in entry.rings: area = maxf(area, cache_bounds(ring).get_area())
-		candidates.append({"code":entry.code,"name":entry.name,"center":entry.center,"area":area})
+		candidates.append({"code":entry.code,"name":entry.name,"center":entry.center,"area":area,"rings":entry.rings})
 	for i in range(regions.size()):
 		var area = 0.0
 		for ring in regions[i]: area = maxf(area, cache_bounds(ring).get_area())
-		candidates.append({"code":setup.countries[i].code,"name":sim.country(i).name,"center":center(i),"area":area})
+		candidates.append({"code":setup.countries[i].code,"name":sim.country(i).name,"center":center(i),"area":area,"rings":regions[i]})
 	candidates.sort_custom(func(a,b): return a.area > b.area)
 	for item in candidates:
 		if item.code == selected_reference or item.code == hovered_reference: continue
@@ -342,7 +384,8 @@ func draw_country_labels(setup: Dictionary):
 		if item.code == "ATA": label_size = 17
 		if item.code == "NOR": label_size = mini(label_size, 22)
 		var pose = LABEL_POSES.get(item.code, [item.center, 0.0])
-		country_label(transform_point(pose[0]), item.name, false, label_size, pose[1])
+		var anchor = label_anchor(item.code, item.rings, pose[0])
+		country_label(transform_point(anchor), item.name, false, label_size, pose[1], item.rings)
 
 func draw_capitals(setup: Dictionary, names_only: bool = false):
 	if not names_only: marker_rects.clear()
@@ -386,6 +429,7 @@ func map_text(pos: Vector2, value: String, font_size: int, color: Color):
 	draw_string(font, origin, value, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, color)
 
 func _draw():
+	update_minimap_layout()
 	for y in range(0, int(size.y), 4):
 		draw_rect(Rect2(0, y, size.x, 4), Color("081a32").lerp(Color("183a60"), float(y) / maxf(size.y, 1)))
 	if ocean_texture != null:

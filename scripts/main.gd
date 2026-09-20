@@ -37,6 +37,8 @@ var panel_open = false
 var reference_code = ""
 var reference_year = 2026
 var country_search_window: AcceptDialog
+var map_mode_button: Button
+var zoom_label: Label
 var application_focused = true
 
 func _notification(what):
@@ -208,9 +210,24 @@ func build_ui():
 	map_area.add_child(map)
 	var controls = HBoxContainer.new()
 	map_area.add_child(controls)
-	for entry in [["Welt", func(): map.fit_world()], ["Mein Land", func(): map.focus_country(session.player_id)], ["Ländersuche", show_country_search], ["+", func(): map.zoom_at(map.size / 2, 1)], ["−", func(): map.zoom_at(map.size / 2, -1)], ["Kartenmodus", func(): map.mode = "diplomatic" if map.mode == "political" else "political"; map.queue_redraw()]]:
+	controls.add_theme_constant_override("separation", 4)
+	for entry in [["Welt", func(): map.fit_world()], ["Mein Land", func(): map.focus_country(session.player_id)], ["Ländersuche", show_country_search]]:
 		var b = button(controls, entry[0], entry[1])
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.custom_minimum_size.x = {"Welt":55, "Mein Land":88, "Ländersuche":112}[entry[0]]
+	button(controls, "−", func(): map.zoom_at(map.size / 2, -1)).custom_minimum_size.x = 32
+	zoom_label = label("1.0×", 12, GOLD)
+	zoom_label.custom_minimum_size.x = 43
+	zoom_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	controls.add_child(zoom_label)
+	button(controls, "+", func(): map.zoom_at(map.size / 2, 1)).custom_minimum_size.x = 32
+	map.draw.connect(func(): zoom_label.text = "%.1f×" % map.zoom)
+	map_mode_button = button(controls, "Politisch", func():
+		map.mode = "diplomatic" if map.mode == "political" else "political"
+		map_mode_button.text = "Beziehungen" if map.mode == "diplomatic" else "Politisch"
+		map.queue_redraw())
+	map_mode_button.custom_minimum_size.x = 128
+	map_mode_button.tooltip_text = "Kartenmodus wechseln · Politisch: Länderfarben · Beziehungen: eigene Gebiete gold, andere Kampagnenländer grün, übrige Welt grau"
 	chronicle = VBoxContainer.new()
 	map_area.add_child(chronicle)
 	detail_panel = PanelContainer.new()
@@ -801,7 +818,7 @@ func show_menu():
 	button(box, "Einstellungen", func(): menu.hide(); show_settings())
 	button(box, "Zum Hauptmenü", func(): menu.hide(); show_main_menu())
 	button(box, "Über die Politikerbilder", func(): menu.hide(); show_portrait_info())
-	paragraph(box, "Staatskunst 0.8.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
+	paragraph(box, "Staatskunst 0.8.1 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
 
@@ -922,7 +939,7 @@ func show_main_menu():
 	var bottom_gap = Control.new()
 	bottom_gap.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	menu.add_child(bottom_gap)
-	paragraph(menu, "VERSION 0.8.0 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
+	paragraph(menu, "VERSION 0.8.1 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
 	var space = Control.new()
 	space.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(space)
@@ -968,6 +985,7 @@ func show_settings():
 	var cartography = settings_page(pages, "Karte")
 	setting_toggle(cartography, "Ländernamen anzeigen", "labels")
 	setting_toggle(cartography, "Gradnetz anzeigen", "map_grid")
+	setting_toggle(cartography, "Minikarte anzeigen", "minimap")
 	setting_toggle(cartography, "Kriegsanimationen", "animations")
 	paragraph(cartography, "Zoomgeschwindigkeit")
 	var slider = HSlider.new()

@@ -29,6 +29,8 @@ jobs:
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/input_test.gd
       - name: Relief cartography and compact interface
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/cartography_test.gd
+      - name: Minimap navigation and label placement
+        run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/navigation_test.gd
       - name: Worldwide country profiles and map labels
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/atlas_test.gd
       - name: Constitution and economic regression tests
