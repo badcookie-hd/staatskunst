@@ -4,6 +4,8 @@ signal reference_selected(code: String)
 const Scenarios = preload("res://scripts/scenarios.gd")
 var sim
 var settings
+var keyboard_pan_allowed: Callable
+const PAN_SPEED = 650.0
 var selected_id = 0
 var player_id = 0
 var hovered = -1
@@ -155,12 +157,7 @@ func _gui_input(event):
 		if event.button_mask & (MOUSE_BUTTON_MASK_MIDDLE | MOUSE_BUTTON_MASK_RIGHT):
 			pan += event.relative
 			clamp_pan()
-		hovered = hit(event.position)
-		hovered_reference = reference_code_at(event.position) if hovered < 0 else ""
-		if hovered >= 0: tooltip_text = sim.country(hovered).name + " · Kampagnenland"
-		else:
-			var entry = reference(hovered_reference)
-			tooltip_text = entry.name + " · Klicken: Länderakte" if not entry.is_empty() else "Mausrad: Zoom · Rechts / Mitte ziehen: Karte verschieben"
+		update_hover(event.position)
 		queue_redraw()
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -347,5 +344,30 @@ func _draw():
 	draw_circle(compass, 5, Color("c8bb91"), false, 1)
 	map_text(compass-Vector2(0,22),"N",10,Color("c8bb91"))
 
-func _process(_delta):
+func update_hover(point: Vector2):
+	hovered = hit(point) if Rect2(Vector2.ZERO, size).has_point(point) else -1
+	hovered_reference = reference_code_at(point) if hovered < 0 and Rect2(Vector2.ZERO, size).has_point(point) else ""
+	if hovered >= 0: tooltip_text = sim.country(hovered).name + " · Kampagnenland"
+	else:
+		var entry = reference(hovered_reference)
+		tooltip_text = entry.name + " · Klicken: Länderakte" if not entry.is_empty() else "WASD: Bewegen · Umschalt: Schneller · Mausrad: Zoom · Rechts / Mitte ziehen: Verschieben"
+
+func pan_with_keyboard(delta: float):
+	if not is_visible_in_tree(): return
+	# Physical keys keep the same layout across keyboard languages.
+	var direction = Vector2(
+		float(Input.is_physical_key_pressed(KEY_A)) - float(Input.is_physical_key_pressed(KEY_D)),
+		float(Input.is_physical_key_pressed(KEY_W)) - float(Input.is_physical_key_pressed(KEY_S)))
+	if direction == Vector2.ZERO: return
+	if not keyboard_pan_allowed.is_valid() or not keyboard_pan_allowed.call(): return
+	var speed = PAN_SPEED * (2.0 if Input.is_physical_key_pressed(KEY_SHIFT) else 1.0)
+	var previous_pan = pan
+	pan += direction.normalized() * speed * delta
+	clamp_pan()
+	if pan == previous_pan: return
+	update_hover(get_local_mouse_position())
+	queue_redraw()
+
+func _process(delta):
+	pan_with_keyboard(delta)
 	if sim != null and not sim.state.wars.is_empty() and is_visible_in_tree() and (settings == null or settings.animations): queue_redraw()

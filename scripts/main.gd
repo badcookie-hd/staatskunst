@@ -36,6 +36,24 @@ var panel_open = false
 var reference_code = ""
 var reference_year = 2026
 var country_search_window: AcceptDialog
+var application_focused = true
+
+func _notification(what):
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT: application_focused = false
+	elif what == NOTIFICATION_APPLICATION_FOCUS_IN: application_focused = true
+
+func has_open_window(node: Node) -> bool:
+	for child in node.get_children():
+		if child is Window and child.visible: return true
+		if has_open_window(child): return true
+	return false
+
+func can_pan_map() -> bool:
+	if not application_focused or not campaign_started: return false
+	if is_instance_valid(title_screen) and title_screen.visible: return false
+	var focus = get_viewport().gui_get_focus_owner()
+	if focus is LineEdit or focus is TextEdit: return false
+	return not has_open_window(self)
 
 func _ready():
 	preferences.read()
@@ -171,6 +189,7 @@ func build_ui():
 	map = WorldMap.new()
 	map.sim = session.sim
 	map.settings = preferences
+	map.keyboard_pan_allowed = can_pan_map
 	map.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	map.custom_minimum_size = Vector2(300, 260)
 	map.selected.connect(func(id): reference_code = ""; selected = id; tab = 5; panel_open = true; refresh())
@@ -198,7 +217,7 @@ func build_ui():
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("separation", 12)
 	scroll.add_child(content)
-	status_label = label("Weltkarte · Mausrad zum Zoomen · Rechts oder Mitte ziehen zum Verschieben", 12, GOLD)
+	status_label = label("WASD: Bewegen · Umschalt: Schneller · Mausrad: Zoom · Rechts/Mitte ziehen: Verschieben", 12, GOLD)
 	root_box.add_child(status_label)
 
 func refresh():
@@ -724,7 +743,7 @@ func refresh_setup():
 		b.custom_minimum_size.x = 230
 		b.tooltip_text = "Industrie %d · Armee %d · Qualität %.2f · %s" % [entry.industry, entry.army, entry.quality, "Freie Wahlen" if entry.democratic else "Autoritäre Regierung"]
 	paragraph(setup_content, "Globale Referenzkarte mit 242 Ländern und Gebieten und europäischen Kampagnenländern. Historische Grenzen sind schematisch; Wirtschaft, Militär und politische Anteile sind Spielwerte. Personen und Parteien beziehen sich auf den Szenariostart am 1. Januar; spätere Regierungswechsel folgen der Simulation. Der Verlauf ist frei, keine festgelegte Geschichtswiederholung.")
-	paragraph(setup_content, "Mit ▶ oder Leertaste starten. Mausrad: Zoom; Rechts/Mitte ziehen: Karte verschieben. Welt und Mein Land wechseln die Ansicht. Außerhalb der Kampagnenländer zeigt die Weltkarte moderne Referenzgrenzen, auch im Szenario 1936.")
+	paragraph(setup_content, "Mit ▶ oder Leertaste starten. WASD: Karte bewegen; Umschalt: schneller; Mausrad: Zoom; Rechts/Mitte ziehen: verschieben. Welt und Mein Land wechseln die Ansicht. Außerhalb der Kampagnenländer zeigt die Weltkarte moderne Referenzgrenzen, auch im Szenario 1936.")
 
 func show_menu():
 	if session.is_host() and session.running: session.toggle_pause()
@@ -761,7 +780,7 @@ func show_menu():
 	button(box, "Einstellungen", func(): menu.hide(); show_settings())
 	button(box, "Zum Hauptmenü", func(): menu.hide(); show_main_menu())
 	button(box, "Über die Politikerbilder", func(): menu.hide(); show_portrait_info())
-	paragraph(box, "Staatskunst 0.7.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
+	paragraph(box, "Staatskunst 0.7.1 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
 
@@ -882,7 +901,7 @@ func show_main_menu():
 	var bottom_gap = Control.new()
 	bottom_gap.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	menu.add_child(bottom_gap)
-	paragraph(menu, "VERSION 0.7 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
+	paragraph(menu, "VERSION 0.7.1 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
 	var space = Control.new()
 	space.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(space)
@@ -939,7 +958,7 @@ func show_settings():
 	slider.value_changed.connect(func(value): preferences.zoom_speed = value; save_settings())
 	cartography.add_child(slider)
 	var controls = settings_page(pages, "Steuerung")
-	paragraph(controls, "Mausrad · Karte zoomen\nRechte oder mittlere Maustaste ziehen · Karte verschieben\nLinksklick · Kampagnenland auswählen\nWelt · Ganze Welt einpassen\nMein Land · Auf deine Regierung zoomen\nAkte schließen · Karte vergrößern\nLeertaste · Zeit pausieren / fortsetzen\nEscape · Spielmenü öffnen")
+	paragraph(controls, "WASD · Karte bewegen (W Norden, A Westen, S Süden, D Osten)\nUmschalt halten · Doppelte Bewegungsgeschwindigkeit\nMausrad · Karte zoomen\nRechte oder mittlere Maustaste ziehen · Karte verschieben\nLinksklick · Kampagnenland auswählen\nWelt · Ganze Welt einpassen\nMein Land · Auf deine Regierung zoomen\nAkte schließen · Karte vergrößern\nLeertaste · Zeit pausieren / fortsetzen\nEscape · Spielmenü öffnen")
 	paragraph(controls, "Die Weltkarte zeigt 242 Länder und Gebiete. Spielbar sind die Länder der jeweiligen Kampagne. Außerhalb davon werden moderne Referenzgrenzen dargestellt, auch 1936.")
 	settings_window.popup_centered()
 

@@ -2,11 +2,13 @@
 
 Ein politisches Strategiespiel in **Godot 4.5.1**. Regiere einen realen europäischen Staat im Szenario **1936** oder **2026**: Parteien, Koalitionen, eigene Minister, Wirtschaftsaufbau und Diplomatie stehen im Mittelpunkt. Armeen kämpfen automatisch über Zeit, ohne Einheitenbefehle oder Frontverwaltung.
 
-**Version 0.7.0 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
+**Version 0.7.1 — spielbarer Prototyp.** Deutsche Oberfläche, Einzelspieler gegen einfache KI sowie LAN / direkte IP mit bis zu acht Spielern. Keine zentralen Server, keine Konten. Eigener Code und eigene Oberfläche, keine übernommenen Hearts-of-Iron-Assets.
 
-[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.7.0) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
+[Windows-Download und Quellcode](https://github.com/badcookie-hd/staatskunst/releases/tag/v0.7.1) · [Quellen](docs/SOURCES.md) · [Prüfungen](docs/VALIDATION.md)
 
-Neu in 0.7: **Alle 242 Länder und Gebiete anklickbar**, mit politischen Länderakten, zusätzlichem Personal und Offline-Porträts. Eine Ländersuche und vergrößerte Klickpunkte machen auch Kleinstaaten erreichbar. Detailliertere Küsten, ruhige Blau-Grau-/Grüntöne, goldene Auswahlmarkierungen und größere, kollisionsfreie Ländernamen ersetzen die bisherige Karte. [Datenumfang und Quellen des Weltatlas](docs/WORLD-ATLAS.md).
+Neu in 0.7.1: **Flüssige WASD-Kartensteuerung**, mit Umschalt schneller bewegen. Die Geschwindigkeit bleibt bei unterschiedlichen Bildraten gleich; diagonales Bewegen ist gleich schnell. Menüs, Texteingaben und ein inaktives Spielfenster sperren die Bewegung.
+
+Seit 0.7: **Alle 242 Länder und Gebiete anklickbar**, mit politischen Länderakten, zusätzlichem Personal und Offline-Porträts. Eine Ländersuche und vergrößerte Klickpunkte machen auch Kleinstaaten erreichbar. Detailliertere Küsten, ruhige Blau-Grau-/Grüntöne, goldene Auswahlmarkierungen und größere, kollisionsfreie Ländernamen ersetzen die bisherige Karte. [Datenumfang und Quellen des Weltatlas](docs/WORLD-ATLAS.md).
 
 ![Anklickbare Länderakte](docs/screen-atlas-japan.png)
 
@@ -42,7 +44,7 @@ In beiden Epochen: Deutschland, Frankreich, Vereinigtes Königreich, Italien, Sp
 
 ![Weltkarte](docs/screen-world.png)
 
-Mausrad: Zoom; rechte oder mittlere Maustaste ziehen: Verschieben. **Ländersuche** findet Länder über Namen oder Kürzel; Enter oder ein Klick öffnet die Akte und fokussiert die Karte. **Welt** passt alle Kontinente ein, **Mein Land** fokussiert die eigene Regierung. **Akte schließen** vergrößert die Karte. Escape öffnet das Spielmenü. Im Haupt- und Spielmenü liegen **Einstellungen**; Änderungen gelten sofort und bleiben nach einem Neustart erhalten.
+**WASD** bewegt die Karte (W Norden, A Westen, S Süden, D Osten); **Umschalt** verdoppelt die Geschwindigkeit. Mausrad: Zoom; rechte oder mittlere Maustaste ziehen: Verschieben. Beim Tippen, in Menüs und bei inaktivem Spielfenster ist die Tastaturbewegung gesperrt. **Ländersuche** findet Länder über Namen oder Kürzel; Enter oder ein Klick öffnet die Akte und fokussiert die Karte. **Welt** passt alle Kontinente ein, **Mein Land** fokussiert die eigene Regierung. **Akte schließen** vergrößert die Karte. Escape öffnet das Spielmenü. Im Haupt- und Spielmenü liegen **Einstellungen**; Änderungen gelten sofort und bleiben nach einem Neustart erhalten.
 
 Identitäten beziehen sich auf den 1. Januar der jeweiligen Epoche. Der spätere Verlauf ist frei: historische Amtswechsel, Sterbedaten, laufende reale Kriege und Kolonien sind nicht geskriptet. Grenzen sind schematisch. Wirtschaft, Militär, Parteianteile, Koalitionen und Fachprofile sind vereinfachte Spielwerte; keine aktuellen Umfragen oder amtlichen Wirtschaftsstatistiken.
 

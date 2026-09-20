@@ -25,6 +25,8 @@ jobs:
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/portrait_test.gd
       - name: World map and settings
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/graphics_test.gd
+      - name: Keyboard map navigation
+        run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/input_test.gd
       - name: Worldwide country profiles and map labels
         run: Godot_v4.5.1-stable_linux.x86_64 --headless --path . --script res://tests/atlas_test.gd
       - name: Constitution and economic regression tests

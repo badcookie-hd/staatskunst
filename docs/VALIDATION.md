@@ -1,6 +1,11 @@
-# Prüfung von Version 0.7.0
+# Prüfung von Version 0.7.1
 
 Godot 4.5.1 stable, Windows x64, 20. September 2026.
+
+- **25 neue Steuerungsprüfungen bestanden**, im Projekt und erneut direkt in der exportierten Windows-EXE. Alle WASD-Richtungen, Loslassen, gehaltene Tasten im Frame-Loop, gleiche Geschwindigkeit bei 30 und 144 FPS, normalisierte Diagonalen, Umschalt, gegensätzliche Tasten, Weltgrenzen und gesperrte Bewegung bei Hauptmenü, Pausemenü, Ländersuche, LAN-Dialog, LineEdit/TextEdit, ausgeblendeter Karte und inaktiver Anwendung. Fortsetzung nach Fokuswechsel geprüft.
+- **32 Grafik- und 81 UI-Prüfungen erneut bestanden.** Fertigen Export separat mit OpenGL gestartet (Exit-Code 0) und alle 710 Porträteinträge, Illustrationen sowie 242 Weltregionen und Länderakten daraus geladen (0 Fehler).
+
+Die folgenden umfassenden Prüfungen stammen aus Version 0.7.0; die CI führt sie auch für den neuen Release-Commit aus:
 
 - **4.293 Atlasprüfungen bestanden.** Alle 242 Länder-/Gebietsakten in beiden Epochen, Quellenangaben, lesbare Personennamen, 402 zusätzliche Porträteinträge samt Texturen und Lizenzangaben, echte Klickauswahl der USA und von vier Kleinstaaten, Suchfilter und Auswahl mit Enter. Kollisionsfreie Ländernamen bei vier Zoomstufen und zwei Fenstergrößen. USA, Japan und die neue Weltansicht mit OpenGL gerendert und visuell geprüft. Historische Datenlücken und fehlende Fotos werden ausdrücklich ausgewiesen.
 
@@ -16,7 +21,7 @@ Godot 4.5.1 stable, Windows x64, 20. September 2026.
 
 Die Windows-Sandbox meldet einen Fehler beim Lesen des System-Zertifikatsspeichers. Das Spiel nutzt keine HTTPS-Verbindungen. Kein Gameplay- oder GDScript-Fehler in den abschließenden Läufen.
 
-Die CI wiederholt Import, Simulation, UI, Grafik-/Menüprüfungen, Porträtprüfungen, Verfassungs-/Wirtschaftsregressionen und beide ENet-Durchläufe unter Linux. Deren Ergebnis ist im GitHub-Actions-Lauf des Release-Commits sichtbar.
+Die CI wiederholt Import, Simulation, UI, Tastatursteuerung, Grafik-/Menüprüfungen, Porträtprüfungen, Verfassungs-/Wirtschaftsregressionen und beide ENet-Durchläufe unter Linux. Deren Ergebnis ist im GitHub-Actions-Lauf des Release-Commits sichtbar.
 
 Nicht praktisch geprüft: zwei physische Rechner, echte Router-Portweiterleitung, acht gleichzeitig verbundene Spieler und längerer Netzwerkbetrieb. Die Wirtschaft ist ein Spielmodell, nicht an amtlichen makroökonomischen Daten kalibriert. Die historische und moderne Parteienauswahl ist kuratiert, nicht vollständig.
 
