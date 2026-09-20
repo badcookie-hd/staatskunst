@@ -1,6 +1,12 @@
-# Prüfung von Version 0.7.1
+# Prüfung von Version 0.8.0
 
 Godot 4.5.1 stable, Windows x64, 20. September 2026.
+
+Version 0.8: **13 neue Kartografieprüfungen** mit echtem OpenGL bestanden: Offline-Relief, Hauptstadtdaten, unterschiedliche Nachbarfarben, korrekte UV-Zuordnung, Kartenhöhe über 70 % bei 1440 × 900 und 1152 × 720, kollisionsfreie Beschriftung bei drei Zoomstufen und Kabinett bei Mindestauflösung. Welt-, Europa-, Detail- und Kabinettsansicht gerendert und visuell geprüft. Zusätzlich 25 WASD-, 81 UI- und 32 Grafik-/Menüprüfungen erneut bestanden.
+
+Die **4.293 Atlasprüfungen** wurden mit OpenGL wiederholt und bestanden. Die fertige Windows-EXE besteht die 13 Kartografieprüfungen ebenfalls mit OpenGL sowie die Ressourcenprüfung aller 710 Porträteinträge, Illustrationen und 242 Weltregionen/Länderakten. Keine fehlenden Ressourcen oder GDScript-Fehler. Die CI enthält jetzt auch die neue Kartografieprüfung.
+
+Vorheriger Prüfstand und fortlaufende Regressionen:
 
 - **25 neue Steuerungsprüfungen bestanden**, im Projekt und erneut direkt in der exportierten Windows-EXE. Alle WASD-Richtungen, Loslassen, gehaltene Tasten im Frame-Loop, gleiche Geschwindigkeit bei 30 und 144 FPS, normalisierte Diagonalen, Umschalt, gegensätzliche Tasten, Weltgrenzen und gesperrte Bewegung bei Hauptmenü, Pausemenü, Ländersuche, LAN-Dialog, LineEdit/TextEdit, ausgeblendeter Karte und inaktiver Anwendung. Fortsetzung nach Fokuswechsel geprüft.
 - **32 Grafik- und 81 UI-Prüfungen erneut bestanden.** Fertigen Export separat mit OpenGL gestartet (Exit-Code 0) und alle 710 Porträteinträge, Illustrationen sowie 242 Weltregionen und Länderakten daraus geladen (0 Fehler).

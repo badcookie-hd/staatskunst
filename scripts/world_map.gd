@@ -6,6 +6,10 @@ var sim
 var settings
 var keyboard_pan_allowed: Callable
 const PAN_SPEED = 650.0
+const RELIEF = preload("res://assets/world-relief.png")
+var capitals: Array = []
+var marker_rects: Array[Rect2] = []
+var ocean_texture: NoiseTexture2D
 var selected_id = 0
 var player_id = 0
 var hovered = -1
@@ -24,7 +28,22 @@ var background: Array = []
 var world: Array = []
 var mode = "political"
 var previous_size = Vector2.ZERO
-const PALETTE = ["738783", "82938d", "758d96", "929c94", "7c8991", "88978a"]
+const PALETTE = ["7e8d83", "b0a083", "8196a4", "a58b8c", "999d86", "9690a5", "789a96", "b4aa91"]
+const COUNTRY_COLORS = {
+	"DEU":"82898a", "FRA":"7198be", "GBR":"b77b87", "ITA":"8baf99", "POL":"b991aa",
+	"SWE":"79a8ce", "NOR":"859bab", "FIN":"c4d0d5", "RUS":"929481", "SOV":"929481",
+	"ESP":"b3a379", "PRT":"87a18b", "USA":"7e99ac", "CAN":"a98791", "BRA":"87a087",
+	"CHN":"bcac83", "JPN":"b79b98", "AUS":"b39586", "IND":"b9a579", "TUR":"a79a88",
+	"CHE":"b2a3a0", "AUT":"b8b6ad", "CZE":"7ca6ac", "CSK":"7ca6ac", "BEL":"b9ad83",
+	"NLD":"b29883", "DNK":"a69f95", "IRL":"92aa91", "UKR":"a6ab8c", "ATA":"bbc8ce"
+}
+const LABEL_POSES = {
+	"NOR": [Vector2(9, 63), -1.05], "SWE": [Vector2(16, 62), -1.1],
+	"FIN": [Vector2(26, 64.5), -1.35], "ITA": [Vector2(12.8, 43), 0.8],
+	"CHL": [Vector2(-71, -36), 1.45], "ARG": [Vector2(-64, -36), 1.15],
+	"GBR": [Vector2(-2, 54), -0.9], "FRA": [Vector2(2, 46.5), 0.0],
+	"CAN": [Vector2(-107, 59), 0.0], "ATA": [Vector2(0, -80), 0.0]
+}
 
 func _ready():
 	clip_contents = true
@@ -32,6 +51,21 @@ func _ready():
 	previous_size = size
 	resized.connect(preserve_view_on_resize)
 	mouse_exited.connect(func(): hovered = -1; hovered_reference = ""; queue_redraw())
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	capitals = JSON.parse_string(FileAccess.get_file_as_string("res://data/capitals.json")).capitals
+	var noise = FastNoiseLite.new()
+	noise.seed = 1936
+	noise.frequency = 0.009
+	noise.fractal_octaves = 4
+	ocean_texture = NoiseTexture2D.new()
+	ocean_texture.width = 1024
+	ocean_texture.height = 512
+	ocean_texture.noise = noise
+	var ocean_gradient = Gradient.new()
+	ocean_gradient.set_color(0, Color("0a1c37"))
+	ocean_gradient.set_color(1, Color("244c75"))
+	ocean_texture.color_ramp = ocean_gradient
+	ocean_texture.changed.connect(queue_redraw)
 	var data = JSON.parse_string(FileAccess.get_file_as_string("res://data/world.json"))
 	for entry in data.countries:
 		var rings = []
@@ -210,40 +244,65 @@ func country_shape(ring: PackedVector2Array, color: Color, border: Color, width:
 		var indices = Geometry2D.triangulate_polygon(ring)
 		if indices.is_empty(): return
 		var vertices = PackedVector3Array()
-		for point in ring: vertices.append(Vector3(point.x, point.y, 0))
+		var uvs = PackedVector2Array()
+		for point in ring:
+			vertices.append(Vector3(point.x, point.y, 0))
+			uvs.append(Vector2((point.x + 180.0) / 360.0, (90.0 - point.y) / 180.0))
 		var arrays = []
 		arrays.resize(Mesh.ARRAY_MAX)
 		arrays[Mesh.ARRAY_VERTEX] = vertices
+		arrays[Mesh.ARRAY_TEX_UV] = uvs
 		arrays[Mesh.ARRAY_INDEX] = indices
 		var mesh = ArrayMesh.new()
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		ring_meshes[key] = mesh
 	var scale_value = map_scale() * zoom
-	draw_mesh(ring_meshes[key], null, Transform2D(Vector2(scale_value, 0), Vector2(0, -scale_value), size / 2 + pan), color)
+	draw_mesh(ring_meshes[key], RELIEF, Transform2D(Vector2(scale_value, 0), Vector2(0, -scale_value), size / 2 + pan), color)
 	if bounds.size.x < 1 or bounds.size.y < 1: return
 	var outline = points.duplicate()
 	outline.append(points[0])
+	draw_polyline(outline, Color(0.035, 0.06, 0.08, 0.68), width + 0.9, true)
 	draw_polyline(outline, border, width, true)
 
 func country_color(code: String) -> Color:
+	if COUNTRY_COLORS.has(code): return Color(COUNTRY_COLORS[code])
 	var index = 0
 	for letter in code.to_utf8_buffer(): index = (index * 31 + letter) % PALETTE.size()
 	return Color(PALETTE[index])
 
-func country_label(pos: Vector2, value: String, priority: bool = false):
+func country_label(pos: Vector2, value: String, priority: bool = false, text_scale: int = 16, angle: float = 0.0):
 	var short_names = {"Vereinigte Staaten": "USA", "Volksrepublik China": "China", "Vereinigtes Königreich": "Großbritannien", "Demokratische Republik Kongo": "DR Kongo", "Zentralafrikanische Republik": "Zentralafrika", "Bosnien und Herzegowina": "Bosnien-Herzegowina"}
 	value = short_names.get(value, value)
+	if not priority: value = value.to_upper()
 	var font = ThemeDB.fallback_font
-	var font_size = 16 if priority else 14
+	var font_size = 17 if priority else text_scale
 	var text_size = font.get_string_size(value, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-	var rect = Rect2(pos - Vector2(text_size.x / 2 + 6, 17), Vector2(text_size.x + 12, 25))
-	if not Rect2(Vector2(12, 12), size - Vector2(24, 50)).encloses(rect): return
-	for occupied in label_rects:
-		if occupied.grow(5).intersects(rect): return
+	var local_rect = Rect2(Vector2(-text_size.x / 2 - 6, -font_size - 2), Vector2(text_size.x + 12, font_size + 10))
+	var rect: Rect2
+	var placed = false
+	for offset in [Vector2.ZERO, Vector2(0, -22), Vector2(0, 24), Vector2(0, -44), Vector2(-24, 0), Vector2(24, 0)]:
+		var placement = Transform2D(angle, pos + offset)
+		var candidate = placement * local_rect
+		if not Rect2(Vector2(12, 12), size - Vector2(24, 50)).encloses(candidate): continue
+		var blocked = false
+		for occupied in label_rects:
+			if occupied.grow(3).intersects(candidate): blocked = true; break
+		for marker in marker_rects:
+			if local_rect.grow(5).has_point(placement.affine_inverse() * marker.get_center()): blocked = true; break
+		if blocked: continue
+		pos += offset
+		rect = candidate
+		placed = true
+		break
+	if not placed: return
 	label_rects.append(rect)
 	drawn_labels.append(value)
 	if priority: draw_style_box(label_style(), rect.grow(2))
-	map_text(pos, value, font_size, Color("fff0ca") if priority else Color("eaf0ed"))
+	draw_set_transform(pos, angle)
+	var origin = Vector2(-text_size.x / 2, 0)
+	draw_string_outline(font, origin, value, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, 3, Color("23313a"))
+	draw_string(font, origin, value, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color("fff0ca") if priority else Color("dde3df"))
+	draw_set_transform(Vector2.ZERO)
 
 func label_style() -> StyleBoxFlat:
 	var box = StyleBoxFlat.new()
@@ -268,15 +327,55 @@ func draw_country_labels(setup: Dictionary):
 		if entry.code in campaign_codes or (sim.year() == 1936 and entry.code in ["CZE", "SVK"]): continue
 		var area = 0.0
 		for ring in entry.rings: area = maxf(area, cache_bounds(ring).get_area())
-		candidates.append({"name":entry.name,"center":entry.center,"area":area})
+		candidates.append({"code":entry.code,"name":entry.name,"center":entry.center,"area":area})
 	for i in range(regions.size()):
 		var area = 0.0
 		for ring in regions[i]: area = maxf(area, cache_bounds(ring).get_area())
-		candidates.append({"name":sim.country(i).name,"center":center(i),"area":area})
+		candidates.append({"code":setup.countries[i].code,"name":sim.country(i).name,"center":center(i),"area":area})
 	candidates.sort_custom(func(a,b): return a.area > b.area)
 	for item in candidates:
+		if item.code == selected_reference or item.code == hovered_reference: continue
+		if selected_reference.is_empty() and selected_id >= 0 and item.code == setup.countries[selected_id].code: continue
+		if hovered >= 0 and item.code == setup.countries[hovered].code: continue
 		if item.area * pow(map_scale() * zoom, 2) < 1800: continue
-		country_label(transform_point(item.center), item.name)
+		var label_size = clampi(int(sqrt(item.area) * map_scale() * zoom * 0.10), 13, 30)
+		if item.code == "ATA": label_size = 17
+		if item.code == "NOR": label_size = mini(label_size, 22)
+		var pose = LABEL_POSES.get(item.code, [item.center, 0.0])
+		country_label(transform_point(pose[0]), item.name, false, label_size, pose[1])
+
+func draw_capitals(setup: Dictionary, names_only: bool = false):
+	if not names_only: marker_rects.clear()
+	if zoom < 1.8: return
+	var campaign_codes = setup.countries.map(func(c): return c.code)
+	for capital in capitals:
+		# Outside the European scenario we do not present modern capitals as historical ones.
+		var code = "CSK" if capital.code == "CZE" and sim.year() == 1936 else capital.code
+		if sim.year() == 1936 and code not in campaign_codes: continue
+		var pos = transform_point(Vector2(capital.point[0], capital.point[1]))
+		if not Rect2(Vector2(10, 10), size - Vector2(20, 20)).has_point(pos): continue
+		if not names_only:
+			var star = PackedVector2Array()
+			for i in range(10):
+				var angle = -PI / 2 + i * PI / 5
+				star.append(pos + Vector2(cos(angle), sin(angle)) * (5.0 if i % 2 == 0 else 2.4))
+			draw_colored_polygon(star, Color("e6d5aa"))
+			star.append(star[0])
+			draw_polyline(star, Color("152332"), 1.1, true)
+			marker_rects.append(Rect2(pos - Vector2(6, 6), Vector2(12, 12)))
+			continue
+		if zoom < 5 or (settings != null and not settings.labels): continue
+		var names = {"Warsaw":"Warschau", "Vienna":"Wien", "Rome":"Rom", "Prague":"Prag", "Copenhagen":"Kopenhagen", "Moscow":"Moskau", "Brussels":"Brüssel", "Lisbon":"Lissabon"}
+		var name_value = names.get(capital.name, capital.name)
+		var width = ThemeDB.fallback_font.get_string_size(name_value, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
+		var rect = Rect2(pos + Vector2(10, -9), Vector2(width + 4, 18))
+		if not Rect2(Vector2.ZERO, size).encloses(rect): continue
+		var blocked = false
+		for occupied in label_rects + marker_rects:
+			if occupied.grow(2).intersects(rect): blocked = true; break
+		if blocked: continue
+		label_rects.append(rect)
+		map_text(pos + Vector2(12 + width / 2, 4), name_value, 12, Color("f1e8d6"))
 
 func map_text(pos: Vector2, value: String, font_size: int, color: Color):
 	if not Rect2(Vector2.ZERO, size).has_point(pos): return
@@ -288,7 +387,9 @@ func map_text(pos: Vector2, value: String, font_size: int, color: Color):
 
 func _draw():
 	for y in range(0, int(size.y), 4):
-		draw_rect(Rect2(0, y, size.x, 4), Color("172c3b").lerp(Color("263f4c"), float(y) / maxf(size.y, 1)))
+		draw_rect(Rect2(0, y, size.x, 4), Color("081a32").lerp(Color("183a60"), float(y) / maxf(size.y, 1)))
+	if ocean_texture != null:
+		draw_texture_rect(ocean_texture, Rect2(transform_point(Vector2(-180, 90)), Vector2(360, 180) * map_scale() * zoom), false, Color(1, 1, 1, 0.65))
 	# Latitudes and longitudes move with the world, rather than with the screen.
 	if settings == null or settings.map_grid:
 		for lon in range(-180,181,30): draw_line(transform_point(Vector2(lon,-90)), transform_point(Vector2(lon,90)), Color(0.6,0.75,0.77,0.045), 1)
@@ -301,7 +402,7 @@ func _draw():
 		if mode == "diplomatic": color = Color("64777f")
 		var active = world[i].code == selected_reference
 		if active or world[i].code == hovered_reference: color = color.lightened(0.18)
-		for ring in world[i].rings: country_shape(ring, color, Color("efd398") if active else Color("3a5057"), 2.0 if active else 0.85)
+		for ring in world[i].rings: country_shape(ring, color, Color("e8cb8d") if active else color.darkened(0.28), 2.2 if active else 0.6)
 	for i in range(regions.size()):
 		var owner = int(sim.country(i).owner)
 		var color = country_color(setup.countries[owner].code)
@@ -312,18 +413,31 @@ func _draw():
 			if owner == pressured: color = color.lerp(Color("ac5f4d"), absf(war.progress) / 110.0)
 		var active = i == selected_id and selected_reference.is_empty()
 		if i == hovered or active: color = color.lightened(0.16)
-		for ring in regions[i]: country_shape(ring, color, Color("efd398") if active else Color("3a5057"), 2.0 if active else 0.85)
+		for ring in regions[i]: country_shape(ring, color, Color("e8cb8d") if active else color.darkened(0.28), 2.2 if active else 0.6)
+	# Draw the selection last so neighboring polygons cannot cover its shared borders.
+	var selection_rings: Array = []
+	if not selected_reference.is_empty():
+		var selected_entry = reference(selected_reference)
+		if not selected_entry.is_empty(): selection_rings = selected_entry.rings
+	elif selected_id >= 0 and selected_id < regions.size(): selection_rings = regions[selected_id]
+	for ring in selection_rings:
+		var outline = screen_polygon(ring)
+		outline.append(outline[0])
+		draw_polyline(outline, Color(0.96, 0.79, 0.44, 0.22), 5.0, true)
+		draw_polyline(outline, Color("e8cb8d"), 1.8, true)
 	if zoom >= 2:
 		for entry in tiny_regions:
 			var position_value = transform_point(entry.center)
 			if Rect2(Vector2.ZERO, size).has_point(position_value):
 				draw_circle(position_value, 4, Color("192c36"))
 				draw_circle(position_value, 2, Color("e2c28a"))
+	draw_capitals(setup)
 	if settings == null or settings.labels:
 		draw_country_labels(setup)
 	else:
 		label_rects.clear()
 		drawn_labels.clear()
+	draw_capitals(setup, true)
 	for w in sim.state.wars:
 		var start = transform_point(center(int(w.a)))
 		var end = transform_point(center(int(w.b)))

@@ -65,3 +65,7 @@ Grundgesetz-Panel: [Artikel 1](https://www.gesetze-im-internet.de/gg/art_1.html)
 ## Weltatlas ab Version 0.7
 
 Die Karte verwendet nun Natural Earth 1:50m mit 242 Ländern und Gebieten. Politische Länderakten und zusätzliche Porträts: [Datenumfang und Quellen](WORLD-ATLAS.md), [Bildnachweise](WORLD-PORTRAIT-CREDITS.md).
+
+## Relief und Kartenstil ab Version 0.8
+
+Natural Earth SR_HR für das Gelände, Natural Earth Populated Places für Hauptstadtpunkte und eigene Metallrahmen. [Quellen, Verarbeitung und Grenzen der Darstellung](CARTOGRAPHY.md).

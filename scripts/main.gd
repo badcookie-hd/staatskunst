@@ -5,6 +5,7 @@ const Trend = preload("res://scripts/trend.gd")
 const Portraits = preload("res://scripts/portraits.gd")
 const Settings = preload("res://scripts/settings.gd")
 const Atlas = preload("res://scripts/world_atlas.gd")
+const STEEL = preload("res://assets/steel-frame.svg")
 const GOLD = Color("e2c28a")
 const MUTED = Color("9eafc4")
 var session
@@ -86,12 +87,12 @@ func build_theme():
 	t.set_color("font_color", "Label", Color("e3e9e7"))
 	t.set_color("font_color", "Button", Color("d8e5e2"))
 	t.set_color("font_disabled_color", "Button", Color("60757c"))
-	t.set_stylebox("normal", "Button", style(Color("293943"), Color("465c66")))
-	t.set_stylebox("hover", "Button", style(Color("3b525d"), GOLD))
-	t.set_stylebox("pressed", "Button", style(Color("465b62"), GOLD))
+	t.set_stylebox("normal", "Button", metal())
+	t.set_stylebox("hover", "Button", metal(Color("e5d5af")))
+	t.set_stylebox("pressed", "Button", metal(Color("a9b9c4")))
 	t.set_stylebox("disabled", "Button", style(Color("202c33"), Color("34464e")))
 	t.set_stylebox("focus", "Button", style(Color(0,0,0,0), GOLD))
-	t.set_stylebox("panel", "AcceptDialog", style(Color("202d35"), Color("627984")))
+	t.set_stylebox("panel", "AcceptDialog", metal())
 	t.set_stylebox("panel", "ItemList", style(Color("17242c"), Color("465c66")))
 	t.set_color("font_color", "ItemList", Color("e3e9e7"))
 	t.set_stylebox("normal", "LineEdit", style(Color("191e1c"), Color("48636a")))
@@ -101,6 +102,15 @@ func build_theme():
 	t.set_constant("separation", "VBoxContainer", 10)
 	t.set_constant("separation", "HBoxContainer", 10)
 	theme = t
+
+func metal(tint: Color = Color.WHITE) -> StyleBoxTexture:
+	var box = StyleBoxTexture.new()
+	box.texture = STEEL
+	box.modulate_color = tint
+	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		box.set_texture_margin(side, 10)
+		box.set_content_margin(side, 10 if side in [SIDE_LEFT, SIDE_RIGHT] else 7)
+	return box
 
 func label(text_value: String, size_value: int = 15, color: Color = Color("e3e9e7")) -> Label:
 	var l = Label.new()
@@ -131,7 +141,7 @@ func button(parent: Node, value: String, callback: Callable) -> Button:
 
 func panel(parent: Node, color: Color = Color("202d35")) -> VBoxContainer:
 	var p = PanelContainer.new()
-	p.add_theme_stylebox_override("panel", style(color, Color("465a63")))
+	p.add_theme_stylebox_override("panel", metal() if color == Color("202d35") else style(color, Color("69716c")))
 	parent.add_child(p)
 	var box = VBoxContainer.new()
 	p.add_child(box)
@@ -145,14 +155,14 @@ func clear(node: Node):
 func build_ui():
 	var margin = MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	for edge in ["left", "right", "top", "bottom"]: margin.add_theme_constant_override("margin_" + edge, 12)
+	for edge in ["left", "right", "top", "bottom"]: margin.add_theme_constant_override("margin_" + edge, 4)
 	add_child(margin)
 	root_box = VBoxContainer.new()
-	root_box.add_theme_constant_override("separation", 6)
+	root_box.add_theme_constant_override("separation", 3)
 	margin.add_child(root_box)
 	var header = HBoxContainer.new()
 	root_box.add_child(header)
-	var brand = label("S T A A T S K U N S T", 22, GOLD)
+	var brand = label("S T A A T S K U N S T", 18, GOLD)
 	brand.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(brand)
 	date_label = label("", 16)
@@ -170,12 +180,13 @@ func build_ui():
 	for i in range(names.size()):
 		var b = button(nav, names[i], func(): tab = i; panel_open = true; scroll.scroll_vertical = 0; refresh())
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		b.custom_minimum_size.y = 38
+		b.custom_minimum_size.y = 34
 		tab_buttons.append(b)
 	var body = HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root_box.add_child(body)
 	map_area = VBoxContainer.new()
+	map_area.add_theme_constant_override("separation", 3)
 	map_area.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_child(map_area)
 	var map_header = HBoxContainer.new()
@@ -204,7 +215,7 @@ func build_ui():
 	map_area.add_child(chronicle)
 	detail_panel = PanelContainer.new()
 	detail_panel.custom_minimum_size.x = 550
-	detail_panel.add_theme_stylebox_override("panel", style(Color("1b2830"), Color("61747a")))
+	detail_panel.add_theme_stylebox_override("panel", metal())
 	body.add_child(detail_panel)
 	var side_box = VBoxContainer.new()
 	detail_panel.add_child(side_box)
@@ -270,10 +281,16 @@ func refresh():
 func metric(title: String, value: String, detail: String):
 	var box = panel(stats)
 	box.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.add_child(label(title, 10, MUTED))
-	box.add_theme_constant_override("separation", 2)
-	box.add_child(label(value, 20, GOLD))
-	box.add_child(label(detail, 11, MUTED))
+	box.get_parent().tooltip_text = title + " · " + value + "\n" + detail
+	var row = HBoxContainer.new()
+	box.add_child(row)
+	var caption = label(title, 10, Color("b5b9b0"))
+	caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(caption)
+	var number = label(value, 18, Color("ece4ca"))
+	number.clip_text = false
+	number.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	row.add_child(number)
 
 func date_text(day: int) -> String:
 	return "%02d.%02d.%d" % [day % 30 + 1, (day / 30) % 12 + 1, session.sim.year() + day / 360]
@@ -383,7 +400,11 @@ func cabinet_tab(c: Dictionary):
 		box.add_child(label(pair[0].to_upper(), 11, GOLD))
 		var leader = find_person(c, pair[1])
 		portrait(box, leader, 100)
-		box.add_child(label(pair[1], 21))
+		var leader_name = label(pair[1], 18)
+		leader_name.clip_text = false
+		leader_name.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+		leader_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		box.add_child(leader_name)
 	paragraph(content, "Startpersonal nach Epoche. Die vier Ressorts bilden ein Spielkabinett; Besetzung, Koalitionen und Fachboni sind vereinfacht. Fachprofil = Spielrolle, keine Bewertung realer Fähigkeiten.")
 	var g = grid(content)
 	for role in sim.Politics.ROLES:
@@ -780,7 +801,7 @@ func show_menu():
 	button(box, "Einstellungen", func(): menu.hide(); show_settings())
 	button(box, "Zum Hauptmenü", func(): menu.hide(); show_main_menu())
 	button(box, "Über die Politikerbilder", func(): menu.hide(); show_portrait_info())
-	paragraph(box, "Staatskunst 0.7.1 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
+	paragraph(box, "Staatskunst 0.8.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
 
@@ -901,7 +922,7 @@ func show_main_menu():
 	var bottom_gap = Control.new()
 	bottom_gap.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	menu.add_child(bottom_gap)
-	paragraph(menu, "VERSION 0.7.1 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
+	paragraph(menu, "VERSION 0.8.0 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
 	var space = Control.new()
 	space.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(space)

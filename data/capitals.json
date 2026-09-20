@@ -1,0 +1,1605 @@
+{
+  "source": "Natural Earth populated places, public domain; modern reference capitals",
+  "capitals": [
+    {
+      "code": "VAT",
+      "name": "Vatican City",
+      "point": [
+        12.453387,
+        41.903282
+      ]
+    },
+    {
+      "code": "SMR",
+      "name": "San Marino",
+      "point": [
+        12.44177,
+        43.936096
+      ]
+    },
+    {
+      "code": "LIE",
+      "name": "Vaduz",
+      "point": [
+        9.51667,
+        47.133724
+      ]
+    },
+    {
+      "code": "LUX",
+      "name": "Luxembourg",
+      "point": [
+        6.130003,
+        49.61166
+      ]
+    },
+    {
+      "code": "FSM",
+      "name": "Palikir",
+      "point": [
+        158.149974,
+        6.916644
+      ]
+    },
+    {
+      "code": "MHL",
+      "name": "Majuro",
+      "point": [
+        171.38,
+        7.103004
+      ]
+    },
+    {
+      "code": "TUV",
+      "name": "Funafuti",
+      "point": [
+        179.216647,
+        -8.516652
+      ]
+    },
+    {
+      "code": "PLW",
+      "name": "Melekeok",
+      "point": [
+        134.626549,
+        7.487396
+      ]
+    },
+    {
+      "code": "MCO",
+      "name": "Monaco",
+      "point": [
+        7.406913,
+        43.739646
+      ]
+    },
+    {
+      "code": "KIR",
+      "name": "Tarawa",
+      "point": [
+        173.017571,
+        1.338188
+      ]
+    },
+    {
+      "code": "COM",
+      "name": "Moroni",
+      "point": [
+        43.240244,
+        -11.704158
+      ]
+    },
+    {
+      "code": "AND",
+      "name": "Andorra",
+      "point": [
+        1.526594,
+        42.510753
+      ]
+    },
+    {
+      "code": "TTO",
+      "name": "Port-of-Spain",
+      "point": [
+        -61.517031,
+        10.651997
+      ]
+    },
+    {
+      "code": "RWA",
+      "name": "Kigali",
+      "point": [
+        30.058586,
+        -1.951644
+      ]
+    },
+    {
+      "code": "SWZ",
+      "name": "Mbabane",
+      "point": [
+        31.133335,
+        -26.316651
+      ]
+    },
+    {
+      "code": "SVN",
+      "name": "Ljubljana",
+      "point": [
+        14.514969,
+        46.055288
+      ]
+    },
+    {
+      "code": "SVK",
+      "name": "Bratislava",
+      "point": [
+        17.116981,
+        48.150018
+      ]
+    },
+    {
+      "code": "QAT",
+      "name": "Doha",
+      "point": [
+        51.532968,
+        25.286556
+      ]
+    },
+    {
+      "code": "MNE",
+      "name": "Podgorica",
+      "point": [
+        19.266307,
+        42.465972
+      ]
+    },
+    {
+      "code": "CHE",
+      "name": "Bern",
+      "point": [
+        7.466976,
+        46.916683
+      ]
+    },
+    {
+      "code": "KOS",
+      "name": "Pristina",
+      "point": [
+        21.165984,
+        42.66671
+      ]
+    },
+    {
+      "code": "DMA",
+      "name": "Roseau",
+      "point": [
+        -61.387013,
+        15.301016
+      ]
+    },
+    {
+      "code": "DJI",
+      "name": "Djibouti",
+      "point": [
+        43.148002,
+        11.595014
+      ]
+    },
+    {
+      "code": "GMB",
+      "name": "Banjul",
+      "point": [
+        -16.591701,
+        13.453876
+      ]
+    },
+    {
+      "code": "MKD",
+      "name": "Skopje",
+      "point": [
+        21.433461,
+        42.000006
+      ]
+    },
+    {
+      "code": "BRB",
+      "name": "Bridgetown",
+      "point": [
+        -59.616527,
+        13.102003
+      ]
+    },
+    {
+      "code": "BDI",
+      "name": "Bujumbura",
+      "point": [
+        29.360006,
+        -3.376087
+      ]
+    },
+    {
+      "code": "VCT",
+      "name": "Kingstown",
+      "point": [
+        -61.220236,
+        13.155756
+      ]
+    },
+    {
+      "code": "LCA",
+      "name": "Castries",
+      "point": [
+        -60.992875,
+        14.007875
+      ]
+    },
+    {
+      "code": "KNA",
+      "name": "Basseterre",
+      "point": [
+        -62.717009,
+        17.302031
+      ]
+    },
+    {
+      "code": "MUS",
+      "name": "Port Louis",
+      "point": [
+        57.499994,
+        -20.166639
+      ]
+    },
+    {
+      "code": "GRD",
+      "name": "Saint George's",
+      "point": [
+        -61.741643,
+        12.052633
+      ]
+    },
+    {
+      "code": "BHR",
+      "name": "Manama",
+      "point": [
+        50.583052,
+        26.236136
+      ]
+    },
+    {
+      "code": "ATG",
+      "name": "Saint John's",
+      "point": [
+        -61.850034,
+        17.118036
+      ]
+    },
+    {
+      "code": "URY",
+      "name": "Montevideo",
+      "point": [
+        -56.186823,
+        -34.905376
+      ]
+    },
+    {
+      "code": "TGO",
+      "name": "Lomé",
+      "point": [
+        1.220811,
+        6.133883
+      ]
+    },
+    {
+      "code": "TUN",
+      "name": "Tunis",
+      "point": [
+        10.179678,
+        36.802778
+      ]
+    },
+    {
+      "code": "ARE",
+      "name": "Abu Dhabi",
+      "point": [
+        54.366593,
+        24.466684
+      ]
+    },
+    {
+      "code": "TKM",
+      "name": "Ashgabat",
+      "point": [
+        58.383299,
+        37.949995
+      ]
+    },
+    {
+      "code": "ZMB",
+      "name": "Lusaka",
+      "point": [
+        28.281382,
+        -15.414698
+      ]
+    },
+    {
+      "code": "ZWE",
+      "name": "Harare",
+      "point": [
+        31.042764,
+        -17.815844
+      ]
+    },
+    {
+      "code": "TLS",
+      "name": "Dili",
+      "point": [
+        125.579456,
+        -8.559388
+      ]
+    },
+    {
+      "code": "VUT",
+      "name": "Port Vila",
+      "point": [
+        168.316641,
+        -17.73335
+      ]
+    },
+    {
+      "code": "HND",
+      "name": "Tegucigalpa",
+      "point": [
+        -87.219475,
+        14.103991
+      ]
+    },
+    {
+      "code": "GUY",
+      "name": "Georgetown",
+      "point": [
+        -58.167029,
+        6.801974
+      ]
+    },
+    {
+      "code": "ISL",
+      "name": "Reykjavík",
+      "point": [
+        -21.936546,
+        64.143459
+      ]
+    },
+    {
+      "code": "HTI",
+      "name": "Port-au-Prince",
+      "point": [
+        -72.33798,
+        18.54297
+      ]
+    },
+    {
+      "code": "UGA",
+      "name": "Kampala",
+      "point": [
+        32.581378,
+        0.318605
+      ]
+    },
+    {
+      "code": "SUR",
+      "name": "Paramaribo",
+      "point": [
+        -55.167031,
+        5.83503
+      ]
+    },
+    {
+      "code": "NER",
+      "name": "Niamey",
+      "point": [
+        2.11471,
+        13.518652
+      ]
+    },
+    {
+      "code": "TJK",
+      "name": "Dushanbe",
+      "point": [
+        68.773879,
+        38.560035
+      ]
+    },
+    {
+      "code": "PRY",
+      "name": "Asunción",
+      "point": [
+        -57.625834,
+        -25.290671
+      ]
+    },
+    {
+      "code": "NIC",
+      "name": "Managua",
+      "point": [
+        -86.270437,
+        12.154962
+      ]
+    },
+    {
+      "code": "SLE",
+      "name": "Freetown",
+      "point": [
+        -13.236162,
+        8.471957
+      ]
+    },
+    {
+      "code": "PAK",
+      "name": "Islamabad",
+      "point": [
+        73.08063,
+        33.689368
+      ]
+    },
+    {
+      "code": "NPL",
+      "name": "Kathmandu",
+      "point": [
+        85.314696,
+        27.718638
+      ]
+    },
+    {
+      "code": "ZAF",
+      "name": "Bloemfontein",
+      "point": [
+        26.229913,
+        -29.119994
+      ]
+    },
+    {
+      "code": "ZAF",
+      "name": "Pretoria",
+      "point": [
+        28.227483,
+        -25.704975
+      ]
+    },
+    {
+      "code": "PNG",
+      "name": "Port Moresby",
+      "point": [
+        147.192504,
+        -9.464708
+      ]
+    },
+    {
+      "code": "SLB",
+      "name": "Honiara",
+      "point": [
+        159.949766,
+        -9.437994
+      ]
+    },
+    {
+      "code": "PAN",
+      "name": "Panama City",
+      "point": [
+        -79.534983,
+        8.969963
+      ]
+    },
+    {
+      "code": "MAR",
+      "name": "Rabat",
+      "point": [
+        -6.836408,
+        34.025307
+      ]
+    },
+    {
+      "code": "MDA",
+      "name": "Chișinău",
+      "point": [
+        28.857711,
+        47.005024
+      ]
+    },
+    {
+      "code": "MOZ",
+      "name": "Maputo",
+      "point": [
+        32.587217,
+        -25.953332
+      ]
+    },
+    {
+      "code": "SOM",
+      "name": "Mogadishu",
+      "point": [
+        45.364732,
+        2.068627
+      ]
+    },
+    {
+      "code": "OMN",
+      "name": "Muscat",
+      "point": [
+        58.378311,
+        23.585179
+      ]
+    },
+    {
+      "code": "LKA",
+      "name": "Colombo",
+      "point": [
+        79.857751,
+        6.931966
+      ]
+    },
+    {
+      "code": "MNG",
+      "name": "Ulaanbaatar",
+      "point": [
+        106.91467,
+        47.918619
+      ]
+    },
+    {
+      "code": "NAM",
+      "name": "Windhoek",
+      "point": [
+        17.083546,
+        -22.570006
+      ]
+    },
+    {
+      "code": "NGA",
+      "name": "Abuja",
+      "point": [
+        7.489505,
+        9.05462
+      ]
+    },
+    {
+      "code": "GNB",
+      "name": "Bissau",
+      "point": [
+        -15.598361,
+        11.865024
+      ]
+    },
+    {
+      "code": "JOR",
+      "name": "Amman",
+      "point": [
+        35.931354,
+        31.951971
+      ]
+    },
+    {
+      "code": "LTU",
+      "name": "Vilnius",
+      "point": [
+        25.316635,
+        54.683366
+      ]
+    },
+    {
+      "code": "LVA",
+      "name": "Riga",
+      "point": [
+        24.099965,
+        56.950024
+      ]
+    },
+    {
+      "code": "KGZ",
+      "name": "Bishkek",
+      "point": [
+        74.583258,
+        42.875025
+      ]
+    },
+    {
+      "code": "LSO",
+      "name": "Maseru",
+      "point": [
+        27.483273,
+        -29.316674
+      ]
+    },
+    {
+      "code": "MDG",
+      "name": "Antananarivo",
+      "point": [
+        47.514678,
+        -18.914691
+      ]
+    },
+    {
+      "code": "ECU",
+      "name": "Quito",
+      "point": [
+        -78.501997,
+        -0.213042
+      ]
+    },
+    {
+      "code": "CRI",
+      "name": "San José",
+      "point": [
+        -84.078814,
+        9.930371
+      ]
+    },
+    {
+      "code": "SLV",
+      "name": "San Salvador",
+      "point": [
+        -89.215576,
+        13.70328
+      ]
+    },
+    {
+      "code": "JAM",
+      "name": "Kingston",
+      "point": [
+        -76.767434,
+        17.977077
+      ]
+    },
+    {
+      "code": "TCD",
+      "name": "N'Djamena",
+      "point": [
+        15.047202,
+        12.115042
+      ]
+    },
+    {
+      "code": "GNQ",
+      "name": "Malabo",
+      "point": [
+        8.783278,
+        3.750015
+      ]
+    },
+    {
+      "code": "ERI",
+      "name": "Asmara",
+      "point": [
+        38.933324,
+        15.333339
+      ]
+    },
+    {
+      "code": "HRV",
+      "name": "Zagreb",
+      "point": [
+        15.999995,
+        45.800007
+      ]
+    },
+    {
+      "code": "EST",
+      "name": "Tallinn",
+      "point": [
+        24.728041,
+        59.433877
+      ]
+    },
+    {
+      "code": "MWI",
+      "name": "Lilongwe",
+      "point": [
+        33.783302,
+        -13.983295
+      ]
+    },
+    {
+      "code": "GTM",
+      "name": "Guatemala City",
+      "point": [
+        -90.528911,
+        14.623081
+      ]
+    },
+    {
+      "code": "GAB",
+      "name": "Libreville",
+      "point": [
+        9.457965,
+        0.385389
+      ]
+    },
+    {
+      "code": "FJI",
+      "name": "Suva",
+      "point": [
+        178.441707,
+        -18.133016
+      ]
+    },
+    {
+      "code": "MRT",
+      "name": "Nouakchott",
+      "point": [
+        -15.97534,
+        18.086427
+      ]
+    },
+    {
+      "code": "MLI",
+      "name": "Bamako",
+      "point": [
+        -8.001985,
+        12.65196
+      ]
+    },
+    {
+      "code": "LBN",
+      "name": "Beirut",
+      "point": [
+        35.507762,
+        33.873921
+      ]
+    },
+    {
+      "code": "GEO",
+      "name": "Tbilisi",
+      "point": [
+        44.78885,
+        41.726956
+      ]
+    },
+    {
+      "code": "KAZ",
+      "name": "Nur-Sultan",
+      "point": [
+        71.427774,
+        51.181125
+      ]
+    },
+    {
+      "code": "LAO",
+      "name": "Vientiane",
+      "point": [
+        102.59998,
+        17.966693
+      ]
+    },
+    {
+      "code": "COG",
+      "name": "Brazzaville",
+      "point": [
+        15.282744,
+        -4.25724
+      ]
+    },
+    {
+      "code": "GIN",
+      "name": "Conakry",
+      "point": [
+        -13.682181,
+        9.533469
+      ]
+    },
+    {
+      "code": "CIV",
+      "name": "Yamoussoukro",
+      "point": [
+        -5.275503,
+        6.818381
+      ]
+    },
+    {
+      "code": "CAN",
+      "name": "Ottawa",
+      "point": [
+        -75.701961,
+        45.418643
+      ]
+    },
+    {
+      "code": "SRB",
+      "name": "Belgrade",
+      "point": [
+        20.466045,
+        44.820591
+      ]
+    },
+    {
+      "code": "BRN",
+      "name": "Bandar Seri Begawan",
+      "point": [
+        114.933284,
+        4.883331
+      ]
+    },
+    {
+      "code": "BOL",
+      "name": "Sucre",
+      "point": [
+        -65.259516,
+        -19.040971
+      ]
+    },
+    {
+      "code": "BLZ",
+      "name": "Belmopan",
+      "point": [
+        -88.767073,
+        17.252033
+      ]
+    },
+    {
+      "code": "CAF",
+      "name": "Bangui",
+      "point": [
+        18.558288,
+        4.366644
+      ]
+    },
+    {
+      "code": "CMR",
+      "name": "Yaoundé",
+      "point": [
+        11.514705,
+        3.868647
+      ]
+    },
+    {
+      "code": "ALB",
+      "name": "Tirana",
+      "point": [
+        19.818883,
+        41.327541
+      ]
+    },
+    {
+      "code": "ARM",
+      "name": "Yerevan",
+      "point": [
+        44.511606,
+        40.183097
+      ]
+    },
+    {
+      "code": "AZE",
+      "name": "Baku",
+      "point": [
+        49.860271,
+        40.397218
+      ]
+    },
+    {
+      "code": "KHM",
+      "name": "Phnom Penh",
+      "point": [
+        104.914689,
+        11.551976
+      ]
+    },
+    {
+      "code": "BOL",
+      "name": "La Paz",
+      "point": [
+        -68.151931,
+        -16.496028
+      ]
+    },
+    {
+      "code": "BEN",
+      "name": "Cotonou",
+      "point": [
+        2.404355,
+        6.36298
+      ]
+    },
+    {
+      "code": "BGR",
+      "name": "Sofia",
+      "point": [
+        23.314708,
+        42.685295
+      ]
+    },
+    {
+      "code": "BLR",
+      "name": "Minsk",
+      "point": [
+        27.564681,
+        53.901923
+      ]
+    },
+    {
+      "code": "BTN",
+      "name": "Thimphu",
+      "point": [
+        89.639014,
+        27.472986
+      ]
+    },
+    {
+      "code": "BWA",
+      "name": "Gaborone",
+      "point": [
+        25.911948,
+        -24.646314
+      ]
+    },
+    {
+      "code": "AUS",
+      "name": "Canberra",
+      "point": [
+        149.129026,
+        -35.283029
+      ]
+    },
+    {
+      "code": "BFA",
+      "name": "Ouagadougou",
+      "point": [
+        -1.52667,
+        12.372262
+      ]
+    },
+    {
+      "code": "BIH",
+      "name": "Sarajevo",
+      "point": [
+        18.383002,
+        43.850022
+      ]
+    },
+    {
+      "code": "MMR",
+      "name": "Naypyidaw",
+      "point": [
+        96.116673,
+        19.768503
+      ]
+    },
+    {
+      "code": "BMU",
+      "name": "Hamilton",
+      "point": [
+        -64.783937,
+        32.29419
+      ]
+    },
+    {
+      "code": "TON",
+      "name": "Nuku'alofa",
+      "point": [
+        -175.220564,
+        -21.138512
+      ]
+    },
+    {
+      "code": "SOL",
+      "name": "Hargeisa",
+      "point": [
+        44.06531,
+        9.560022
+      ]
+    },
+    {
+      "code": "SYC",
+      "name": "Victoria",
+      "point": [
+        55.44999,
+        -4.616632
+      ]
+    },
+    {
+      "code": "STP",
+      "name": "São Tomé",
+      "point": [
+        6.72965,
+        0.337466
+      ]
+    },
+    {
+      "code": "WSM",
+      "name": "Apia",
+      "point": [
+        -171.768599,
+        -13.835715
+      ]
+    },
+    {
+      "code": "MLT",
+      "name": "Valletta",
+      "point": [
+        14.514711,
+        35.899732
+      ]
+    },
+    {
+      "code": "MDV",
+      "name": "Malé",
+      "point": [
+        73.508901,
+        4.172037
+      ]
+    },
+    {
+      "code": "ISR",
+      "name": "Jerusalem",
+      "point": [
+        35.206626,
+        31.778408
+      ]
+    },
+    {
+      "code": "CPV",
+      "name": "Praia",
+      "point": [
+        -23.516689,
+        14.916698
+      ]
+    },
+    {
+      "code": "BHS",
+      "name": "Nassau",
+      "point": [
+        -77.350044,
+        25.08339
+      ]
+    },
+    {
+      "code": "CYP",
+      "name": "Nicosia",
+      "point": [
+        33.366635,
+        35.166677
+      ]
+    },
+    {
+      "code": "NZL",
+      "name": "Wellington",
+      "point": [
+        174.777201,
+        -41.292068
+      ]
+    },
+    {
+      "code": "VNM",
+      "name": "Hanoi",
+      "point": [
+        105.848068,
+        21.035273
+      ]
+    },
+    {
+      "code": "TUR",
+      "name": "Ankara",
+      "point": [
+        32.862446,
+        39.929184
+      ]
+    },
+    {
+      "code": "HUN",
+      "name": "Budapest",
+      "point": [
+        19.081375,
+        47.501952
+      ]
+    },
+    {
+      "code": "YEM",
+      "name": "Sanaa",
+      "point": [
+        44.204648,
+        15.356679
+      ]
+    },
+    {
+      "code": "ROU",
+      "name": "Bucharest",
+      "point": [
+        26.098001,
+        44.435318
+      ]
+    },
+    {
+      "code": "SYR",
+      "name": "Damascus",
+      "point": [
+        36.29805,
+        33.50198
+      ]
+    },
+    {
+      "code": "PRT",
+      "name": "Lisbon",
+      "point": [
+        -9.146812,
+        38.724669
+      ]
+    },
+    {
+      "code": "SDN",
+      "name": "Khartoum",
+      "point": [
+        32.532233,
+        15.590024
+      ]
+    },
+    {
+      "code": "NOR",
+      "name": "Oslo",
+      "point": [
+        10.748033,
+        59.918636
+      ]
+    },
+    {
+      "code": "POL",
+      "name": "Warsaw",
+      "point": [
+        21.005347,
+        52.230872
+      ]
+    },
+    {
+      "code": "PRK",
+      "name": "Pyongyang",
+      "point": [
+        125.752745,
+        39.021385
+      ]
+    },
+    {
+      "code": "TZA",
+      "name": "Dar es Salaam",
+      "point": [
+        39.266396,
+        -6.798067
+      ]
+    },
+    {
+      "code": "IRL",
+      "name": "Dublin",
+      "point": [
+        -6.25698,
+        53.346731
+      ]
+    },
+    {
+      "code": "LBR",
+      "name": "Monrovia",
+      "point": [
+        -10.79966,
+        6.314582
+      ]
+    },
+    {
+      "code": "MYS",
+      "name": "Kuala Lumpur",
+      "point": [
+        101.688699,
+        3.139797
+      ]
+    },
+    {
+      "code": "CUB",
+      "name": "Havana",
+      "point": [
+        -82.366128,
+        23.133905
+      ]
+    },
+    {
+      "code": "CZE",
+      "name": "Prague",
+      "point": [
+        14.422939,
+        50.086967
+      ]
+    },
+    {
+      "code": "KWT",
+      "name": "Kuwait City",
+      "point": [
+        47.976355,
+        29.371664
+      ]
+    },
+    {
+      "code": "DOM",
+      "name": "Santo Domingo",
+      "point": [
+        -69.929742,
+        18.470745
+      ]
+    },
+    {
+      "code": "GHA",
+      "name": "Accra",
+      "point": [
+        -0.218662,
+        5.55198
+      ]
+    },
+    {
+      "code": "LBY",
+      "name": "Tripoli",
+      "point": [
+        13.180012,
+        32.8925
+      ]
+    },
+    {
+      "code": "FIN",
+      "name": "Helsinki",
+      "point": [
+        24.932457,
+        60.163804
+      ]
+    },
+    {
+      "code": "DNK",
+      "name": "København",
+      "point": [
+        12.56154,
+        55.68051
+      ]
+    },
+    {
+      "code": "CIV",
+      "name": "Abidjan",
+      "point": [
+        -4.020207,
+        5.323126
+      ]
+    },
+    {
+      "code": "BRA",
+      "name": "Brasília",
+      "point": [
+        -47.917998,
+        -15.781394
+      ]
+    },
+    {
+      "code": "BEL",
+      "name": "Brussels",
+      "point": [
+        4.331371,
+        50.835263
+      ]
+    },
+    {
+      "code": "BGD",
+      "name": "Dhaka",
+      "point": [
+        90.406634,
+        23.725006
+      ]
+    },
+    {
+      "code": "AGO",
+      "name": "Luanda",
+      "point": [
+        13.232481,
+        -8.83634
+      ]
+    },
+    {
+      "code": "DZA",
+      "name": "Algiers",
+      "point": [
+        3.048607,
+        36.765011
+      ]
+    },
+    {
+      "code": "VEN",
+      "name": "Caracas",
+      "point": [
+        -66.918983,
+        10.502944
+      ]
+    },
+    {
+      "code": "UKR",
+      "name": "Kyiv",
+      "point": [
+        30.514682,
+        50.435313
+      ]
+    },
+    {
+      "code": "UZB",
+      "name": "Tashkent",
+      "point": [
+        69.268823,
+        41.303828
+      ]
+    },
+    {
+      "code": "ESP",
+      "name": "Madrid",
+      "point": [
+        -3.685297,
+        40.401972
+      ]
+    },
+    {
+      "code": "SWE",
+      "name": "Stockholm",
+      "point": [
+        18.0663,
+        59.324127
+      ]
+    },
+    {
+      "code": "THA",
+      "name": "Bangkok",
+      "point": [
+        100.514699,
+        13.751945
+      ]
+    },
+    {
+      "code": "PER",
+      "name": "Lima",
+      "point": [
+        -77.052008,
+        -12.046067
+      ]
+    },
+    {
+      "code": "SEN",
+      "name": "Dakar",
+      "point": [
+        -17.475076,
+        14.717778
+      ]
+    },
+    {
+      "code": "NLD",
+      "name": "Amsterdam",
+      "point": [
+        4.914694,
+        52.351914
+      ]
+    },
+    {
+      "code": "KOR",
+      "name": "Seoul",
+      "point": [
+        126.997785,
+        37.568295
+      ]
+    },
+    {
+      "code": "PHL",
+      "name": "Manila",
+      "point": [
+        120.980271,
+        14.606105
+      ]
+    },
+    {
+      "code": "DEU",
+      "name": "Berlin",
+      "point": [
+        13.399603,
+        52.523764
+      ]
+    },
+    {
+      "code": "COD",
+      "name": "Kinshasa",
+      "point": [
+        15.313026,
+        -4.327778
+      ]
+    },
+    {
+      "code": "IND",
+      "name": "New Delhi",
+      "point": [
+        77.19998,
+        28.600023
+      ]
+    },
+    {
+      "code": "GRC",
+      "name": "Athens",
+      "point": [
+        23.731375,
+        37.985272
+      ]
+    },
+    {
+      "code": "IRQ",
+      "name": "Baghdad",
+      "point": [
+        44.391923,
+        33.340594
+      ]
+    },
+    {
+      "code": "ETH",
+      "name": "Addis Ababa",
+      "point": [
+        38.698059,
+        9.035256
+      ]
+    },
+    {
+      "code": "IRN",
+      "name": "Tehran",
+      "point": [
+        51.422398,
+        35.673889
+      ]
+    },
+    {
+      "code": "ARG",
+      "name": "Buenos Aires",
+      "point": [
+        -58.432513,
+        -34.610715
+      ]
+    },
+    {
+      "code": "AFG",
+      "name": "Kabul",
+      "point": [
+        69.181314,
+        34.518636
+      ]
+    },
+    {
+      "code": "AUT",
+      "name": "Vienna",
+      "point": [
+        16.364693,
+        48.201961
+      ]
+    },
+    {
+      "code": "TWN",
+      "name": "Taipei",
+      "point": [
+        121.568333,
+        25.035833
+      ]
+    },
+    {
+      "code": "USA",
+      "name": "Washington,  D.C.",
+      "point": [
+        -77.011364,
+        38.901495
+      ]
+    },
+    {
+      "code": "GBR",
+      "name": "London",
+      "point": [
+        -0.118668,
+        51.501941
+      ]
+    },
+    {
+      "code": "SAU",
+      "name": "Riyadh",
+      "point": [
+        46.720487,
+        24.634497
+      ]
+    },
+    {
+      "code": "ZAF",
+      "name": "Cape Town",
+      "point": [
+        18.433042,
+        -33.918065
+      ]
+    },
+    {
+      "code": "RUS",
+      "name": "Moscow",
+      "point": [
+        37.613577,
+        55.75411
+      ]
+    },
+    {
+      "code": "MEX",
+      "name": "Mexico City",
+      "point": [
+        -99.132934,
+        19.444388
+      ]
+    },
+    {
+      "code": "ITA",
+      "name": "Rome",
+      "point": [
+        12.481313,
+        41.897902
+      ]
+    },
+    {
+      "code": "CHN",
+      "name": "Beijing",
+      "point": [
+        116.394201,
+        39.90172
+      ]
+    },
+    {
+      "code": "KEN",
+      "name": "Nairobi",
+      "point": [
+        36.814711,
+        -1.281401
+      ]
+    },
+    {
+      "code": "IDN",
+      "name": "Jakarta",
+      "point": [
+        106.827492,
+        -6.172472
+      ]
+    },
+    {
+      "code": "COL",
+      "name": "Bogota",
+      "point": [
+        -74.08529,
+        4.598369
+      ]
+    },
+    {
+      "code": "EGY",
+      "name": "Cairo",
+      "point": [
+        31.248022,
+        30.051906
+      ]
+    },
+    {
+      "code": "JPN",
+      "name": "Tokyo",
+      "point": [
+        139.749462,
+        35.686963
+      ]
+    },
+    {
+      "code": "FRA",
+      "name": "Paris",
+      "point": [
+        2.352992,
+        48.858092
+      ]
+    },
+    {
+      "code": "CHL",
+      "name": "Santiago",
+      "point": [
+        -70.650504,
+        -33.440205
+      ]
+    },
+    {
+      "code": "SGP",
+      "name": "Singapore",
+      "point": [
+        103.853875,
+        1.294979
+      ]
+    }
+  ]
+}
