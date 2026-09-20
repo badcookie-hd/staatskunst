@@ -4,6 +4,7 @@ const WorldMap = preload("res://scripts/world_map.gd")
 const Trend = preload("res://scripts/trend.gd")
 const Portraits = preload("res://scripts/portraits.gd")
 const Settings = preload("res://scripts/settings.gd")
+const Atlas = preload("res://scripts/world_atlas.gd")
 const GOLD = Color("e2c28a")
 const MUTED = Color("9eafc4")
 var session
@@ -32,6 +33,9 @@ var title_screen: Control
 var settings_window: AcceptDialog
 var campaign_started = false
 var panel_open = false
+var reference_code = ""
+var reference_year = 2026
+var country_search_window: AcceptDialog
 
 func _ready():
 	preferences.read()
@@ -64,12 +68,14 @@ func build_theme():
 	t.set_color("font_color", "Label", Color("e3e9e7"))
 	t.set_color("font_color", "Button", Color("d8e5e2"))
 	t.set_color("font_disabled_color", "Button", Color("60757c"))
-	t.set_stylebox("normal", "Button", style(Color("343c39"), Color("686650")))
-	t.set_stylebox("hover", "Button", style(Color("505c50"), GOLD))
-	t.set_stylebox("pressed", "Button", style(Color("5c6551"), GOLD))
-	t.set_stylebox("disabled", "Button", style(Color("252b29"), Color("42483e")))
+	t.set_stylebox("normal", "Button", style(Color("293943"), Color("465c66")))
+	t.set_stylebox("hover", "Button", style(Color("3b525d"), GOLD))
+	t.set_stylebox("pressed", "Button", style(Color("465b62"), GOLD))
+	t.set_stylebox("disabled", "Button", style(Color("202c33"), Color("34464e")))
 	t.set_stylebox("focus", "Button", style(Color(0,0,0,0), GOLD))
-	t.set_stylebox("panel", "AcceptDialog", style(Color("262e2c"), Color("62766e")))
+	t.set_stylebox("panel", "AcceptDialog", style(Color("202d35"), Color("627984")))
+	t.set_stylebox("panel", "ItemList", style(Color("17242c"), Color("465c66")))
+	t.set_color("font_color", "ItemList", Color("e3e9e7"))
 	t.set_stylebox("normal", "LineEdit", style(Color("191e1c"), Color("48636a")))
 	t.set_color("font_color", "LineEdit", Color("e3e9e7"))
 	t.set_stylebox("background", "ProgressBar", style(Color("262e2c"), Color.TRANSPARENT, 3))
@@ -105,9 +111,9 @@ func button(parent: Node, value: String, callback: Callable) -> Button:
 	parent.add_child(b)
 	return b
 
-func panel(parent: Node, color: Color = Color("262e2c")) -> VBoxContainer:
+func panel(parent: Node, color: Color = Color("202d35")) -> VBoxContainer:
 	var p = PanelContainer.new()
-	p.add_theme_stylebox_override("panel", style(color, Color("5d624e")))
+	p.add_theme_stylebox_override("panel", style(color, Color("465a63")))
 	parent.add_child(p)
 	var box = VBoxContainer.new()
 	p.add_child(box)
@@ -167,19 +173,19 @@ func build_ui():
 	map.settings = preferences
 	map.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	map.custom_minimum_size = Vector2(300, 260)
-	map.selected.connect(func(id): selected = id; tab = 5; panel_open = true; refresh())
-	map.reference_selected.connect(func(country_name): show_notice(country_name + " · Weltkartenregion. Derzeit sind die europäischen Kampagnenländer spielbar."))
+	map.selected.connect(func(id): reference_code = ""; selected = id; tab = 5; panel_open = true; refresh())
+	map.reference_selected.connect(open_reference)
 	map_area.add_child(map)
 	var controls = HBoxContainer.new()
 	map_area.add_child(controls)
-	for entry in [["Welt", func(): map.fit_world()], ["Mein Land", func(): map.focus_country(session.player_id)], ["+", func(): map.zoom_at(map.size / 2, 1)], ["−", func(): map.zoom_at(map.size / 2, -1)], ["Kartenmodus", func(): map.mode = "diplomatic" if map.mode == "political" else "political"; map.queue_redraw()]]:
+	for entry in [["Welt", func(): map.fit_world()], ["Mein Land", func(): map.focus_country(session.player_id)], ["Ländersuche", show_country_search], ["+", func(): map.zoom_at(map.size / 2, 1)], ["−", func(): map.zoom_at(map.size / 2, -1)], ["Kartenmodus", func(): map.mode = "diplomatic" if map.mode == "political" else "political"; map.queue_redraw()]]:
 		var b = button(controls, entry[0], entry[1])
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	chronicle = VBoxContainer.new()
 	map_area.add_child(chronicle)
 	detail_panel = PanelContainer.new()
 	detail_panel.custom_minimum_size.x = 550
-	detail_panel.add_theme_stylebox_override("panel", style(Color("242a2a"), Color("756c51")))
+	detail_panel.add_theme_stylebox_override("panel", style(Color("1b2830"), Color("61747a")))
 	body.add_child(detail_panel)
 	var side_box = VBoxContainer.new()
 	detail_panel.add_child(side_box)
@@ -212,6 +218,7 @@ func refresh():
 	nation_label.text = "%s  /  %s" % [c.name.to_upper(), "LAN · %d Spieler" % session.players.size() if session.online else "EINZELSPIELER"]
 	map_caption.text = "%d  /  %d STAATEN" % [sim.year(), sim.count()]
 	map.selected_id = selected
+	map.selected_reference = reference_code if tab == 5 else ""
 	map.player_id = session.player_id
 	map.ensure_cache()
 	map.queue_redraw()
@@ -231,7 +238,9 @@ func refresh():
 		2: cabinet_tab(c)
 		3: economy_tab(c)
 		4: war_tab(c)
-		5: foreign_tab(c)
+		5:
+			if reference_code.is_empty(): foreign_tab(c)
+			else: reference_tab()
 		6: constitution_tab(c)
 	clear(chronicle)
 	for entry in sim.state.log.slice(0, 1):
@@ -525,6 +534,122 @@ func foreign_tab(_c: Dictionary):
 			paragraph(box, "Tag %d · Angreiferfortschritt %+.1f / 100\n+100: Angreifer siegt. −100: Verteidiger siegt." % [w.days, w.progress])
 	for action in ["trade", "import_food", "import_materials", "diplomacy", "war", "peace"]: add_action(action)
 	paragraph(content, "Stärke = Größe × Qualität × Stabilität × Versorgung × Verteidigungsbudget × Kabinettsfaktor. Die stärkere Armee setzt sich über Zeit durch. Bei Gleichstand bleibt der Krieg stehen.")
+	content.add_child(label("PARTEIEN & PERSONAL", 16, GOLD))
+	for party in sim.Politics.roster(sim.year(), c.code).get("parties", []):
+		var box = panel(content)
+		paragraph(box, party.name, GOLD)
+		for person in party.candidates:
+			var row = HBoxContainer.new()
+			box.add_child(row)
+			portrait(row, person, 48)
+			var name_label = label(person.name, 15)
+			name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			row.add_child(name_label)
+
+func open_reference(code: String):
+	if Atlas.country(code).is_empty(): return
+	for i in range(session.sim.count()):
+		if session.sim.country(i).code == code or (session.sim.year() == 1936 and code in ["CZE", "SVK"] and session.sim.country(i).code == "CSK"):
+			reference_code = ""
+			selected = i
+			tab = 5
+			panel_open = true
+			refresh()
+			return
+	reference_code = code
+	reference_year = session.sim.year()
+	tab = 5
+	panel_open = true
+	scroll.scroll_vertical = 0
+	refresh()
+
+func show_country_search():
+	if is_instance_valid(country_search_window): country_search_window.queue_free()
+	country_search_window = AcceptDialog.new()
+	country_search_window.title = "Weltatlas · Ländersuche"
+	country_search_window.get_ok_button().text = "Schließen"
+	add_child(country_search_window)
+	var box = VBoxContainer.new()
+	box.custom_minimum_size = Vector2(610, 430)
+	country_search_window.add_child(box)
+	var query = LineEdit.new()
+	query.placeholder_text = "Land oder Kürzel eingeben · z. B. USA, Japan, Vatikan"
+	box.add_child(query)
+	var results = ItemList.new()
+	results.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_child(results)
+	var populate = func(text_value):
+		results.clear()
+		for entry in Atlas.search(text_value):
+			var index = results.add_item(entry.name + "   ·   " + entry.code)
+			results.set_item_metadata(index, entry.code)
+		if results.item_count > 0: results.select(0)
+	var choose = func(index):
+		var code = results.get_item_metadata(index)
+		open_reference(code)
+		map.focus_reference(code)
+		country_search_window.hide()
+	query.text_changed.connect(populate)
+	query.text_submitted.connect(func(_text):
+		if results.item_count > 0: choose.call(results.get_selected_items()[0]))
+	results.item_clicked.connect(func(index, _position, _mouse): choose.call(index))
+	populate.call("")
+	country_search_window.popup_centered()
+	query.grab_focus()
+
+func reference_tab():
+	var entry = Atlas.country(reference_code)
+	if entry.is_empty(): return
+	var profile = entry.profiles[str(reference_year)]
+	heading(entry.name, "WELTATLAS · POLITISCHE LÄNDERAKTE")
+	var years = HBoxContainer.new()
+	content.add_child(years)
+	for year in [1936, 2026]:
+		var option = button(years, str(year), func(): reference_year = year; refresh())
+		option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		option.modulate = GOLD if reference_year == year else Color.WHITE
+	paragraph(content, "Staatsführung am 01.01.%d · Datierter Quellenstand, keine simulierte Regierung." % reference_year, GOLD)
+	if profile.has("reference_government"): paragraph(content, "Staatsführung des Bezugsstaats: " + profile.reference_government, GOLD)
+	if reference_year == 1936 and profile.name != entry.name: paragraph(content, "Historischer Bezugsstaat: " + profile.name)
+	if profile.leaders.is_empty():
+		paragraph(content, "Für diesen Stichtag ist kein ausreichend datierter Amtsinhaber im Atlas erfasst. Für damalige Kolonien, Nachfolgestaaten oder unbewohnte Gebiete wird keine heutige Regierung als historische Regierung ausgegeben.")
+		if reference_year == 1936: button(content, "Politische Länderakte 2026 ansehen", func(): reference_year = 2026; refresh())
+	var unique_leaders: Dictionary = {}
+	for person in profile.leaders:
+		if unique_leaders.has(person.qid): unique_leaders[person.qid].role += " / " + person.role
+		else: unique_leaders[person.qid] = person.duplicate(true)
+	for person in unique_leaders.values():
+		var box = panel(content, Color("28363e"))
+		paragraph(box, person.role, GOLD)
+		var row = HBoxContainer.new()
+		box.add_child(row)
+		if Portraits.texture(person) != null: portrait(row, person, 88)
+		else:
+			var monogram = label(person.name.substr(0, 1), 36, GOLD)
+			monogram.custom_minimum_size = Vector2(72, 88)
+			monogram.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			monogram.tooltip_text = "Kein frei verwendbares Foto im Atlas vorhanden."
+			row.add_child(monogram)
+		var text_box = VBoxContainer.new()
+		text_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text_box)
+		paragraph(text_box, person.name, Color("eef3f1"))
+		paragraph(text_box, person.title)
+		paragraph(text_box, "Amtsbeginn: " + person.since)
+		if Portraits.texture(person) == null: paragraph(text_box, "Foto nicht verfügbar")
+		if not person.parties.is_empty(): paragraph(box, "Parteizugehörigkeit laut Quelle: " + ", ".join(person.parties))
+		button(box, "Person und Quellen öffnen ↗", func(): OS.shell_open(person.person_source))
+		button(box, "Amtsangaben prüfen ↗", func(): OS.shell_open(person.get("authority_source", person.source)))
+	content.add_child(label("GEOGRAFISCHES PROFIL", 15, GOLD))
+	var continents = {"Asia":"Asien","Europe":"Europa","Africa":"Afrika","North America":"Nordamerika","South America":"Südamerika","Oceania":"Ozeanien","Antarctica":"Antarktika"}
+	paragraph(content, continents.get(entry.continent, entry.continent) + " · " + entry.code)
+	paragraph(content, "Heutige Referenzdaten; keine Werte der Wirtschaftssimulation.")
+	if not entry.capital.is_empty(): paragraph(content, "Hauptstadt / Verwaltungssitz: " + ", ".join(entry.capital))
+	if not entry.currency.is_empty(): paragraph(content, "Währung: " + ", ".join(entry.currency))
+	if entry.population > 0: paragraph(content, "Bevölkerung: %.2f Mio. · Schätzung %d" % [entry.population / 1000000.0, entry.population_year])
+	if entry.type == "Dependency": paragraph(content, "Abhängiges Gebiet · Bezugsstaat: " + entry.sovereign)
+	paragraph(content, "Dieses Gebiet ist als Länderakte zugänglich. Krieg, Haushalt und Regierungswechsel stehen weiterhin für die Kampagnenländer zur Verfügung. Weltgrenzen sind moderne Referenzgrenzen, auch in der 1936-Ansicht.")
+	button(content, "Länderquelle öffnen ↗", func(): OS.shell_open("https://www.wikidata.org/wiki/" + entry.qid))
 
 func add_action(action: String, parent: Node = null, title: String = "", detail: String = ""):
 	if parent == null: parent = content
@@ -598,7 +723,7 @@ func refresh_setup():
 		var b = button(grid, entry.name, func(): session.solo(i, setup_year); selected = i; campaign_started = true; panel_open = false; refresh(); modal.hide(); map.fit_world())
 		b.custom_minimum_size.x = 230
 		b.tooltip_text = "Industrie %d · Armee %d · Qualität %.2f · %s" % [entry.industry, entry.army, entry.quality, "Freie Wahlen" if entry.democratic else "Autoritäre Regierung"]
-	paragraph(setup_content, "Globale Referenzkarte mit 177 Regionen und europäischen Kampagnenländern. Historische Grenzen sind schematisch; Wirtschaft, Militär und politische Anteile sind Spielwerte. Personen und Parteien beziehen sich auf den Szenariostart am 1. Januar; spätere Regierungswechsel folgen der Simulation. Der Verlauf ist frei, keine festgelegte Geschichtswiederholung.")
+	paragraph(setup_content, "Globale Referenzkarte mit 242 Ländern und Gebieten und europäischen Kampagnenländern. Historische Grenzen sind schematisch; Wirtschaft, Militär und politische Anteile sind Spielwerte. Personen und Parteien beziehen sich auf den Szenariostart am 1. Januar; spätere Regierungswechsel folgen der Simulation. Der Verlauf ist frei, keine festgelegte Geschichtswiederholung.")
 	paragraph(setup_content, "Mit ▶ oder Leertaste starten. Mausrad: Zoom; Rechts/Mitte ziehen: Karte verschieben. Welt und Mein Land wechseln die Ansicht. Außerhalb der Kampagnenländer zeigt die Weltkarte moderne Referenzgrenzen, auch im Szenario 1936.")
 
 func show_menu():
@@ -636,7 +761,7 @@ func show_menu():
 	button(box, "Einstellungen", func(): menu.hide(); show_settings())
 	button(box, "Zum Hauptmenü", func(): menu.hide(); show_main_menu())
 	button(box, "Über die Politikerbilder", func(): menu.hide(); show_portrait_info())
-	paragraph(box, "Staatskunst 0.6.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
+	paragraph(box, "Staatskunst 0.7.0 · Godot 4.5\nReale Staaten · Szenarien 1936 und 2026\nKartengrundlage: Natural Earth (Public Domain)\nLokaler Spielstand: " + OS.get_user_data_dir())
 	button(box, "Spiel beenden", func(): get_tree().quit())
 	menu.popup_centered()
 
@@ -652,6 +777,7 @@ func show_portrait_info():
 	dialog.add_child(box)
 	paragraph(box, "Porträts anklicken für eine große Ansicht mit Quelle und Lizenz.")
 	paragraph(box, "307 reale Personen: Wikimedia-Fotos. Manuel Giménez Fernández: gekennzeichnete KI-Illustration ohne gesicherte historische Ähnlichkeit. Sechs CfD-Politiker: erfundene Figuren mit eigenen Illustrationen.")
+	paragraph(box, "Der Weltatlas ergänzt weitere Politikerfotos. Nachweise: WORLD-PORTRAIT-CREDITS.md. Nicht verfügbare Fotos sind in der jeweiligen Akte gekennzeichnet.")
 	paragraph(box, "Sämtliche Bilder sind offline enthalten. Fotos behalten ihre jeweiligen Lizenzen. Nachweise: PORTRAIT-CREDITS.md im Download.")
 	dialog.popup_centered()
 
@@ -756,7 +882,7 @@ func show_main_menu():
 	var bottom_gap = Control.new()
 	bottom_gap.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	menu.add_child(bottom_gap)
-	paragraph(menu, "VERSION 0.6 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
+	paragraph(menu, "VERSION 0.7 · GODOT\nWeltkarte: Natural Earth · Eigene Spielgrafik\n16 / 17 europäische Kampagnenländer", Color("b7b8a5"))
 	var space = Control.new()
 	space.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(space)
@@ -814,7 +940,7 @@ func show_settings():
 	cartography.add_child(slider)
 	var controls = settings_page(pages, "Steuerung")
 	paragraph(controls, "Mausrad · Karte zoomen\nRechte oder mittlere Maustaste ziehen · Karte verschieben\nLinksklick · Kampagnenland auswählen\nWelt · Ganze Welt einpassen\nMein Land · Auf deine Regierung zoomen\nAkte schließen · Karte vergrößern\nLeertaste · Zeit pausieren / fortsetzen\nEscape · Spielmenü öffnen")
-	paragraph(controls, "Die Weltkarte zeigt 177 Referenzregionen. Spielbar sind die Länder der jeweiligen Kampagne. Außerhalb davon werden moderne Referenzgrenzen dargestellt, auch 1936.")
+	paragraph(controls, "Die Weltkarte zeigt 242 Länder und Gebiete. Spielbar sind die Länder der jeweiligen Kampagne. Außerhalb davon werden moderne Referenzgrenzen dargestellt, auch 1936.")
 	settings_window.popup_centered()
 
 func settings_page(pages: TabContainer, caption: String) -> VBoxContainer:

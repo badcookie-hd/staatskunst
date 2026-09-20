@@ -6,6 +6,9 @@ static var _textures: Dictionary = {}
 static func catalogue() -> Dictionary:
 	if _catalogue.is_empty():
 		_catalogue = JSON.parse_string(FileAccess.get_file_as_string("res://data/portraits.json"))
+		if FileAccess.file_exists("res://data/world_portraits.json"):
+			var atlas = JSON.parse_string(FileAccess.get_file_as_string("res://data/world_portraits.json"))
+			_catalogue.merge(atlas, false)
 	return _catalogue
 
 static func credit(person: Dictionary) -> Dictionary:

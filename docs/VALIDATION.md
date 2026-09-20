@@ -1,8 +1,10 @@
-# Prüfung von Version 0.6.0
+# Prüfung von Version 0.7.0
 
-Godot 4.5.1 stable, Windows x64, 18. September 2026.
+Godot 4.5.1 stable, Windows x64, 20. September 2026.
 
-- **32 neue Grafik- und Menüprüfungen bestanden.** Hauptmenü, neue Kampagne, Pause und Fortsetzen, Einstellungen vor Spielbeginn, gespeicherte Kartenoptionen und Konfigurations-Roundtrip. 177 Weltregionen, Trefferprüfung auf fünf Kontinenten, Trennung von Referenzregionen und Kampagnenländern, mauszentrierter Zoom und erhaltene geografische Position beim Öffnen einer Akte. Lesbare Haushaltszahlen sowie passende Höhe von Hauptmenü, Szenarioauswahl, Pausemenü und Einstellungen bei 1152 × 720. Hauptmenü, Weltkarte, Kabinett, Wirtschaft und Einstellungen mit OpenGL gerendert und visuell geprüft.
+- **4.293 Atlasprüfungen bestanden.** Alle 242 Länder-/Gebietsakten in beiden Epochen, Quellenangaben, lesbare Personennamen, 402 zusätzliche Porträteinträge samt Texturen und Lizenzangaben, echte Klickauswahl der USA und von vier Kleinstaaten, Suchfilter und Auswahl mit Enter. Kollisionsfreie Ländernamen bei vier Zoomstufen und zwei Fenstergrößen. USA, Japan und die neue Weltansicht mit OpenGL gerendert und visuell geprüft. Historische Datenlücken und fehlende Fotos werden ausdrücklich ausgewiesen.
+
+- **32 neue Grafik- und Menüprüfungen bestanden.** Hauptmenü, neue Kampagne, Pause und Fortsetzen, Einstellungen vor Spielbeginn, gespeicherte Kartenoptionen und Konfigurations-Roundtrip. 242 Weltregionen, Trefferprüfung auf fünf Kontinenten, Trennung von Referenzregionen und Kampagnenländern, mauszentrierter Zoom und erhaltene geografische Position beim Öffnen einer Akte. Lesbare Haushaltszahlen sowie passende Höhe von Hauptmenü, Szenarioauswahl, Pausemenü und Einstellungen bei 1152 × 720. Hauptmenü, Weltkarte, Kabinett, Wirtschaft und Einstellungen mit OpenGL gerendert und visuell geprüft.
 
 - **1.419 zusätzliche Porträtprüfungen bestanden.** 314 eindeutige Personen aus beiden Epochen, ladbare Texturen, vorhandene Urheber und Quellen, alle Parteikarten und Kabinette in 33 Land-/Epochenkombinationen, keine leeren Bilder und Porträtklick mit passendem Staatsoberhaupt und Urhebernachweis. 307 Fotos, eine gekennzeichnete historische KI-Interpretation und sechs fiktive CfD-Gesichter. Gerenderte Kontaktbögen und aktualisierte Spielansichten geprüft. Die Bilddateien werden lokal geladen.
 
@@ -18,4 +20,4 @@ Die CI wiederholt Import, Simulation, UI, Grafik-/Menüprüfungen, Porträtprüf
 
 Nicht praktisch geprüft: zwei physische Rechner, echte Router-Portweiterleitung, acht gleichzeitig verbundene Spieler und längerer Netzwerkbetrieb. Die Wirtschaft ist ein Spielmodell, nicht an amtlichen makroökonomischen Daten kalibriert. Die historische und moderne Parteienauswahl ist kuratiert, nicht vollständig.
 
-Zusätzliche Prüfung des fertigen Windows-Exports: 308 einzelne Katalogbilder, CfD-Atlas, neue Hauptmenüillustration und 177 Weltregionen direkt aus der exportierten EXE geladen, 0 fehlende Ressourcen. Separater OpenGL-Spielstart: Exit-Code 0.
+Zusätzliche Prüfung des fertigen Windows-Exports: Kampagnen- und Atlasporträts, CfD-Atlas, Hauptmenüillustration, 242 Weltregionen und Länderakten direkt aus der exportierten EXE geladen, 0 fehlende Ressourcen. Separater OpenGL-Spielstart: Exit-Code 0.

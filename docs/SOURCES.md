@@ -2,9 +2,9 @@
 
 ## Geografische Basis
 
-- Natural Earth, `ne_110m_admin_0_countries.geojson`, abgerufen für Version 0.2.0: [Originaldatei](https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_admin_0_countries.geojson).
+- Natural Earth, `ne_50m_admin_0_countries.geojson`, abgerufen für Version 0.7.0: [Originaldatei](https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_50m_admin_0_countries.geojson). Die älteren Kampagnengeometrien basieren auf 1:110m.
 - [Natural Earth Terms of Use](https://www.naturalearthdata.com/about/terms-of-use/): Public Domain.
-- `data/world.json` enthält ab Version 0.6 alle 177 Referenzregionen einschließlich Antarktika. `tools/build_world.mjs` übernimmt Außenringe und deutsche Beschriftungen aus der Originaldatei, mit vier Nachkommastellen. Innenlöcher werden weggelassen; selbstberührende Ringe werden bei der Darstellung normalisiert. Die Genauigkeit entspricht einer strategischen Übersicht, nicht einer Vermessungskarte.
+- `data/world.json` enthält ab Version 0.7 alle 242 Länder und Gebiete einschließlich Antarktika. `tools/build_world.mjs` übernimmt Außenringe und deutsche Beschriftungen aus der Originaldatei, mit vier Nachkommastellen und 0,035 Grad Vereinfachungstoleranz. Innenlöcher werden weggelassen; selbstberührende Ringe werden bei der Darstellung normalisiert. Die Genauigkeit entspricht einer strategischen Übersicht, nicht einer Vermessungskarte.
 - Darüber liegen die bisherigen europäischen Kampagnengeometrien. Nur diese Länder sind spielbar. Die Welt außerhalb der Kampagnenländer verwendet moderne Referenzgrenzen und Namen auch 1936, keine historische globale Grenzrekonstruktion.
 
 ## Historische Einordnung
@@ -44,7 +44,7 @@ Wilhelm II. als zurückkehrender Kaiser und Paul Löbe als Übergangspräsident 
 Mit Node.js und der oben verlinkten Originaldatei im Repository-Verzeichnis:
 
 ```sh
-node tools/build_maps.mjs /path/to/ne_110m_admin_0_countries.geojson
+node tools/build_maps.mjs /path/to/ne_50m_admin_0_countries.geojson
 ```
 
 Das erzeugt `data/scenarios.json`. Die Grenzanpassungen sind direkt im Skript enthalten. Zur Laufzeit sind keine Downloads nötig.
@@ -61,3 +61,7 @@ Grundgesetz-Panel: [Artikel 1](https://www.gesetze-im-internet.de/gg/art_1.html)
 
 ## Politikerfotos (Version 0.5)
 307 Fotos aus Wikimedia Commons; eindeutige Identitäten über Wikipedia/Wikidata und manuell geprüfte Namensauflösung. [Einzelne Bildnachweise und Lizenzen](PORTRAIT-CREDITS.md). Eine gekennzeichnete KI-Interpretation für Manuel Giménez Fernández und sechs erfundene CfD-Gesichter: [ART.md](ART.md). D66-Kandidat Jan Paternotte korrigiert.
+
+## Weltatlas ab Version 0.7
+
+Die Karte verwendet nun Natural Earth 1:50m mit 242 Ländern und Gebieten. Politische Länderakten und zusätzliche Porträts: [Datenumfang und Quellen](WORLD-ATLAS.md), [Bildnachweise](WORLD-PORTRAIT-CREDITS.md).

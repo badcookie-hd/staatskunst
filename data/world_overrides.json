@@ -1,0 +1,24 @@
+{
+  "2026": {
+    "LBY": [
+      {"qid":"Q105319569","name":"Abdul Hamid Dbeibah","role":"Regierungsführung","title":"Premierminister der Regierung in Tripolis","since":"2021-03-15","authority_source":"https://unsmil.unmissions.org/en/speeches-and-statements/transcript-srsg-hanna-tettahs-interview-with-al-hadath-on-22-may"},
+      {"qid":"Q118903129","name":"Osama Hammad","role":"Parallelregierung","title":"Leiter der östlichen Gegenregierung","since":"2023","authority_source":"https://unsmil.unmissions.org/en/speeches-and-statements/transcript-srsg-hanna-tettahs-interview-with-al-hadath-on-22-may"}
+    ],
+    "VCT": [
+      {"qid":"Q28319076","name":"Godwin Friday","role":"Regierungsführung","title":"Premierminister","since":"2025-11","authority_source":"https://www.gov.vc/index.php/media-center/4080-government-of-st-vincent-and-the-grenadines-swearing-in-ceremony-of-new-cabinet-ministers-marks-a-new-chapter-of-governance"}
+    ],
+    "TCD": [
+      {"qid":"Q126086566","name":"Allamaye Halina","role":"Regierungsführung","title":"Premierminister","since":"2025-02","authority_source":"https://presidencetchad.org/actualites/formation-nouveau-gouvernement-37-membres/"}
+    ],
+    "NPL": [
+      {"qid":"Q3183124","name":"Ram Chandra Paudel","role":"Staatsoberhaupt","title":"Präsident Nepals","since":"2023","authority_source":"https://www.mofa.go.jp/s_sa/sw/np/pageite_000001_00001.html"},
+      {"qid":"Q23842116","name":"Sushila Karki","role":"Regierungsführung","title":"Interimspremierministerin","since":"2025-09-12","authority_source":"https://opmcm.gov.np/minister-detail/2/"}
+    ],
+    "VUT": [
+      {"qid":"Q115252004","name":"Jotham Napat","role":"Regierungsführung","title":"Premierminister von Vanuatu","since":"2025-02-11","authority_source":"https://www.pmnec.gov.pg/prime-minister-marape-congratulates-hon-jotham-napat-on-election-as-vanuatus-new-prime-minister/"}
+    ],
+    "SDN": [
+      {"qid":"Q6357939","name":"Kamil Idris","role":"Regierungsführung","title":"Premierminister","since":"2025-05-31","authority_source":"https://www.suna.sd/posts/dr-kamil-idris-takes-oath-as-prime-minister-before"}
+    ]
+  }
+}

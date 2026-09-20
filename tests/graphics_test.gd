@@ -70,7 +70,7 @@ func run():
 	root.size = Vector2i(1440, 900)
 	await frame()
 	check(game.campaign_started and not game.title_screen.visible and not game.detail_panel.visible, "Campaign opens on unobstructed world map")
-	check(game.map.world.size() == 177, "Complete world reference dataset")
+	check(game.map.world.size() == 242, "Complete world reference dataset")
 	for point in [Vector2(-100,40),Vector2(134,-25),Vector2(-52,-12),Vector2(102,35),Vector2(25,-28)]:
 		check(not game.map.reference_at(game.map.transform_point(point)).is_empty(), "Reference continent is present")
 		check(game.map.hit(game.map.transform_point(point)) == -1, "Reference regions do not invent playable countries")
